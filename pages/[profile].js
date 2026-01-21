@@ -309,7 +309,8 @@ export default function ProfilePage() {
     <>
       <Head>
         <title>Resume Generator - {profileName}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="description" content={`Generate ATS-optimized resume for ${profileName}`} />
       </Head>
 
       <div style={{
@@ -317,12 +318,13 @@ export default function ProfilePage() {
         background: colors.bg,
         color: colors.text,
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif",
-        padding: "16px",
+        padding: "clamp(12px, 3vw, 16px)",
         transition: "background 0.3s ease, color 0.3s ease"
       }}>
         <div style={{
           maxWidth: "800px",
-          margin: "0 auto"
+          margin: "0 auto",
+          width: "100%"
         }}>
           {/* Header Card */}
           <div style={{
@@ -337,11 +339,13 @@ export default function ProfilePage() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: "12px"
+              marginBottom: "12px",
+              flexWrap: "wrap",
+              gap: "8px"
             }}>
-              <div>
+              <div style={{ flex: 1, minWidth: "200px" }}>
                 <h1 style={{
-                  fontSize: "18px",
+                  fontSize: "clamp(16px, 4vw, 18px)",
                   fontWeight: "600",
                   color: colors.text,
                   margin: "0 0 2px 0"
@@ -350,7 +354,7 @@ export default function ProfilePage() {
                 </h1>
                 {selectedProfileData.title && (
                   <p style={{
-                    fontSize: "12px",
+                    fontSize: "clamp(11px, 2.5vw, 12px)",
                     color: colors.textSecondary,
                     margin: 0
                   }}>
@@ -386,7 +390,7 @@ export default function ProfilePage() {
             {quickCopyFields.length > 0 && (
               <div style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(70px, calc(50% - 4px)), 1fr))",
                 gap: "8px",
                 paddingTop: "12px",
                 borderTop: `1px solid ${colors.cardBorder}`
@@ -396,7 +400,7 @@ export default function ProfilePage() {
                     key={key}
                     onClick={() => copyToClipboard(value, key)}
                     style={{
-                      padding: "8px 6px",
+                      padding: "clamp(6px, 1.5vw, 8px) clamp(4px, 1vw, 6px)",
                       background: copiedField === key ? colors.copyBg : colors.inputBg,
                       border: `1px solid ${copiedField === key ? colors.infoText : colors.inputBorder}`,
                       borderRadius: "6px",
@@ -407,7 +411,7 @@ export default function ProfilePage() {
                       flexDirection: "column",
                       alignItems: "center",
                       gap: "4px",
-                      minHeight: "60px",
+                      minHeight: "clamp(50px, 12vw, 60px)",
                       justifyContent: "center"
                     }}
                     onMouseEnter={(e) => {
@@ -423,9 +427,9 @@ export default function ProfilePage() {
                       }
                     }}
                   >
-                    <span style={{ fontSize: "16px" }}>{icon}</span>
+                    <span style={{ fontSize: "clamp(14px, 3.5vw, 16px)" }}>{icon}</span>
                     <div style={{
-                      fontSize: "10px",
+                      fontSize: "clamp(9px, 2vw, 10px)",
                       fontWeight: "500",
                       color: copiedField === key ? colors.successText : colors.textMuted,
                       textTransform: "uppercase",
@@ -451,7 +455,7 @@ export default function ProfilePage() {
             <div style={{ marginBottom: "16px" }}>
               <label style={{
                 display: "block",
-                fontSize: "11px",
+                fontSize: "clamp(10px, 2.5vw, 11px)",
                 fontWeight: "600",
                 color: colors.textSecondary,
                 marginBottom: "6px",
@@ -467,8 +471,8 @@ export default function ProfilePage() {
                 rows="10"
                 style={{
                   width: "100%",
-                  padding: "10px 12px",
-                  fontSize: "13px",
+                  padding: "clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px)",
+                  fontSize: "clamp(12px, 3vw, 13px)",
                   fontFamily: "inherit",
                   color: colors.text,
                   background: colors.textareaBg,
@@ -476,7 +480,7 @@ export default function ProfilePage() {
                   borderRadius: "6px",
                   outline: "none",
                   resize: "vertical",
-                  minHeight: "180px",
+                  minHeight: "clamp(150px, 30vw, 180px)",
                   lineHeight: "1.5",
                   transition: "all 0.2s ease",
                   boxSizing: "border-box"
@@ -496,7 +500,7 @@ export default function ProfilePage() {
             <div style={{ marginBottom: "16px" }}>
               <label style={{
                 display: "block",
-                fontSize: "11px",
+                fontSize: "clamp(10px, 2.5vw, 11px)",
                 fontWeight: "600",
                 color: colors.textSecondary,
                 marginBottom: "6px",
@@ -513,8 +517,8 @@ export default function ProfilePage() {
                 required
                 style={{
                   width: "100%",
-                  padding: "8px 12px",
-                  fontSize: "13px",
+                  padding: "clamp(6px, 1.5vw, 8px) clamp(10px, 2.5vw, 12px)",
+                  fontSize: "clamp(12px, 3vw, 13px)",
                   fontFamily: "inherit",
                   color: colors.text,
                   background: colors.inputBg,
@@ -539,7 +543,7 @@ export default function ProfilePage() {
             <div style={{ marginBottom: "16px" }}>
               <label style={{
                 display: "block",
-                fontSize: "11px",
+                fontSize: "clamp(10px, 2.5vw, 11px)",
                 fontWeight: "600",
                 color: colors.textSecondary,
                 marginBottom: "6px",
@@ -555,8 +559,8 @@ export default function ProfilePage() {
                 placeholder="Enter company name for filename..."
                 style={{
                   width: "100%",
-                  padding: "8px 12px",
-                  fontSize: "13px",
+                  padding: "clamp(6px, 1.5vw, 8px) clamp(10px, 2.5vw, 12px)",
+                  fontSize: "clamp(12px, 3vw, 13px)",
                   fontFamily: "inherit",
                   color: colors.text,
                   background: colors.inputBg,
@@ -583,8 +587,8 @@ export default function ProfilePage() {
               disabled={disable || !jd.trim() || !roleName.trim()}
               style={{
                 width: "100%",
-                padding: "10px 16px",
-                fontSize: "14px",
+                padding: "clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px)",
+                fontSize: "clamp(12px, 3vw, 14px)",
                 fontWeight: "600",
                 color: colors.buttonText,
                 background: disable || !jd.trim() || !roleName.trim() ? colors.buttonDisabled : colors.buttonBg,
@@ -616,12 +620,12 @@ export default function ProfilePage() {
             {/* Status Messages */}
             {lastGenerationTime && (
               <div style={{
-                padding: "10px 12px",
+                padding: "clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px)",
                 background: colors.successBg,
                 border: `1px solid ${colors.successText}`,
                 borderRadius: "6px",
                 color: colors.successText,
-                fontSize: "12px",
+                fontSize: "clamp(11px, 2.5vw, 12px)",
                 textAlign: "center",
                 fontWeight: "500"
               }}>

@@ -1,11 +1,15 @@
 import fs from "fs";
 import path from "path";
+import { promises as fsPromises } from "fs";
 import React from "react";
 import { renderToStream } from "@react-pdf/renderer";
 import { getTemplate } from "../../lib/pdf-templates";
 import { callAI } from "../../lib/ai-service";
-import { getTemplateForProfile, getProfileBySlug } from "../../lib/profile-template-mapping";
+import { getTemplateForProfile, getProfileBySlug, getPromptForProfile } from "../../lib/profile-template-mapping";
 import { loadPromptForProfile } from "../../lib/prompt-loader";
+
+// Performance: Cache prompt templates in memory
+const promptCache = new Map();
 
 // Job validation keywords
 const hybridKeywords = [
@@ -30,7 +34,6 @@ export default async function handler(req, res) {
 
     if (!profileSlug) return res.status(400).send("Profile slug required");
     if (!jd) return res.status(400).send("Job description required");
-    if (!roleName || !roleName.trim()) return res.status(400).send("Role name is required");
     if (!roleName || !roleName.trim()) return res.status(400).send("Role name is required");
 
     // **Job Description Validation: Check if job is remote or hybrid/onsite**
@@ -83,6 +86,10 @@ export default async function handler(req, res) {
     
     console.log("✅ Job appears to be REMOTE - Proceeding");
 
+    // Performance: Start timing
+    const startTime = Date.now();
+    console.time('total-generation');
+
     // Get profile configuration from slug
     const profileConfig = getProfileBySlug(profileSlug);
     if (!profileConfig) {
@@ -99,15 +106,24 @@ export default async function handler(req, res) {
       return res.status(400).send(`Unsupported provider: ${provider}. Supported: claude, openai`);
     }
 
-    // Load profile JSON using resume name
+    // Performance: Load profile JSON using async file read (parallelizable)
     console.log(`Loading profile: ${resumeName} (slug: ${profileSlug})`);
+    console.time('file-io');
     const profilePath = path.join(process.cwd(), "resumes", `${resumeName}.json`);
 
-    if (!fs.existsSync(profilePath)) {
-      return res.status(404).send(`Profile file "${resumeName}.json" not found`);
+    // Use async file read for better performance
+    let profileData;
+    try {
+      const profileContent = await fsPromises.readFile(profilePath, "utf-8");
+      profileData = JSON.parse(profileContent);
+      console.timeEnd('file-io');
+    } catch (error) {
+      console.timeEnd('file-io');
+      if (error.code === 'ENOENT') {
+        return res.status(404).send(`Profile file "${resumeName}.json" not found`);
+      }
+      throw error;
     }
-
-    const profileData = JSON.parse(fs.readFileSync(profilePath, "utf-8"));
 
 
     // Calculate years of experience with improved date parsing
@@ -176,8 +192,36 @@ export default async function handler(req, res) {
       return eduStr;
     }).join('\n');
 
-    // Load prompt template for this profile (using slug)
-    const prompt = loadPromptForProfile(profileSlug, {
+    // Performance: Load prompt template with caching
+    console.time('prompt-loading');
+    // Cache key is just the profile slug (template doesn't change per profile)
+    const promptCacheKey = profileSlug;
+    
+    let promptTemplate;
+    if (promptCache.has(promptCacheKey)) {
+      // Use cached prompt template
+      promptTemplate = promptCache.get(promptCacheKey);
+      console.log("Using cached prompt template");
+    } else {
+      // Load and cache the raw template (without variable replacements)
+      const promptName = getPromptForProfile(profileSlug);
+      const templatePath = path.join(process.cwd(), 'lib', 'prompts', `${promptName}.txt`);
+      const defaultPath = path.join(process.cwd(), 'lib', 'prompts', 'default.txt');
+      
+      if (fs.existsSync(templatePath)) {
+        promptTemplate = fs.readFileSync(templatePath, 'utf-8');
+      } else if (fs.existsSync(defaultPath)) {
+        promptTemplate = fs.readFileSync(defaultPath, 'utf-8');
+      } else {
+        throw new Error(`Prompt template not found for ${profileSlug}`);
+      }
+      
+      // Cache the raw template
+      promptCache.set(promptCacheKey, promptTemplate);
+    }
+    
+    // Process template with variables
+    const variables = {
       name: profileData.name || "Unknown",
       email: profileData.email || "",
       location: profileData.location || "",
@@ -186,9 +230,20 @@ export default async function handler(req, res) {
       education: education,
       jobDescription: jd,
       experienceCount: (profileData.experience || []).length
-    });
+    };
+    
+    let prompt = promptTemplate;
+    for (const [key, value] of Object.entries(variables)) {
+      const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
+      prompt = prompt.replace(regex, String(value || ''));
+    }
+    
+    console.timeEnd('prompt-loading');
 
+    // Performance: AI call timing
+    console.time('ai-call');
     const aiResponse = await callAI(prompt, provider, model);
+    console.timeEnd('ai-call');
 
     // Log token usage to debug if we're hitting limits
     console.log(`${provider.toUpperCase()} API Response Metadata:`);
@@ -221,26 +276,40 @@ export default async function handler(req, res) {
       return extracted;
     };
 
-    let content;
-    if (aiResponse.stop_reason === 'max_tokens' || aiResponse.stop_reason === 'length') {
-      console.error(`⚠️ WARNING: ${provider.toUpperCase()} hit max_tokens limit! Response was truncated.`);
-      console.log("🔄 Retrying with reduced requirements to fit in token limit...");
+    // Performance: Extract content - don't retry on max_tokens if JSON is valid
+    let content = extractContent(aiResponse);
+    
+    // Check if we have valid JSON even if max_tokens was hit
+    const hasValidJson = content.includes('{') && content.includes('}');
+    
+    if ((aiResponse.stop_reason === 'max_tokens' || aiResponse.stop_reason === 'length') && hasValidJson) {
+      console.warn(`⚠️ WARNING: ${provider.toUpperCase()} hit max_tokens limit, but response appears complete. Attempting to parse...`);
+      // Try to parse - if it works, we don't need to retry
+      try {
+        const testParse = JSON.parse(content.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim());
+        if (testParse.title && testParse.summary && testParse.skills && testParse.experience) {
+          console.log("✅ Response is complete despite max_tokens - no retry needed");
+          // Use the extracted content as-is
+        } else {
+          throw new Error("Incomplete JSON structure");
+        }
+      } catch (parseError) {
+        // JSON is incomplete, need to retry
+        console.error(`⚠️ Response is incomplete. Retrying with reduced requirements...`);
+        console.time('ai-call-retry');
+        const concisePrompt = prompt
+          .replace(/TOTAL: 60-80 skills maximum/g, 'TOTAL: 50-60 skills maximum')
+          .replace(/Per category: 8-12 skills/g, 'Per category: 6-10 skills')
+          .replace(/6 bullets each/g, '5 bullets each')
+          .replace(/5-6 bullets per job/g, '4-5 bullets per job');
 
-      // Retry with a more concise prompt
-      const concisePrompt = prompt
-        .replace(/TOTAL: 60-80 skills maximum/g, 'TOTAL: 50-60 skills maximum')
-        .replace(/Per category: 8-12 skills/g, 'Per category: 6-10 skills')
-        .replace(/6 bullets each/g, '5 bullets each')
-        .replace(/5-6 bullets per job/g, '4-5 bullets per job');
-
-      const retryResponse = await callAI(concisePrompt, provider, model);
-      console.log("Retry Response Metadata:");
-      console.log("- Stop reason:", retryResponse.stop_reason);
-      console.log("- Output tokens:", retryResponse.usage?.output_tokens);
-
-      content = extractContent(retryResponse);
-    } else {
-      content = extractContent(aiResponse);
+        const retryResponse = await callAI(concisePrompt, provider, model);
+        console.log("Retry Response Metadata:");
+        console.log("- Stop reason:", retryResponse.stop_reason);
+        console.log("- Output tokens:", retryResponse.usage?.output_tokens);
+        console.timeEnd('ai-call-retry');
+        content = extractContent(retryResponse);
+      }
     }
 
     // Check if AI is apologizing instead of returning JSON
@@ -251,28 +320,31 @@ export default async function handler(req, res) {
       throw new Error("AI refused to generate resume. The prompt may be too complex. Please try again with a shorter job description or simpler requirements.");
     }
 
+    // Performance: Optimized JSON extraction - single pass when possible
+    console.time('json-extraction');
+    
     // Enhanced JSON extraction - handle various formats
     // Remove markdown code blocks (case insensitive) - be more aggressive
-    content = content.replace(/```json\s*/gi, "");
-    content = content.replace(/```javascript\s*/gi, "");
-    content = content.replace(/```js\s*/gi, "");
-    content = content.replace(/```\s*/g, "");
+    let cleanedContent = content.replace(/```json\s*/gi, "")
+      .replace(/```javascript\s*/gi, "")
+      .replace(/```js\s*/gi, "")
+      .replace(/```\s*/g, "");
 
     // Remove common prefixes and explanations
-    content = content.replace(/^(here is|here's|this is|the json is|json:|response:):?\s*/gim, "");
+    cleanedContent = cleanedContent.replace(/^(here is|here's|this is|the json is|json:|response:):?\s*/gim, "");
     
     // Remove any text before the first {
-    const firstBrace = content.indexOf('{');
+    const firstBrace = cleanedContent.indexOf('{');
     if (firstBrace > 0) {
-      content = content.substring(firstBrace);
+      cleanedContent = cleanedContent.substring(firstBrace);
     }
 
-    // Find the last } that matches the first {
+    // Find the last } that matches the first { (optimized single pass)
     let braceCount = 0;
     let lastBrace = -1;
-    for (let i = 0; i < content.length; i++) {
-      if (content[i] === '{') braceCount++;
-      if (content[i] === '}') {
+    for (let i = 0; i < cleanedContent.length; i++) {
+      if (cleanedContent[i] === '{') braceCount++;
+      if (cleanedContent[i] === '}') {
         braceCount--;
         if (braceCount === 0) {
           lastBrace = i;
@@ -282,24 +354,27 @@ export default async function handler(req, res) {
     }
 
     if (lastBrace !== -1) {
-      content = content.substring(0, lastBrace + 1);
+      content = cleanedContent.substring(0, lastBrace + 1).trim();
     } else {
       // Fallback to original method
-      const fallbackLastBrace = content.lastIndexOf('}');
+      const fallbackLastBrace = cleanedContent.lastIndexOf('}');
       if (fallbackLastBrace !== -1) {
-        content = content.substring(0, fallbackLastBrace + 1);
+        content = cleanedContent.substring(0, fallbackLastBrace + 1).trim();
       } else {
+        console.timeEnd('json-extraction');
         console.error("No JSON object found in response");
         throw new Error("AI did not return valid JSON format. Please try again.");
       }
     }
+    
+    console.timeEnd('json-extraction');
 
-    content = content.trim();
-
-    // Parse JSON with better error handling
+    // Performance: Optimized JSON parsing - try direct parse first
+    console.time('json-parsing');
     let resumeContent;
     try {
       resumeContent = JSON.parse(content);
+      console.timeEnd('json-parsing');
     } catch (parseError) {
       console.error("=== JSON PARSE ERROR ===");
       console.error("Parse error:", parseError.message);
@@ -345,10 +420,12 @@ export default async function handler(req, res) {
           resumeContent = JSON.parse(aggressiveFix);
           console.log("✅ Successfully parsed after aggressive fixes");
         } catch (thirdError) {
+          console.timeEnd('json-parsing');
           console.error("All parsing attempts failed");
           throw new Error(`AI returned invalid JSON: ${parseError.message}. The AI response may be malformed. Please try again with a shorter job description.`);
         }
       }
+      console.timeEnd('json-parsing');
     }
 
     // Validate required fields
@@ -403,20 +480,7 @@ export default async function handler(req, res) {
       education: profileData.education || []
     };
 
-    // Render PDF with React PDF
-    const pdfDocument = React.createElement(TemplateComponent, { data: templateData });
-    const pdfStream = await renderToStream(pdfDocument);
-
-    // Convert stream to buffer
-    const chunks = [];
-    for await (const chunk of pdfStream) {
-      chunks.push(chunk);
-    }
-    const pdfBuffer = Buffer.concat(chunks);
-
-    console.log("PDF generated successfully!");
-
-    // Generate filename from resume name + role name + company name (if provided)
+    // Performance: Generate filename first (before PDF rendering)
     const nameParts = resumeName ? resumeName.trim().split(/\s+/) : [];
     let baseName;
     if (!nameParts || nameParts.length === 0) baseName = 'resume';
@@ -436,9 +500,28 @@ export default async function handler(req, res) {
 
     const fileName = `${baseName}.pdf`;
 
+    // Performance: Stream PDF directly to response (no buffering)
+    console.time('pdf-rendering');
+    const pdfDocument = React.createElement(TemplateComponent, { data: templateData });
+    const pdfStream = await renderToStream(pdfDocument);
+    console.timeEnd('pdf-rendering');
+
+    // Set headers before streaming
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-    res.end(pdfBuffer);
+
+    // Performance: Stream directly to response instead of buffering
+    console.time('pdf-streaming');
+    for await (const chunk of pdfStream) {
+      res.write(chunk);
+    }
+    res.end();
+    console.timeEnd('pdf-streaming');
+
+    // Performance: Log total time
+    const totalTime = Date.now() - startTime;
+    console.timeEnd('total-generation');
+    console.log(`✅ PDF generated successfully in ${(totalTime / 1000).toFixed(2)}s`);
 
 
   } catch (err) {
