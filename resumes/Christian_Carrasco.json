@@ -3,10 +3,10 @@
   "email": "christianmadrid201@gmail.com",
   "phone": "+34 722243634",
   "location": "Catalonia, Spain",
-  "postalCode": "",
-  "linkedin": "https://www.linkedin.com/in/christian-carrasco-ruedo",
-  "github": "",
-  "website": "",
+  "postalCode": "08860",
+  "linkedin": "https://www.linkedin.com/in/christian-carrasco-rueda",
+  "github": "https://github.com/xhris-spec",
+  "website": "https://portfolio.chrisdevstudio.com/",
   
   "experience": [
      {
@@ -43,8 +43,8 @@
     {
       "degree": "Bachelor’s Degree in Computer Science",
       "school": "University of Barcelona",
-      "start_year": "2018",
-      "end_year": ""
+      "start_year": "",
+      "end_year": "2018"
     }
   ]
 
