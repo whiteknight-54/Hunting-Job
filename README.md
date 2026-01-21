@@ -65,7 +65,6 @@ Apply12_31/
 │   ├── parse.js                   # Resume parsing utility
 │   └── api/
 │       ├── generate.js             # PDF generation endpoint (main)
-│       ├── generate_2.js          # Legacy PDF generation (Puppeteer-based, deprecated)
 │       ├── preview.js              # Preview endpoint
 │       ├── profiles.js             # Profile listing endpoint
 │       ├── profiles/[id].js        # Individual profile endpoint
@@ -333,9 +332,20 @@ The easiest way to deploy is using Vercel:
 
 The project includes `render.yaml` for deployment on Render.com:
 
-1. Set environment variables in Render dashboard
-2. Connect your GitHub repository
-3. Render will automatically deploy
+1. **Push your code to GitHub**
+2. **Create Web Service in Render:**
+   - Go to [render.com](https://render.com)
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+3. **Add Environment Variables in Render dashboard:**
+   - `ANTHROPIC_API_KEY` (required)
+   - `OPENAI_API_KEY` (optional)
+   - `NODE_ENV=production`
+4. **Deploy!** Render will automatically build and deploy
+
+📖 **Full Render Deployment Guide:** See [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md) for detailed instructions.
+
+**Note:** The deprecated `generate_2.js` file has been removed to fix build errors. The main generation endpoint (`generate.js`) uses React PDF and works perfectly.
 
 ### Other Platforms
 
