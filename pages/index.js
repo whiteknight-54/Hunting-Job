@@ -106,21 +106,44 @@ export default function Home() {
               }}>
                 Resume Generator
               </h1>
-              <button
-                onClick={toggleTheme}
-                style={{
-                  padding: "8px 16px",
-                  fontSize: "14px",
-                  background: "transparent",
-                  border: `1px solid ${colors.cardBorder}`,
-                  borderRadius: "8px",
-                  color: colors.text,
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
-              </button>
+              <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                <button
+                  onClick={() => router.push("/preview")}
+                  style={{
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    background: "transparent",
+                    border: `1px solid ${colors.cardBorder}`,
+                    borderRadius: "8px",
+                    color: colors.text,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = colors.inputBg;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                  }}
+                >
+                  📄 Preview Templates
+                </button>
+                <button
+                  onClick={toggleTheme}
+                  style={{
+                    padding: "8px 16px",
+                    fontSize: "14px",
+                    background: "transparent",
+                    border: `1px solid ${colors.cardBorder}`,
+                    borderRadius: "8px",
+                    color: colors.text,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+                </button>
+              </div>
             </div>
 
             {/* Profile Slug Input */}

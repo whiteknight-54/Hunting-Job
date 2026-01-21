@@ -195,16 +195,28 @@ npm start
 
 ## 📖 Usage
 
+### Preview Templates
+
+Before generating a resume, you can preview all available templates:
+
+1. **Access Preview Page**: 
+   - Click "📄 Preview Templates" button on the home page, OR
+   - Navigate to `/preview` in your browser
+2. **Browse Templates**: See all 10 available resume templates
+3. **Preview PDF**: Click "Preview PDF" on any template to see it with sample data
+4. **Compare Styles**: Open multiple templates to compare designs
+
 ### Basic Workflow
 
 1. **Access Home Page**: Navigate to the root URL
-2. **Enter Profile ID**: Type a numeric profile ID (e.g., "1", "2", "3")
+2. **Enter Profile ID**: Type a profile ID (e.g., "bv", "cc", "jm", "kg", "lm", "pv")
 3. **View Profile Page**: System loads the corresponding profile
 4. **Copy Profile Info**: Use quick copy buttons for contact details
 5. **Enter Job Description**: Paste the job description in the textarea
-6. **Optional Company Name**: Add company name for custom filename
-7. **Generate Resume**: Click "Generate Resume PDF" button
-8. **Download PDF**: Resume PDF downloads automatically
+6. **Enter Role Name**: Enter the role name (required) for the filename
+7. **Optional Company Name**: Add company name for custom filename
+8. **Generate Resume**: Click "Generate Resume PDF" button
+9. **Download PDF**: Resume PDF downloads automatically
 
 ### Profile Management
 
