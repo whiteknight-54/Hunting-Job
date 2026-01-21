@@ -1,0 +1,52 @@
+{
+  "name": "Christian Carrasco",
+  "email": "christianmadrid201@gmail.com",
+  "phone": "+34 722243634",
+  "location": "Catalonia, Spain",
+  "postalCode": "",
+  "linkedin": "https://www.linkedin.com/in/christian-carrasco-ruedo",
+  "github": "",
+  "website": "",
+  
+  "experience": [
+     {
+      "company": "Bluetab, an IBM Company",
+      "title": "Backend Developer",
+      "location": "",
+      "start_date": "Oct 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "lquadrat",
+      "title": "Full Stack Engineer",
+      "location": "",
+      "start_date": "Aug 2023",
+      "end_date": "Aug 2025"
+    },
+    {
+      "company": "STP PROJECTS",
+      "title": "Backend Developer",
+      "location": "",
+      "start_date": "Nov 2021",
+      "end_date": "Aug 2023"
+    },
+    {
+      "company": "Corva",
+      "title": "Junior Software Engineer",
+      "location": "",
+      "start_date": "Jun 2018",
+      "end_date": "Oct 2021"
+    }
+  ],
+  
+  "education": [
+    {
+      "degree": "Bachelor’s Degree in Computer Science",
+      "school": "University of Barcelona",
+      "start_year": "2018",
+      "end_year": ""
+    }
+  ]
+
+}
+

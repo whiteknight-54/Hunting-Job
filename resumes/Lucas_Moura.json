@@ -1,0 +1,44 @@
+{
+  "name": "Lucas Moura",
+  "email": "lucasm6784@gmail.com",
+  "phone": "",
+  "location": "Greater Natal, Brazil",
+  "postalCode": "",
+  "linkedin": "https://www.linkedin.com/in/lucas-moura-41455b245/",
+  "github": "",
+  "website": "",
+  
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Software Engineer",
+      "location": "Florida, US",
+      "start_date": "Jun 2025",
+      "end_date": "12/2025"
+    },
+    {
+      "company": "PuzzleHR",
+      "title": "Software Engineer",
+      "location": "Florida, US",
+      "start_date": "May 2020",
+      "end_date": "Feb 2025"
+    },
+    {
+      "company": "Icone Sistems",
+      "title": "Junior Software Engineer",
+      "location": "Rio Grande do Norte, Brazil",
+      "start_date": "Jul 2017",
+      "end_date": "Oct 2019"
+    }
+  ],
+  
+  "education": [
+    {
+      "degree": "Bachelor’s Degree in Computer Science",
+      "school": "Universidade Federal do Rio Grande do Norte",
+      "start_year": "2013",
+      "end_year": "2017"
+    }
+  ]
+
+}
