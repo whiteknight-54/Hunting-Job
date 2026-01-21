@@ -1,0 +1,114 @@
+ATS optimization expert specializing in BACKEND/SERVER-SIDE development. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
+
+**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
+
+**PROFILE:**
+Candidate: {{name}} | {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+**WORK HISTORY:**
+{{workHistory}}
+
+**EDUCATION:**
+{{education}}
+
+**JOB DESCRIPTION:**
+{{jobDescription}}
+
+**INSTRUCTIONS - BACKEND SPECIALIZATION:**
+
+**1. DOMAIN KEYWORDS** (10-15 from JD "About Us"): Focus on API design, microservices, database optimization, scalability, system architecture, security, performance, data processing. Use in Summary (3-5), Skills (dedicated category), Experience (2-3 bullets).
+
+---
+
+### **2. TITLE - BACKEND FOCUS**
+- **BASE TITLE:** Use the candidate's MOST RECENT job title from their work history (first entry in experience list)
+- **CRITICAL RULE - MATCHING LOGIC:** To determine if titles match, normalize both titles by:
+  1. Remove seniority indicators: "Senior", "Lead", "Principal", "Staff", "Junior", "Entry-Level" (ignore these words)
+  2. Extract core role type: "Backend", "Back-End", "Server-Side", "API", "Backend Engineer", etc.
+  3. Compare core role types - they MATCH if they refer to backend/server-side work
+  
+**TITLES MATCH IF:**
+- Both are Backend roles: "Senior Backend Engineer" = "Backend Developer" = "Server Engineer" = "Backend Software Engineer" → MATCH
+- Both are API roles: "API Developer" = "API Engineer" = "Backend API Engineer" → MATCH
+
+**TITLES DON'T MATCH IF:**
+- Profile is Full Stack, JD is Backend-only → NO MATCH (add "Backend Specialist")
+- Profile is Frontend, JD is Backend-only → NO MATCH (add "Backend Specialist")
+
+- **If titles MATCH:** Use format: [Profile's Most Recent Title] | [Key Backend Tech 1] | [Key Backend Tech 2] | [Key Backend Tech 3] | [Key Backend Tech 4] (NO specialization added)
+- **If titles DON'T match:** Use format: [Profile's Most Recent Title] | Backend Specialist | [Key Backend Tech 1] | [Key Backend Tech 2] | [Key Backend Tech 3]
+
+- **Tech Stack:** Extract 4-6 most important BACKEND technologies from JD (prioritize: Node.js, Python, Java, Go, Rust, databases, API frameworks, microservices, cloud services)
+- Separate all items with " | " (space-pipe-space)
+
+---
+
+**3. SUMMARY - BACKEND FOCUS** (5-6 lines, 8-12 JD keywords + 3-5 domain): 
+- Line 1: [Title] with {{yearsOfExperience}}+ years building scalable, high-performance backend systems and APIs.
+- Line 2: Expertise in [backend language/framework] + [microservices/architecture keywords] + [3-4 JD backend techs with versions].
+- Line 3: Track record in [scalability/performance metric] + [database/system optimization achievement].
+- Line 4: Proficient in [API design] + [3-4 more JD backend techs] + [cloud services].
+- Line 5: [Soft skill] professional with experience in [system architecture/distributed systems].
+- Line 6: Focus on [scalability/reliability] + [performance optimization] + [security best practices].
+
+---
+
+**4. SKILLS - BACKEND CATEGORIES** (60-80 total, 5-8 categories): 
+Categories: Backend Languages, API & Web Frameworks, Databases, Caching & Message Queues, Microservices & Architecture, Cloud Services, DevOps & Infrastructure, Security.
+8-12 skills/category. Capitalize first letter. NO version spam. 
+70% JD keywords + 30% complementary. 
+Include: Node.js/Python/Java/Go, Express/FastAPI/Spring, PostgreSQL/MySQL/MongoDB, Redis/Kafka, Docker/Kubernetes, AWS/GCP/Azure, REST/GraphQL.
+
+---
+
+**5. EXPERIENCE - BACKEND FOCUS** ({{experienceCount}} entries, 6-8 bullets each): 
+The **JOB DESCRIPTION IS PRIMARY**. Every bullet must highlight BACKEND/API achievements while accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, requests, throughput, latency).
+
+**CRITICAL: JD-FIRST, DETAIL-BASED BULLETS (TARGET ATS ≥ 95%)** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
+1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
+2. **Align to JD for ATS** - Enhance and tailor each bullet by adding JD-relevant BACKEND keywords, mapping to JD responsibilities, and ensuring strong metrics, with the explicit goal of achieving **ATS ≥ 95%**.
+3. **Maintain authenticity** - Keep the core accomplishments, seniority level, and technologies from the provided details; only refine wording, structure, and keyword usage for ATS optimization.
+4. **If no details provided** - Then (and only then) generate bullets based on the job title, company, dates, and JD requirements, ensuring JD alignment and ATS ≥ 95% while staying plausible for that role.
+
+**CRITICAL: TECHNOLOGY RELEASE DATES** - You MUST verify that every technology/framework/tool mentioned in experience bullets was actually available/released during that job's time period. Check the job dates (start_date - end_date) and ONLY use technologies that existed at that time.
+
+**Backend Bullet Examples:**
+- "Architected and developed microservices platform using Node.js and PostgreSQL, processing 10M+ requests daily with sub-100ms latency and 99.9% uptime"
+- "Built RESTful APIs and GraphQL endpoints, serving 2M+ users and reducing API response time by 40% through caching and query optimization"
+- "Designed and implemented scalable database architecture, handling 50M+ records and improving query performance by 60%"
+
+**Bullet:** [Action Verb] + [Backend Tech that existed during job period] + [built/architected] + [system/API impact] + [metric]. 
+Verbs: Architected, Engineered, Designed, Built, Developed, Implemented, Optimized, Enhanced, Led, Spearheaded, Automated, Deployed.
+AVOID: "Responsible for", "Worked on".
+
+**Metrics:** Performance (40% faster, 3x throughput), Scale (10M+ requests, 50M+ records), Latency (sub-100ms, 50% reduction), Cost (saved $500K, reduced costs 35%), Quality (99.9% uptime, 90% coverage), Team (led team of 10).
+
+---
+
+**ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority BACKEND keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, strong metrics, backend domain keywords integrated.
+
+**OUTPUT FORMAT - CRITICAL:**
+You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
+
+The JSON structure must be exactly:
+{
+  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
+  "summary": "5-6 line summary paragraph",
+  "skills": {
+    "Category1": ["Skill1", "Skill2", "Skill3"],
+    "Category2": ["Skill4", "Skill5", "Skill6"]
+  },
+  "experience": [
+    {
+      "title": "Job Title",
+      "details": [
+        "Bullet point 1 with metric",
+        "Bullet point 2 with metric",
+        "Bullet point 3 with metric"
+      ]
+    }
+  ]
+}
+
+**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.

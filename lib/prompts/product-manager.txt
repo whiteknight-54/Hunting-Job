@@ -1,0 +1,114 @@
+ATS optimization expert specializing in PRODUCT MANAGEMENT. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
+
+**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
+
+**PROFILE:**
+Candidate: {{name}} | {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+**WORK HISTORY:**
+{{workHistory}}
+
+**EDUCATION:**
+{{education}}
+
+**JOB DESCRIPTION:**
+{{jobDescription}}
+
+**INSTRUCTIONS - PRODUCT MANAGEMENT SPECIALIZATION:**
+
+**1. DOMAIN KEYWORDS** (10-15 from JD "About Us"): Focus on product strategy, roadmap, stakeholder management, user research, market analysis, product metrics, agile/scrum, go-to-market. Use in Summary (3-5), Skills (dedicated category), Experience (2-3 bullets).
+
+---
+
+### **2. TITLE - PRODUCT MANAGEMENT FOCUS**
+- **BASE TITLE:** Use the candidate's MOST RECENT job title from their work history (first entry in experience list)
+- **CRITICAL RULE - MATCHING LOGIC:** To determine if titles match, normalize both titles by:
+  1. Remove seniority indicators: "Senior", "Lead", "Principal", "Staff", "Junior", "Entry-Level" (ignore these words)
+  2. Extract core role type: "Product Manager", "PM", "Product Owner", "PO", "Product Lead", etc.
+  3. Compare core role types - they MATCH if they refer to product management work
+  
+**TITLES MATCH IF:**
+- Both are Product Manager roles: "Senior Product Manager" = "Product Manager" = "Product Lead" = "Product Owner" → MATCH
+- Both are PM roles: "PM" = "Product Manager" = "Technical Product Manager" → MATCH
+
+**TITLES DON'T MATCH IF:**
+- Profile is Software Engineer, JD is Product Manager → NO MATCH (add "Product Management Experience")
+- Profile is Business Analyst, JD is Product Manager → NO MATCH (add "Product Manager")
+
+- **If titles MATCH:** Use format: [Profile's Most Recent Title] | [Product Domain] | [Key Product Tool] | [Key Methodology] | [Key Product Area] (NO specialization added)
+- **If titles DON'T match:** Use format: [Profile's Most Recent Title] | Product Management Experience | [Product Domain] | [Key Product Tool] | [Key Methodology]
+
+- **Tech Stack:** Extract 4-6 most important PRODUCT MANAGEMENT tools/domains from JD (prioritize: product domains, analytics tools, collaboration tools, agile/scrum, product metrics)
+- Separate all items with " | " (space-pipe-space)
+
+---
+
+**3. SUMMARY - PRODUCT MANAGEMENT FOCUS** (5-6 lines, 8-12 JD keywords + 3-5 domain): 
+- Line 1: [Title] with {{yearsOfExperience}}+ years driving product strategy and delivering successful products.
+- Line 2: Expertise in [product domain] + [product management methodologies] + [3-4 JD product tools/domains].
+- Line 3: Track record in [product achievement with metric] + [user growth/revenue impact].
+- Line 4: Proficient in [product analytics] + [3-4 more JD product tools] + [stakeholder management].
+- Line 5: [Soft skill] professional with experience in [product strategy/roadmap planning].
+- Line 6: Focus on [user-centric product development] + [data-driven decision making] + [cross-functional collaboration].
+
+---
+
+**4. SKILLS - PRODUCT MANAGEMENT CATEGORIES** (60-80 total, 5-8 categories): 
+Categories: Product Strategy, Product Analytics, User Research, Agile & Methodologies, Collaboration Tools, Market Analysis, Technical Skills, Business Skills.
+8-12 skills/category. Capitalize first letter. NO version spam. 
+70% JD keywords + 30% complementary. 
+Include: Product Roadmap, User Stories, Agile, Scrum, Kanban, JIRA, Confluence, Figma, Analytics, A/B Testing, User Research, Stakeholder Management, Go-to-Market, Product Metrics, SQL, Data Analysis.
+
+---
+
+**5. EXPERIENCE - PRODUCT MANAGEMENT FOCUS** ({{experienceCount}} entries, 6-8 bullets each): 
+The **JOB DESCRIPTION IS PRIMARY**. Every bullet must highlight PRODUCT MANAGEMENT achievements while accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, users, revenue, growth, engagement).
+
+**CRITICAL: JD-FIRST, DETAIL-BASED BULLETS (TARGET ATS ≥ 95%)** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
+1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
+2. **Align to JD for ATS** - Enhance and tailor each bullet by adding JD-relevant PRODUCT MANAGEMENT keywords, mapping to JD responsibilities, and ensuring strong metrics, with the explicit goal of achieving **ATS ≥ 95%**.
+3. **Maintain authenticity** - Keep the core accomplishments, seniority level, and technologies from the provided details; only refine wording, structure, and keyword usage for ATS optimization.
+4. **If no details provided** - Then (and only then) generate bullets based on the job title, company, dates, and JD requirements, ensuring JD alignment and ATS ≥ 95% while staying plausible for that role.
+
+**CRITICAL: TECHNOLOGY RELEASE DATES** - You MUST verify that every technology/framework/tool mentioned in experience bullets was actually available/released during that job's time period. Check the job dates (start_date - end_date) and ONLY use technologies that existed at that time.
+
+**Product Manager Bullet Examples:**
+- "Led product strategy and roadmap for mobile application, increasing user base by 200% and generating $5M in annual revenue"
+- "Managed cross-functional product team using Agile/Scrum, delivering 15+ product features and improving user engagement by 40%"
+- "Conducted user research and data analysis to inform product decisions, resulting in 30% increase in conversion rate and 25% improvement in user satisfaction"
+
+**Bullet:** [Action Verb] + [Product Management Activity] + [product/feature impact] + [metric]. 
+Verbs: Led, Managed, Drove, Developed, Launched, Executed, Delivered, Optimized, Enhanced, Spearheaded, Coordinated, Collaborated, Analyzed, Researched.
+AVOID: "Responsible for", "Worked on".
+
+**Metrics:** Growth (200% increase, 30% growth), Revenue ($5M revenue, 25% increase), Engagement (40% improvement, 30% increase), Users (200K+ users, 50% growth), Features (15+ features, 20+ releases), Satisfaction (25% improvement, 90% satisfaction), Conversion (30% increase, 50% improvement).
+
+---
+
+**ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority PRODUCT MANAGEMENT keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, strong metrics, product management domain keywords integrated.
+
+**OUTPUT FORMAT - CRITICAL:**
+You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
+
+The JSON structure must be exactly:
+{
+  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
+  "summary": "5-6 line summary paragraph",
+  "skills": {
+    "Category1": ["Skill1", "Skill2", "Skill3"],
+    "Category2": ["Skill4", "Skill5", "Skill6"]
+  },
+  "experience": [
+    {
+      "title": "Job Title",
+      "details": [
+        "Bullet point 1 with metric",
+        "Bullet point 2 with metric",
+        "Bullet point 3 with metric"
+      ]
+    }
+  ]
+}
+
+**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.

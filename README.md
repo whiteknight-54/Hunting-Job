@@ -1,154 +1,127 @@
-# Resume Generator
+# Resume Generator - AI-Powered ATS-Optimized Resume Builder
 
-An intelligent, AI-powered resume generation application that creates ATS-optimized resumes tailored to specific job descriptions. Built with Next.js and React PDF, this application leverages advanced AI models to generate professional resumes with customizable templates.
+An intelligent resume generation system that uses AI to create ATS-optimized resumes tailored to specific job descriptions. The system automatically detects the role type and uses specialized prompts to generate highly targeted resumes.
 
 ## 🚀 Features
 
-- **AI-Powered Resume Generation**: Uses Claude (Anthropic) or OpenAI GPT models to optimize resumes for ATS systems
-- **Multiple Professional Templates**: 10 distinct resume templates with various styles (Tech, Corporate, Creative, Academic, etc.)
-- **Profile Management**: Support for multiple candidate profiles with profile-specific templates and prompts
-- **Dynamic Prompt System**: Customizable AI prompts per profile for specialized resume generation
-- **Quick Copy Functionality**: One-click copy buttons for email, phone, address, LinkedIn, GitHub, and other profile details
-- **Dark/Light Theme**: User-friendly theme switching
-- **PDF Generation**: Server-side PDF generation using `@react-pdf/renderer`
-- **ATS Optimization**: Specialized prompts designed to achieve 95-100% ATS scores by extracting domain keywords and optimizing content
+### Core Features
+- **AI-Powered Resume Generation**: Uses Claude (Anthropic) or OpenAI to generate ATS-optimized resume content
+- **Role-Based Prompt Selection**: Automatically detects job role (Frontend, Backend, Full-Stack, DevOps, Salesforce, SAP, etc.) and uses specialized prompts
+- **Multiple Resume Templates**: 10+ professional PDF resume templates with different styles
+- **Profile Management**: Support for multiple candidate profiles with easy switching
+- **Job Description Analysis**: Validates job descriptions (remote-only, mid-level+ positions)
+- **Real-Time Generation**: Live timer showing generation progress
+- **PDF Export**: High-quality PDF resumes ready for ATS systems
 
-## 🛠️ Technical Stack
-
-### Frontend
-- **Next.js 14.1.0** - React framework with server-side rendering and API routes
-- **React 18.2.0** - UI library
-- **React DOM 18.2.0** - DOM rendering
-- **@react-pdf/renderer 3.4.4** - PDF generation using React components
-
-### Backend & AI
-- **@anthropic-ai/sdk 0.32.1** - Anthropic Claude API integration
-- **openai 4.20.0** - OpenAI GPT API integration
-- **Node.js 20.x** - Runtime environment
-
-### Utilities
-- **formidable 2.1.1** - Form data parsing
-- **jsonc-parser 3.3.1** - JSON with comments parsing
-- **nodemailer 7.0.11** - Email functionality
-- **resend 6.5.2** - Email service integration
+### Advanced Features
+- **Intelligent Role Detection**: Analyzes job descriptions to identify role type (<10ms detection time)
+- **Prompt Caching**: Optimized prompt loading with in-memory caching
+- **Technology Date Validation**: Ensures technologies mentioned in experience existed during job periods
+- **ATS Optimization**: Targets 95%+ ATS compatibility score
+- **Dark/Light Theme**: User-friendly interface with theme switching
+- **Template Preview**: Preview all available resume templates before generation
 
 ## 📁 Project Structure
 
 ```
-Apply12_31/
-├── lib/
-│   ├── ai-service.js              # AI provider abstraction (Claude/OpenAI)
-│   ├── models.js                  # Available AI models configuration
-│   ├── profile-template-mapping.js # Profile-to-template mapping
-│   ├── profile-utils.js           # Profile utility functions
-│   ├── prompt-loader.js           # Dynamic prompt loading and processing
-│   ├── pdf-templates/
-│   │   ├── index.js               # Template registry
-│   │   ├── TemplateBase.js        # Base template factory
-│   │   ├── ResumeTemplate.js      # Default template component
-│   │   ├── utils.js               # PDF template utilities
-│   │   └── templates/             # Individual template components
-│   │       ├── ResumeTechTeal.js
-│   │       ├── ResumeModernGreen.js
-│   │       ├── ResumeCreativeBurgundy.js
-│   │       ├── ResumeBoldEmerald.js
-│   │       ├── ResumeCorporateSlate.js
-│   │       ├── ResumeExecutiveNavy.js
-│   │       ├── ResumeClassicCharcoal.js
-│   │       ├── ResumeConsultantSteel.js
-│   │       └── ResumeAcademicPurple.js
-│   └── prompts/                   # AI prompt templates
-│       └── default.txt            # Default prompt template
-├── pages/
-│   ├── index.js                   # Home page (profile ID input)
-│   ├── [profile].js                # Dynamic profile page
-│   ├── parse.js                   # Resume parsing utility
-│   └── api/
-│       ├── generate.js             # PDF generation endpoint (main)
-│       ├── preview.js              # Preview endpoint
-│       ├── profiles.js             # Profile listing endpoint
-│       ├── profiles/[id].js        # Individual profile endpoint
-│       ├── templates.js            # Template listing endpoint
-│       └── resume-list.js          # Resume list endpoint
-├── resumes/                       # Profile JSON data files
-│   ├── Anatoliy Sokolov.json
+Hunting-Job/
+├── lib/                          # Core library files
+│   ├── ai-service.js             # AI API integration (Claude/OpenAI)
+│   ├── models.js                 # Available AI models configuration
+│   ├── role-detector.js          # Role detection from job descriptions
+│   ├── profile-template-mapping.js  # Profile to template/prompt mapping
+│   ├── prompt-loader.js          # Prompt template loading utility
+│   ├── pdf-templates/            # PDF resume templates
+│   │   ├── index.js              # Template registry
+│   │   ├── TemplateBase.js       # Base template class
+│   │   ├── ResumeTemplate.js     # Default resume template
+│   │   ├── templates/            # Individual template components
+│   │   │   ├── ResumeTechTeal.js
+│   │   │   ├── ResumeModernGreen.js
+│   │   │   ├── ResumeCorporateSlate.js
+│   │   │   ├── ResumeCreativeBurgundy.js
+│   │   │   ├── ResumeExecutiveNavy.js
+│   │   │   ├── ResumeClassicCharcoal.js
+│   │   │   ├── ResumeConsultantSteel.js
+│   │   │   ├── ResumeBoldEmerald.js
+│   │   │   └── ResumeAcademicPurple.js
+│   │   └── utils.js              # Template utilities
+│   └── prompts/                  # AI prompt templates
+│       ├── default.txt           # Default/general purpose prompt
+│       ├── frontend.txt          # Frontend/UI specialization
+│       ├── backend.txt           # Backend/server-side specialization
+│       ├── fullstack.txt        # Full-stack specialization
+│       ├── devops.txt           # DevOps/infrastructure specialization
+│       ├── data-science.txt     # Data science/ML specialization
+│       ├── mobile.txt           # Mobile app development specialization
+│       ├── qa.txt               # QA/testing specialization
+│       ├── security.txt         # Cybersecurity specialization
+│       ├── salesforce.txt       # Salesforce/CRM specialization
+│       ├── sap.txt             # SAP ERP specialization
+│       └── product-manager.txt  # Product management specialization
+│
+├── pages/                        # Next.js pages
+│   ├── index.js                 # Home page (profile selection)
+│   ├── [profile].js             # Profile-specific resume generation page
+│   ├── preview.js               # Template preview page
+│   └── api/                     # API routes
+│       ├── generate.js          # Main resume generation endpoint
+│       ├── preview.js           # Template preview endpoint
+│       ├── profiles.js          # List all profiles
+│       ├── profiles/
+│       │   └── [id].js         # Get specific profile data
+│       ├── templates.js         # List all templates
+│       └── resume-list.js      # List resume files
+│
+├── resumes/                      # Candidate profile data (JSON)
+│   ├── _template.json          # Profile template structure
 │   ├── Boris_Varbanov.json
 │   ├── Christian_Carrasco.json
 │   ├── Jose_Martin.json
 │   ├── Kyle_Garcia.json
 │   ├── Lucas_Moura.json
-│   ├── Pavlo_Vorchylo.json
-│   └── _template.json             # Template structure reference
-├── package.json
-├── render.yaml                    # Deployment configuration
-└── README.md
+│   └── Pavlo_Vorchylo.json
+│
+├── package.json                 # Dependencies and scripts
+├── vercel.json                  # Vercel deployment configuration
+├── render.yaml                  # Render.com deployment configuration
+└── .gitignore                   # Git ignore rules
 ```
 
-## 🏗️ Architecture
+## 🛠️ Technology Stack
 
-### Core Components
+### Frontend
+- **Next.js 14.1.0**: React framework with server-side rendering
+- **React 18.2.0**: UI library
+- **@react-pdf/renderer 3.4.4**: PDF generation
 
-#### 1. **Profile-Template Mapping System**
-The `lib/profile-template-mapping.js` file maps numeric profile IDs to:
-- Resume name (JSON filename)
-- Template ID (React PDF component)
-- Prompt file name (AI prompt template)
+### Backend
+- **Node.js 20.x**: Runtime environment
+- **Next.js API Routes**: Serverless API endpoints
 
-```javascript
-{
-  "1": {
-    resume: "James Davis",
-    template: "Resume-Tech-Teal",
-    prompt: "james-davis"
-  }
-}
-```
+### AI Services
+- **@anthropic-ai/sdk 0.32.1**: Claude AI integration
+- **openai 4.20.0**: OpenAI integration
 
-#### 2. **AI Service Layer**
-The `lib/ai-service.js` provides a unified interface for multiple AI providers:
-- **Claude (Anthropic)**: Default provider with Claude Sonnet models
-- **OpenAI**: GPT-4 and GPT-3.5 support
-- Features: Retry logic, timeout handling, response normalization
+### Deployment
+- **Vercel**: Primary hosting platform (120s timeout)
+- **Render.com**: Alternative deployment option
 
-#### 3. **PDF Template System**
-- **TemplateBase.js**: Factory function that creates React PDF components from configuration
-- **Individual Templates**: 10 specialized templates with unique styling
-- **Template Registry**: Centralized template lookup system
+## 📋 Prerequisites
 
-#### 4. **Dynamic Prompt Loading**
-- Prompts stored as `.txt` files in `lib/prompts/`
-- Variable substitution (e.g., `{{name}}`, `{{jobDescription}}`)
-- Profile-specific prompts with fallback to default
-
-### Data Flow
-
-1. **User Input**: User enters profile ID (e.g., "1") on home page
-2. **Profile Loading**: System loads profile configuration from `profile-template-mapping.js`
-3. **Data Fetching**: Profile JSON data loaded from `resumes/` directory
-4. **Job Description**: User provides job description on profile page
-5. **AI Processing**:
-   - Prompt loaded and variables injected
-   - AI model called with profile data + job description
-   - AI returns optimized resume content (JSON)
-6. **PDF Generation**:
-   - Resume data merged with AI-generated content
-   - React PDF component rendered with selected template
-   - PDF stream generated server-side
-7. **Download**: PDF returned to user as downloadable file
-
-## 🔧 Setup & Installation
-
-### Prerequisites
 - Node.js 20.x or higher
 - npm or yarn package manager
-- API keys for AI providers (Anthropic and/or OpenAI)
+- API keys for AI services:
+  - `ANTHROPIC_API_KEY` (for Claude)
+  - `OPENAI_API_KEY` (optional, for OpenAI)
+  - `ANTHROPIC_MODEL` (optional, defaults to claude-haiku-4-5-20251001)
 
-### Installation Steps
+## 🚀 Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd "Hunting Job"
+   cd Hunting-Job
    ```
 
 2. **Install dependencies**
@@ -156,230 +129,318 @@ The `lib/ai-service.js` provides a unified interface for multiple AI providers:
    npm install
    ```
 
-3. **Configure environment variables**
-   Create a `.env.local` file in the root directory:
+3. **Set up environment variables**
+   Create a `.env.local` file:
    ```env
-   # Required: At least one AI provider API key
-   # You only need ANTHROPIC_API_KEY for default usage (Claude)
-   ANTHROPIC_API_KEY=your_anthropic_api_key_here
-   
-   # Optional: Only needed if you want to use OpenAI
-   OPENAI_API_KEY=your_openai_api_key_here
-   
-   # Optional: Override default models
-   ANTHROPIC_MODEL=claude-haiku-4-5-20251001
-   OPENAI_MODEL=gpt-5.2-chat-latest
+   ANTHROPIC_API_KEY=your_anthropic_api_key
+   OPENAI_API_KEY=your_openai_api_key  # Optional
+   ANTHROPIC_MODEL=claude-haiku-4-5-20251001  # Optional
    ```
 
-4. **Run development server**
+4. **Add candidate profiles**
+   - Place JSON profile files in the `resumes/` directory
+   - Follow the structure in `resumes/_template.json`
+   - Update `lib/profile-template-mapping.js` to map profile slugs
+
+5. **Run development server**
    ```bash
    npm run dev
    ```
 
-5. **Access the application**
-   Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### Important Notes
-
-- **You only need `ANTHROPIC_API_KEY`** - The default provider is Claude, so OpenAI key is optional
-- Default model for Claude: `claude-haiku-4-5-20251001`
-- Default model for OpenAI: `gpt-5.2-chat-latest`
-- The application will use Claude by default if both keys are provided
-
-### Production Build
-
-```bash
-npm run build
-npm start
-```
+6. **Build for production**
+   ```bash
+   npm run build
+   npm start
+   ```
 
 ## 📖 Usage
 
-### Preview Templates
+### Generating a Resume
 
-Before generating a resume, you can preview all available templates:
+1. **Navigate to the home page** (`/`)
+2. **Enter a profile ID** (e.g., "bv", "cc", "jm")
+3. **Fill in the form**:
+   - **Job Description**: Paste the complete job description
+   - **Role Name**: Enter the job title (required)
+   - **Company Name**: Enter company name (optional, used in filename)
+4. **Click "Generate Resume PDF"**
+5. **Wait for generation** (typically 30-60 seconds)
+6. **Download the PDF** automatically
 
-1. **Access Preview Page**: 
-   - Click "📄 Preview Templates" button on the home page, OR
-   - Navigate to `/preview` in your browser
-2. **Browse Templates**: See all 10 available resume templates
-3. **Preview PDF**: Click "Preview PDF" on any template to see it with sample data
-4. **Compare Styles**: Open multiple templates to compare designs
+### Profile Structure
 
-### Basic Workflow
+Each profile JSON file should follow this structure:
 
-1. **Access Home Page**: Navigate to the root URL
-2. **Enter Profile ID**: Type a profile ID (e.g., "bv", "cc", "jm", "kg", "lm", "pv")
-3. **View Profile Page**: System loads the corresponding profile
-4. **Copy Profile Info**: Use quick copy buttons for contact details
-5. **Enter Job Description**: Paste the job description in the textarea
-6. **Enter Role Name**: Enter the role name (required) for the filename
-7. **Optional Company Name**: Add company name for custom filename
-8. **Generate Resume**: Click "Generate Resume PDF" button
-9. **Download PDF**: Resume PDF downloads automatically
+```json
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "location": "San Francisco, CA 94102",
+  "postalCode": "94102",
+  "title": "Senior Software Engineer",
+  "linkedin": "https://linkedin.com/in/johndoe",
+  "github": "https://github.com/johndoe",
+  "experience": [
+    {
+      "company": "Tech Corp",
+      "title": "Senior Software Engineer",
+      "location": "San Francisco, CA",
+      "start_date": "01/2021",
+      "end_date": "Present",
+      "details": [
+        "Built scalable microservices...",
+        "Led team of 5 engineers..."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science",
+      "school": "University of California",
+      "start_year": "2013",
+      "end_year": "2017",
+      "grade": "3.8"
+    }
+  ]
+}
+```
 
-### Profile Management
+## 🔌 API Endpoints
 
-#### Adding a New Profile
-
-1. **Create Profile JSON**: Add a new JSON file in `resumes/` directory
-   ```json
-   {
-     "name": "John Doe",
-     "email": "john@example.com",
-     "phone": "+1-234-567-8900",
-     "location": "San Francisco, CA",
-     "title": "Software Engineer",
-     "experience": [...],
-     "education": [...],
-     "skills": {...}
-   }
-   ```
-
-2. **Update Profile Mapping**: Add entry to `lib/profile-template-mapping.js`
-   ```javascript
-   "7": {
-     resume: "John Doe",
-     template: "Resume-Tech-Teal",
-     prompt: "john-doe"
-   }
-   ```
-
-3. **Create Prompt File** (Optional): Add `lib/prompts/john-doe.txt` for custom prompts
-
-#### Available Templates
-
-- `Resume-Tech-Teal` - Modern tech-focused design
-- `Resume-Modern-Green` - Clean, contemporary style
-- `Resume-Creative-Burgundy` - Creative industry design
-- `Resume-Bold-Emerald` - Bold, impactful layout
-- `Resume-Corporate-Slate` - Professional corporate style
-- `Resume-Executive-Navy` - Executive-level design
-- `Resume-Classic-Charcoal` - Traditional, timeless layout
-- `Resume-Consultant-Steel` - Consulting industry style
-- `Resume-Academic-Purple` - Academic/research focused
-- `Resume` - Default template
-
-## 🔑 API Endpoints
-
-### `POST /api/generate`
-Generates a PDF resume based on profile and job description.
+### POST `/api/generate`
+Generates a resume PDF based on job description.
 
 **Request Body:**
 ```json
 {
-  "profile": "1",
-  "jd": "Job description text...",
-  "companyName": "Company Name (optional)",
-  "provider": "claude",
-  "model": null
+  "profile": "bv",              // Profile slug
+  "jd": "Job description...",    // Job description text
+  "roleName": "Senior Engineer", // Job title (required)
+  "companyName": "Tech Corp",   // Company name (optional)
+  "provider": "claude",         // AI provider: "claude" or "openai"
+  "model": null                 // Model ID (optional, uses default)
 }
 ```
 
-**Response:** PDF file download
+**Response:**
+- Success: PDF file download
+- Error: JSON error message
 
-### `GET /api/profiles`
-Returns list of all available profiles.
+**Validation:**
+- Rejects hybrid/onsite positions (remote-only)
+- Rejects entry-level positions (mid-level+ only)
 
-### `GET /api/profiles/[id]`
-Returns profile data for a specific profile ID.
+### GET `/api/preview?template=Resume-Tech-Teal`
+Preview a resume template with sample data.
 
-### `GET /api/templates`
-Returns list of available templates.
+### GET `/api/profiles`
+List all available profiles.
 
-## 🎨 Customization
+### GET `/api/profiles/[id]`
+Get specific profile data.
 
-### Creating Custom Templates
+### GET `/api/templates`
+List all available resume templates.
 
-1. Create a new template component in `lib/pdf-templates/templates/`
-2. Use `createResumeTemplate` from `TemplateBase.js`:
-   ```javascript
-   import { createResumeTemplate } from '../TemplateBase';
-   
-   export const ResumeCustomTemplate = createResumeTemplate({
-     primaryColor: '#your-color',
-     secondaryColor: '#your-color',
-     // ... other config options
-   });
-   ```
-3. Register in `lib/pdf-templates/index.js`
+## 🎯 Role Detection
 
-### Customizing AI Prompts
+The system automatically detects the role type from job descriptions:
 
-1. Create a `.txt` file in `lib/prompts/`
-2. Use variables: `{{name}}`, `{{email}}`, `{{jobDescription}}`, etc.
-3. Reference in `profile-template-mapping.js`
+### Supported Roles
+- **Frontend**: React, Vue, Angular, UI/UX
+- **Backend**: Node.js, Python, APIs, microservices
+- **Full-Stack**: End-to-end development
+- **DevOps**: Infrastructure, CI/CD, cloud
+- **Data Science**: ML, analytics, data pipelines
+- **Mobile**: iOS, Android, React Native, Flutter
+- **QA**: Test automation, quality assurance
+- **Security**: Cybersecurity, information security
+- **Salesforce**: CRM, Salesforce platform
+- **SAP**: ERP, SAP modules
+- **Product Manager**: Product strategy, roadmap
 
-## 🔒 Environment Variables
+### Detection Process
+1. Analyzes job description text
+2. Matches keywords against role patterns
+3. Calculates weighted scores
+4. Selects highest-scoring role
+5. Uses role-specific prompt template
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `ANTHROPIC_API_KEY` | Yes* | Anthropic API key for Claude |
-| `OPENAI_API_KEY` | Yes* | OpenAI API key for GPT models |
-| `ANTHROPIC_MODEL` | No | Override default Claude model |
-| `OPENAI_MODEL` | No | Override default OpenAI model |
+**Detection Time**: <10ms (negligible impact)
 
-*At least one AI provider key is required
+## 📝 Prompt Templates
+
+Each role has a specialized prompt template that:
+- Focuses on role-specific keywords
+- Emphasizes relevant technologies
+- Uses role-appropriate metrics
+- Targets ATS optimization (95%+ score)
+
+### Prompt Priority
+1. Role-based prompt (e.g., `frontend.txt`)
+2. Profile-specific prompt (from mapping)
+3. Default prompt (`default.txt`)
+
+## ⚡ Performance
+
+### Generation Time
+- **Typical**: 30-60 seconds
+- **Fast**: 20-30 seconds (Claude Haiku)
+- **Slow**: 60-90 seconds (larger models)
+- **Timeout**: 120 seconds (maximum)
+
+### Time Breakdown
+- AI API Call: 20-50 seconds (main bottleneck)
+- PDF Rendering: 2-5 seconds
+- File Operations: <2 seconds
+- Role Detection: <10ms (negligible)
+- Other Processing: <3 seconds
+
+### Optimizations
+- Prompt caching (in-memory)
+- Async file operations
+- Streaming PDF generation
+- Efficient role detection
+
+## 🎨 Resume Templates
+
+### Available Templates
+1. **Resume** (Classic Default)
+2. **Resume-Tech-Teal** - Modern tech-focused design
+3. **Resume-Modern-Green** - Contemporary green theme
+4. **Resume-Corporate-Slate** - Professional corporate style
+5. **Resume-Creative-Burgundy** - Creative industry design
+6. **Resume-Executive-Navy** - Executive-level format
+7. **Resume-Classic-Charcoal** - Traditional black/white
+8. **Resume-Consultant-Steel** - Consulting industry style
+9. **Resume-Bold-Emerald** - Bold emerald green
+10. **Resume-Academic-Purple** - Academic/research format
+
+### Template Selection
+- Automatically assigned per profile in `profile-template-mapping.js`
+- Can be overridden via API parameter
+- Preview available at `/preview` page
+
+## 🔧 Configuration
+
+### Profile Mapping (`lib/profile-template-mapping.js`)
+```javascript
+{
+  "bv": {
+    resume: "Boris_Varbanov",
+    template: "Resume-Tech-Teal",
+    prompt: "default"
+  }
+}
+```
+
+### AI Models (`lib/models.js`)
+- Configures available models per provider
+- Sets default models
+- Supports Claude and OpenAI models
+
+### Role Patterns (`lib/role-detector.js`)
+- Keyword patterns for each role
+- Weight adjustments for better detection
+- Special handling (e.g., fullstack detection)
 
 ## 🚢 Deployment
 
-### Vercel (Recommended)
+### Vercel
+1. Connect GitHub repository
+2. Set environment variables
+3. Deploy automatically on push
 
-The easiest way to deploy is using Vercel:
-
-1. **Push your code to GitHub**
-2. **Import to Vercel:**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "Add New Project"
-   - Import your GitHub repository
-3. **Add Environment Variables:**
-   - `ANTHROPIC_API_KEY` (required)
-   - `OPENAI_API_KEY` (optional)
-   - `NODE_ENV=production`
-4. **Deploy!** Vercel will automatically build and deploy
-
-📖 **Full Vercel Deployment Guide:** See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions.
+**Configuration** (`vercel.json`):
+- Max duration: 120 seconds
+- Framework: Next.js
+- Region: iad1
 
 ### Render.com
+1. Connect repository
+2. Set environment variables
+3. Configure build/start commands
 
-The project includes `render.yaml` for deployment on Render.com:
+**Configuration** (`render.yaml`):
+- Node version: 20.11.0
+- Build command: `npm install && npm run build`
+- Start command: `npm start`
 
-1. **Push your code to GitHub**
-2. **Create Web Service in Render:**
-   - Go to [render.com](https://render.com)
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-3. **Add Environment Variables in Render dashboard:**
-   - `ANTHROPIC_API_KEY` (required)
-   - `OPENAI_API_KEY` (optional)
-   - `NODE_ENV=production`
-4. **Deploy!** Render will automatically build and deploy
+## 📊 Features Summary
 
-📖 **Full Render Deployment Guide:** See [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md) for detailed instructions.
+### Job Description Validation
+- ✅ Remote-only positions
+- ✅ Mid-level and senior roles
+- ❌ Rejects hybrid/onsite
+- ❌ Rejects entry-level/internships
 
-**Note:** The deprecated `generate_2.js` file has been removed to fix build errors. The main generation endpoint (`generate.js`) uses React PDF and works perfectly.
+### ATS Optimization
+- Exact JD keyword matching
+- Technology version matching
+- Domain keyword integration
+- Natural language flow
+- Strong metrics emphasis
 
-### Other Platforms
+### User Experience
+- Dark/light theme toggle
+- Real-time generation timer
+- Quick copy buttons for profile data
+- Template preview functionality
+- Responsive design
 
-For other platforms (AWS, DigitalOcean, etc.):
+## 🔒 Security Notes
 
-1. Set environment variables
-2. Run `npm run build`
-3. Start with `npm start`
-4. Ensure Node.js 20.x is available
+- API keys stored in environment variables
+- No sensitive data in codebase
+- Profile data stored locally (not in database)
+- No user authentication (single-user system)
 
-## 📝 License
+## 📚 Additional Resources
+
+### Profile Data Format
+See `resumes/_template.json` for complete structure.
+
+### Adding New Roles
+1. Add role pattern to `lib/role-detector.js`
+2. Create prompt template in `lib/prompts/[role].txt`
+3. Update `getPromptForRole()` mapping
+
+### Adding New Templates
+1. Create template component in `lib/pdf-templates/templates/`
+2. Register in `lib/pdf-templates/index.js`
+3. Add to template list in `pages/api/templates.js`
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Generation timeout**
+- Reduce job description length
+- Use faster model (Claude Haiku)
+- Check API key validity
+
+**Role not detected**
+- Add more keywords to role patterns
+- Check job description contains role keywords
+- Falls back to default prompt
+
+**PDF generation fails**
+- Check profile JSON structure
+- Verify template exists
+- Check console logs for errors
+
+## 📄 License
 
 Private project - All rights reserved
 
-## 🤝 Contributing
+## 🔄 Version
 
-This is a private project. For questions or issues, please contact the project maintainer.
+**Current Version**: 1.0.0
 
-## 📞 Support
+**Node Version**: 20.x
 
-For technical issues or questions about the application, please refer to the codebase documentation or contact the development team.
+**Next.js Version**: 14.1.0
 
 ---
 
-**Built with ❤️ using Next.js, React PDF, and AI**
+**Note**: This is a private resume generation tool. Ensure API keys are kept secure and not committed to version control.

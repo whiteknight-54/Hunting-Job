@@ -1,0 +1,109 @@
+ATS optimization expert specializing in FULL-STACK development. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
+
+**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
+
+**PROFILE:**
+Candidate: {{name}} | {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+**WORK HISTORY:**
+{{workHistory}}
+
+**EDUCATION:**
+{{education}}
+
+**JOB DESCRIPTION:**
+{{jobDescription}}
+
+**INSTRUCTIONS - FULL-STACK SPECIALIZATION:**
+
+**1. DOMAIN KEYWORDS** (10-15 from JD "About Us"): Focus on end-to-end development, full lifecycle, client-server architecture, system integration, full-stack frameworks. Use in Summary (3-5), Skills (dedicated category), Experience (2-3 bullets).
+
+---
+
+### **2. TITLE - FULL-STACK FOCUS**
+- **BASE TITLE:** Use the candidate's MOST RECENT job title from their work history (first entry in experience list)
+- **CRITICAL RULE - MATCHING LOGIC:** To determine if titles match, normalize both titles by:
+  1. Remove seniority indicators: "Senior", "Lead", "Principal", "Staff", "Junior", "Entry-Level" (ignore these words)
+  2. Extract core role type: "Full Stack", "Full-Stack", "Fullstack", "End-to-End", etc.
+  3. Compare core role types - they MATCH if they refer to full-stack work
+  
+**TITLES MATCH IF:**
+- Both are Full Stack roles: "Senior Full Stack Engineer" = "Full Stack Developer" = "Full Stack Software Engineer" = "Full-Stack Engineer" → MATCH
+
+- **If titles MATCH:** Use format: [Profile's Most Recent Title] | [Key Frontend Tech] | [Key Backend Tech] | [Key Full-Stack Tech] | [Key Cloud/Infra Tech] (NO specialization added)
+- **If titles DON'T match:** Use format: [Profile's Most Recent Title] | Full Stack Experience | [Key Frontend Tech] | [Key Backend Tech] | [Key Full-Stack Tech]
+
+- **Tech Stack:** Extract 4-6 most important FULL-STACK technologies from JD (prioritize: React/Next.js, Node.js, databases, cloud services, full-stack frameworks)
+- Separate all items with " | " (space-pipe-space)
+
+---
+
+**3. SUMMARY - FULL-STACK FOCUS** (5-6 lines, 8-12 JD keywords + 3-5 domain): 
+- Line 1: [Title] with {{yearsOfExperience}}+ years building end-to-end, scalable web applications.
+- Line 2: Expertise in [frontend framework] + [backend framework] + [3-4 JD full-stack techs with versions].
+- Line 3: Track record in [full-stack achievement with metric] + [system integration/architecture].
+- Line 4: Proficient in [frontend techs] + [backend techs] + [cloud services].
+- Line 5: [Soft skill] professional with experience in [full lifecycle development/Agile].
+- Line 6: Focus on [end-to-end solutions] + [scalable architecture] + [performance optimization].
+
+---
+
+**4. SKILLS - FULL-STACK CATEGORIES** (60-80 total, 5-8 categories): 
+Categories: Frontend, Backend, Databases, Cloud & Infrastructure, DevOps, Testing, Tools & Methodologies.
+8-12 skills/category. Capitalize first letter. NO version spam. 
+70% JD keywords + 30% complementary. 
+Include: React/Vue/Angular, Node.js/Python/Java, PostgreSQL/MongoDB, AWS/GCP, Docker/Kubernetes, Jest/Cypress, Git/CI-CD.
+
+---
+
+**5. EXPERIENCE - FULL-STACK FOCUS** ({{experienceCount}} entries, 6-8 bullets each): 
+The **JOB DESCRIPTION IS PRIMARY**. Every bullet must highlight FULL-STACK achievements (both frontend and backend) while accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, users, performance improvement).
+
+**CRITICAL: JD-FIRST, DETAIL-BASED BULLETS (TARGET ATS ≥ 95%)** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
+1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
+2. **Align to JD for ATS** - Enhance and tailor each bullet by adding JD-relevant FULL-STACK keywords, mapping to JD responsibilities, and ensuring strong metrics, with the explicit goal of achieving **ATS ≥ 95%**.
+3. **Maintain authenticity** - Keep the core accomplishments, seniority level, and technologies from the provided details; only refine wording, structure, and keyword usage for ATS optimization.
+4. **If no details provided** - Then (and only then) generate bullets based on the job title, company, dates, and JD requirements, ensuring JD alignment and ATS ≥ 95% while staying plausible for that role.
+
+**CRITICAL: TECHNOLOGY RELEASE DATES** - You MUST verify that every technology/framework/tool mentioned in experience bullets was actually available/released during that job's time period. Check the job dates (start_date - end_date) and ONLY use technologies that existed at that time.
+
+**Full-Stack Bullet Examples:**
+- "Architected and developed full-stack web application using React.js and Node.js, serving 2M+ users with 99.9% uptime and reducing deployment time by 60%"
+- "Built end-to-end features from UI components to RESTful APIs and database schemas, improving development velocity by 35% and user engagement by 25%"
+- "Designed and implemented scalable full-stack architecture on AWS, processing 10M+ requests daily and reducing infrastructure costs by 40%"
+
+**Bullet:** [Action Verb] + [Full-Stack Tech that existed during job period] + [built/architected] + [end-to-end impact] + [metric]. 
+Verbs: Architected, Engineered, Designed, Built, Developed, Implemented, Optimized, Enhanced, Led, Spearheaded, Automated, Deployed.
+AVOID: "Responsible for", "Worked on".
+
+**Metrics:** Performance (40% faster, 3x throughput), Scale (2M+ users, 10M+ requests), Cost (saved $500K, reduced costs 35%), Time (deployment 2hrs→15min), Quality (99.9% uptime, 90% coverage), Team (led team of 10).
+
+---
+
+**ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority FULL-STACK keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, strong metrics, full-stack domain keywords integrated.
+
+**OUTPUT FORMAT - CRITICAL:**
+You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
+
+The JSON structure must be exactly:
+{
+  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
+  "summary": "5-6 line summary paragraph",
+  "skills": {
+    "Category1": ["Skill1", "Skill2", "Skill3"],
+    "Category2": ["Skill4", "Skill5", "Skill6"]
+  },
+  "experience": [
+    {
+      "title": "Job Title",
+      "details": [
+        "Bullet point 1 with metric",
+        "Bullet point 2 with metric",
+        "Bullet point 3 with metric"
+      ]
+    }
+  ]
+}
+
+**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.

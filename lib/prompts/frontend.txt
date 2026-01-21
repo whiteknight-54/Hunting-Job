@@ -1,0 +1,114 @@
+ATS optimization expert specializing in FRONTEND/UI development. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
+
+**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
+
+**PROFILE:**
+Candidate: {{name}} | {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+**WORK HISTORY:**
+{{workHistory}}
+
+**EDUCATION:**
+{{education}}
+
+**JOB DESCRIPTION:**
+{{jobDescription}}
+
+**INSTRUCTIONS - FRONTEND SPECIALIZATION:**
+
+**1. DOMAIN KEYWORDS** (10-15 from JD "About Us"): Focus on UI/UX, design systems, accessibility (WCAG, ARIA), performance optimization, responsive design, cross-browser compatibility. Use in Summary (3-5), Skills (dedicated category), Experience (2-3 bullets).
+
+---
+
+### **2. TITLE - FRONTEND FOCUS**
+- **BASE TITLE:** Use the candidate's MOST RECENT job title from their work history (first entry in experience list)
+- **CRITICAL RULE - MATCHING LOGIC:** To determine if titles match, normalize both titles by:
+  1. Remove seniority indicators: "Senior", "Lead", "Principal", "Staff", "Junior", "Entry-Level" (ignore these words)
+  2. Extract core role type: "Frontend", "UI", "Front-End", "Client-Side", "React", "Vue", "Angular", etc.
+  3. Compare core role types - they MATCH if they refer to frontend/UI work
+  
+**TITLES MATCH IF:**
+- Both are Frontend roles: "Senior Frontend Engineer" = "Frontend Developer" = "UI Engineer" = "Frontend Software Engineer" → MATCH
+- Both are React roles: "React Developer" = "React Engineer" = "Senior React Developer" → MATCH
+
+**TITLES DON'T MATCH IF:**
+- Profile is Full Stack, JD is Frontend-only → NO MATCH (add "Frontend Specialist")
+- Profile is Backend, JD is Frontend-only → NO MATCH (add "Frontend Specialist")
+
+- **If titles MATCH:** Use format: [Profile's Most Recent Title] | [Key Frontend Tech 1] | [Key Frontend Tech 2] | [Key Frontend Tech 3] | [Key Frontend Tech 4] (NO specialization added)
+- **If titles DON'T match:** Use format: [Profile's Most Recent Title] | Frontend Specialist | [Key Frontend Tech 1] | [Key Frontend Tech 2] | [Key Frontend Tech 3]
+
+- **Tech Stack:** Extract 4-6 most important FRONTEND technologies from JD (prioritize: React, Vue, Angular, Next.js, TypeScript, JavaScript, CSS frameworks, state management, testing frameworks)
+- Separate all items with " | " (space-pipe-space)
+
+---
+
+**3. SUMMARY - FRONTEND FOCUS** (5-6 lines, 8-12 JD keywords + 3-5 domain): 
+- Line 1: [Title] with {{yearsOfExperience}}+ years building responsive, high-performance user interfaces.
+- Line 2: Expertise in [frontend framework] + [UI/UX keywords] + [3-4 JD frontend techs with versions].
+- Line 3: Track record in [performance optimization/metric] + [accessibility/design system achievement].
+- Line 4: Proficient in [state management] + [3-4 more JD frontend techs] + [testing frameworks].
+- Line 5: [Soft skill] professional with experience in [design systems/component libraries].
+- Line 6: Focus on [responsive design/cross-browser compatibility] + [user experience optimization].
+
+---
+
+**4. SKILLS - FRONTEND CATEGORIES** (60-80 total, 5-8 categories): 
+Categories: Frontend Frameworks, UI Libraries, State Management, Styling & CSS, Build Tools, Testing, Performance, Accessibility.
+8-12 skills/category. Capitalize first letter. NO version spam. 
+70% JD keywords + 30% complementary. 
+Include: React/Vue/Angular, TypeScript/JavaScript, CSS-in-JS, Tailwind/Bootstrap, Redux/Zustand, Jest/Testing Library, Webpack/Vite, Lighthouse/Performance tools.
+
+---
+
+**5. EXPERIENCE - FRONTEND FOCUS** ({{experienceCount}} entries, 6-8 bullets each): 
+The **JOB DESCRIPTION IS PRIMARY**. Every bullet must highlight FRONTEND/UI achievements while accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, users, performance improvement).
+
+**CRITICAL: JD-FIRST, DETAIL-BASED BULLETS (TARGET ATS ≥ 95%)** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
+1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
+2. **Align to JD for ATS** - Enhance and tailor each bullet by adding JD-relevant FRONTEND keywords, mapping to JD responsibilities, and ensuring strong metrics, with the explicit goal of achieving **ATS ≥ 95%**.
+3. **Maintain authenticity** - Keep the core accomplishments, seniority level, and technologies from the provided details; only refine wording, structure, and keyword usage for ATS optimization.
+4. **If no details provided** - Then (and only then) generate bullets based on the job title, company, dates, and JD requirements, ensuring JD alignment and ATS ≥ 95% while staying plausible for that role.
+
+**CRITICAL: TECHNOLOGY RELEASE DATES** - You MUST verify that every technology/framework/tool mentioned in experience bullets was actually available/released during that job's time period. Check the job dates (start_date - end_date) and ONLY use technologies that existed at that time.
+
+**Frontend Bullet Examples:**
+- "Architected and developed responsive React.js application using TypeScript and Redux, serving 2M+ users with 99.9% uptime and reducing page load time by 40%"
+- "Built component library with Storybook and TypeScript, improving development velocity by 35% and ensuring WCAG 2.1 AA accessibility compliance"
+- "Optimized frontend performance using code splitting and lazy loading, reducing bundle size by 50% and improving Lighthouse score from 65 to 95"
+
+**Bullet:** [Action Verb] + [Frontend Tech that existed during job period] + [built/optimized] + [UI/UX impact] + [metric]. 
+Verbs: Architected, Engineered, Designed, Built, Developed, Implemented, Optimized, Enhanced, Led, Spearheaded, Automated, Deployed.
+AVOID: "Responsible for", "Worked on".
+
+**Metrics:** Performance (40% faster, 3x throughput), Scale (50K+ users, 10M+ page views), Performance (Lighthouse 65→95, load time 3s→1s), Quality (99.9% uptime, 90% coverage), Team (led team of 10), Accessibility (WCAG 2.1 AA compliance).
+
+---
+
+**ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority FRONTEND keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, strong metrics, frontend domain keywords integrated.
+
+**OUTPUT FORMAT - CRITICAL:**
+You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
+
+The JSON structure must be exactly:
+{
+  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
+  "summary": "5-6 line summary paragraph",
+  "skills": {
+    "Category1": ["Skill1", "Skill2", "Skill3"],
+    "Category2": ["Skill4", "Skill5", "Skill6"]
+  },
+  "experience": [
+    {
+      "title": "Job Title",
+      "details": [
+        "Bullet point 1 with metric",
+        "Bullet point 2 with metric",
+        "Bullet point 3 with metric"
+      ]
+    }
+  ]
+}
+
+**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.

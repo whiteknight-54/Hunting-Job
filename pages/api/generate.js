@@ -6,12 +6,12 @@ import { renderToStream } from "@react-pdf/renderer";
 import { getTemplate } from "../../lib/pdf-templates";
 import { callAI } from "../../lib/ai-service";
 import { getTemplateForProfile, getProfileBySlug, getPromptForProfile } from "../../lib/profile-template-mapping";
-import { loadPromptForProfile } from "../../lib/prompt-loader";
+import { detectRole, getPromptForRole } from "../../lib/role-detector";
 
 // Performance: Cache prompt templates in memory
 const promptCache = new Map();
 
-// Job validation keywords
+// Pre-compile validation patterns for performance
 const hybridKeywords = [
   'hybrid', 'hybrid work', 'hybrid model', 'hybrid schedule',
   'days in office', 'days per week in office', 'in-office days',
@@ -26,6 +26,19 @@ const onsiteKeywords = [
   'candidates must be in', 'candidates must reside'
 ];
 
+// Pre-compile regex for faster validation
+const remoteKeywords = ['remote', 'work from home', 'fully remote', '100% remote', 'remote-first', 'distributed team'];
+const juniorKeywords = ['junior role', 'entry level', 'entry-level'];
+const internKeywords = [' intern ', 'internship'];
+
+// Helper function for fast keyword checking
+const hasAnyKeyword = (text, keywords) => {
+  for (const keyword of keywords) {
+    if (text.includes(keyword)) return true;
+  }
+  return false;
+};
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
@@ -38,20 +51,15 @@ export default async function handler(req, res) {
 
     // **Job Description Validation: Check if job is remote or hybrid/onsite**
     console.log("Checking job location type...");
+    // Cache lowercase conversion - used multiple times
     const jdLower = jd.toLowerCase();
     
-    // Check for hybrid indicators
-    const isHybrid = hybridKeywords.some(keyword => jdLower.includes(keyword));
-    
-    // Check for onsite indicators (but exclude if "remote" is also mentioned strongly)
-    const hasOnsiteKeywords = onsiteKeywords.some(keyword => jdLower.includes(keyword));
-    const hasRemoteKeywords = jdLower.includes('remote') || jdLower.includes('work from home') || 
-                               jdLower.includes('fully remote') || jdLower.includes('100% remote') ||
-                               jdLower.includes('remote-first') || jdLower.includes('distributed team');
-    const hasJuniorKeywords = jdLower.includes('junior role') || jdLower.includes('entry level') ||
-                               jdLower.includes('entry-level');
-    
-    const hasInternKeywords = jdLower.includes(' intern ') || jdLower.includes('internship');
+    // Optimized validation using helper function
+    const isHybrid = hasAnyKeyword(jdLower, hybridKeywords);
+    const hasOnsiteKeywords = hasAnyKeyword(jdLower, onsiteKeywords);
+    const hasRemoteKeywords = hasAnyKeyword(jdLower, remoteKeywords);
+    const hasJuniorKeywords = hasAnyKeyword(jdLower, juniorKeywords);
+    const hasInternKeywords = hasAnyKeyword(jdLower, internKeywords);
 
     const isJunior = hasJuniorKeywords && !hasInternKeywords;
     const isIntern = hasInternKeywords && !hasJuniorKeywords;
@@ -126,22 +134,26 @@ export default async function handler(req, res) {
     }
 
 
-    // Calculate years of experience with improved date parsing
+    // Calculate years of experience with improved date parsing - optimized
     const calculateYears = (experience) => {
       if (!experience || experience.length === 0) return 0;
+
+      // Pre-compile regex pattern
+      const mmYyyyPattern = /^(\d{1,2})\/(\d{4})\s*$/;
+      const presentLower = "present";
+      const msPerYear = 1000 * 60 * 60 * 24 * 365;
 
       const parseDate = (dateStr) => {
         if (!dateStr) return null;
         
         const trimmed = String(dateStr).trim();
-        if (trimmed.toLowerCase() === "present") return new Date();
+        const trimmedLower = trimmed.toLowerCase();
+        if (trimmedLower === presentLower) return new Date();
         
-        // Handle MM/YYYY format (e.g., "12/2018", "07/2018")
-        const mmYyyyMatch = trimmed.match(/^(\d{1,2})\/(\d{4})\s*$/);
+        // Handle MM/YYYY format (e.g., "12/2018", "07/2018") - optimized
+        const mmYyyyMatch = trimmed.match(mmYyyyPattern);
         if (mmYyyyMatch) {
-          const month = parseInt(mmYyyyMatch[1], 10) - 1; // JS months are 0-indexed
-          const year = parseInt(mmYyyyMatch[2], 10);
-          return new Date(year, month, 1); // First day of the month
+          return new Date(parseInt(mmYyyyMatch[2], 10), parseInt(mmYyyyMatch[1], 10) - 1, 1);
         }
         
         // Try standard Date parsing
@@ -156,46 +168,65 @@ export default async function handler(req, res) {
         return parsed;
       };
 
-      // Parse all dates and filter out invalid ones
-      const validDates = experience
-        .map(job => parseDate(job?.start_date))
-        .filter(date => date !== null);
+      // Parse all dates and filter out invalid ones - optimized loop
+      const validDates = [];
+      for (let i = 0; i < experience.length; i++) {
+        const date = parseDate(experience[i]?.start_date);
+        if (date !== null) validDates.push(date);
+      }
       
       if (validDates.length === 0) {
         console.warn("No valid dates found in experience");
         return 0;
       }
       
-      // Find earliest date
-      const earliest = validDates.reduce((min, date) => {
-        return date < min ? date : min;
-      }, validDates[0]);
+      // Find earliest date - optimized
+      let earliest = validDates[0];
+      for (let i = 1; i < validDates.length; i++) {
+        if (validDates[i] < earliest) {
+          earliest = validDates[i];
+        }
+      }
       
-      const years = (new Date() - earliest) / (1000 * 60 * 60 * 24 * 365);
+      const years = (Date.now() - earliest.getTime()) / msPerYear;
       return Math.max(0, Math.round(years));
     };
 
     const yearsOfExperience = calculateYears(profileData.experience);
 
-    // Prepare variables for prompt template
-    const workHistory = (profileData.experience || []).map((job, idx) => {
+    // Prepare variables for prompt template - optimized string building
+    const experience = profileData.experience || [];
+    const workHistoryParts = [];
+    for (let idx = 0; idx < experience.length; idx++) {
+      const job = experience[idx];
       const parts = [`${idx + 1}. ${job?.company || 'Unknown Company'}`];
       if (job?.title) parts.push(job.title);
       if (job?.location) parts.push(job.location);
       parts.push(`${job?.start_date || 'N/A'} - ${job?.end_date || 'N/A'}`);
-      return parts.join(' | ');
-    }).join('\n');
+      workHistoryParts.push(parts.join(' | '));
+    }
+    const workHistory = workHistoryParts.join('\n');
 
-    const education = (profileData.education || []).map(edu => {
+    const educationList = profileData.education || [];
+    const educationParts = [];
+    for (let i = 0; i < educationList.length; i++) {
+      const edu = educationList[i];
       let eduStr = `- ${edu?.degree || 'N/A'}, ${edu?.school || 'N/A'} (${edu?.start_year || ''}-${edu?.end_year || ''})`;
       if (edu?.grade) eduStr += ` | GPA: ${edu.grade}`;
-      return eduStr;
-    }).join('\n');
+      educationParts.push(eduStr);
+    }
+    const education = educationParts.join('\n');
 
     // Performance: Load prompt template with caching
     console.time('prompt-loading');
-    // Cache key is just the profile slug (template doesn't change per profile)
-    const promptCacheKey = profileSlug;
+    
+    // Detect role from job description and role name for targeted prompts
+    const detectedRole = detectRole(jd, roleName);
+    const roleBasedPromptName = getPromptForRole(detectedRole);
+    console.log(`Detected role: ${detectedRole} → Using prompt: ${roleBasedPromptName}`);
+    
+    // Cache key includes both profile slug and role (different roles may need different prompts)
+    const promptCacheKey = `${profileSlug}-${roleBasedPromptName}`;
     
     let promptTemplate;
     if (promptCache.has(promptCacheKey)) {
@@ -203,24 +234,45 @@ export default async function handler(req, res) {
       promptTemplate = promptCache.get(promptCacheKey);
       console.log("Using cached prompt template");
     } else {
-      // Load and cache the raw template (without variable replacements)
-      const promptName = getPromptForProfile(profileSlug);
-      const templatePath = path.join(process.cwd(), 'lib', 'prompts', `${promptName}.txt`);
-      const defaultPath = path.join(process.cwd(), 'lib', 'prompts', 'default.txt');
+      // Try role-based prompt first, then profile-specific, then default
+      // Use async file operations for better performance
+      const promptsDir = path.join(process.cwd(), 'lib', 'prompts');
+      const rolePromptPath = path.join(promptsDir, `${roleBasedPromptName}.txt`);
+      const profilePromptName = getPromptForProfile(profileSlug);
+      const profilePromptPath = path.join(promptsDir, `${profilePromptName}.txt`);
+      const defaultPath = path.join(promptsDir, 'default.txt');
       
-      if (fs.existsSync(templatePath)) {
-        promptTemplate = fs.readFileSync(templatePath, 'utf-8');
-      } else if (fs.existsSync(defaultPath)) {
-        promptTemplate = fs.readFileSync(defaultPath, 'utf-8');
-      } else {
-        throw new Error(`Prompt template not found for ${profileSlug}`);
+      // Try to read files in priority order (async)
+      try {
+        promptTemplate = await fsPromises.readFile(rolePromptPath, 'utf-8');
+        console.log(`Using role-based prompt: ${roleBasedPromptName}.txt`);
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+          try {
+            promptTemplate = await fsPromises.readFile(profilePromptPath, 'utf-8');
+            console.log(`Using profile-specific prompt: ${profilePromptName}.txt`);
+          } catch (err2) {
+            if (err2.code === 'ENOENT') {
+              try {
+                promptTemplate = await fsPromises.readFile(defaultPath, 'utf-8');
+                console.log(`Using default prompt`);
+              } catch (err3) {
+                throw new Error(`Prompt template not found for ${profileSlug} (role: ${detectedRole})`);
+              }
+            } else {
+              throw err2;
+            }
+          }
+        } else {
+          throw err;
+        }
       }
       
       // Cache the raw template
       promptCache.set(promptCacheKey, promptTemplate);
     }
     
-    // Process template with variables
+    // Process template with variables - optimized single pass replacement
     const variables = {
       name: profileData.name || "Unknown",
       email: profileData.email || "",
@@ -232,10 +284,16 @@ export default async function handler(req, res) {
       experienceCount: (profileData.experience || []).length
     };
     
+    // Pre-compile regex patterns for all variables (one-time compilation)
+    const variablePatterns = Object.keys(variables).map(key => ({
+      pattern: new RegExp(`\\{\\{${key}\\}\\}`, 'g'),
+      value: String(variables[key] || '')
+    }));
+    
+    // Single pass replacement with pre-compiled patterns
     let prompt = promptTemplate;
-    for (const [key, value] of Object.entries(variables)) {
-      const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
-      prompt = prompt.replace(regex, String(value || ''));
+    for (const { pattern, value } of variablePatterns) {
+      prompt = prompt.replace(pattern, value);
     }
     
     console.timeEnd('prompt-loading');
@@ -279,14 +337,16 @@ export default async function handler(req, res) {
     // Performance: Extract content - don't retry on max_tokens if JSON is valid
     let content = extractContent(aiResponse);
     
-    // Check if we have valid JSON even if max_tokens was hit
-    const hasValidJson = content.includes('{') && content.includes('}');
+    // Check if we have valid JSON even if max_tokens was hit - optimized check
+    const hasValidJson = content.indexOf('{') !== -1 && content.indexOf('}') !== -1;
     
     if ((aiResponse.stop_reason === 'max_tokens' || aiResponse.stop_reason === 'length') && hasValidJson) {
       console.warn(`⚠️ WARNING: ${provider.toUpperCase()} hit max_tokens limit, but response appears complete. Attempting to parse...`);
+      // Pre-compiled pattern for quick test parse
+      const quickCleanPattern = /```(?:json\s*)?/gi;
       // Try to parse - if it works, we don't need to retry
       try {
-        const testParse = JSON.parse(content.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim());
+        const testParse = JSON.parse(content.replace(quickCleanPattern, "").replace(/```\s*/g, "").trim());
         if (testParse.title && testParse.summary && testParse.skills && testParse.experience) {
           console.log("✅ Response is complete despite max_tokens - no retry needed");
           // Use the extracted content as-is
@@ -312,10 +372,11 @@ export default async function handler(req, res) {
       }
     }
 
-    // Check if AI is apologizing instead of returning JSON
-    if (content.toLowerCase().startsWith("i'm sorry") ||
-      content.toLowerCase().startsWith("i cannot") ||
-      content.toLowerCase().startsWith("i apologize")) {
+    // Check if AI is apologizing instead of returning JSON - optimized
+    const contentLower = content.toLowerCase();
+    if (contentLower.startsWith("i'm sorry") ||
+      contentLower.startsWith("i cannot") ||
+      contentLower.startsWith("i apologize")) {
       console.error("AI is apologizing instead of returning JSON:", content.substring(0, 200));
       throw new Error("AI refused to generate resume. The prompt may be too complex. Please try again with a shorter job description or simpler requirements.");
     }
@@ -323,15 +384,16 @@ export default async function handler(req, res) {
     // Performance: Optimized JSON extraction - single pass when possible
     console.time('json-extraction');
     
+    // Pre-compiled regex patterns for JSON cleaning
+    const codeBlockPattern = /```(?:json|javascript|js)?\s*/gi;
+    const prefixPattern = /^(here is|here's|this is|the json is|json:|response:):?\s*/gim;
+    
     // Enhanced JSON extraction - handle various formats
-    // Remove markdown code blocks (case insensitive) - be more aggressive
-    let cleanedContent = content.replace(/```json\s*/gi, "")
-      .replace(/```javascript\s*/gi, "")
-      .replace(/```js\s*/gi, "")
-      .replace(/```\s*/g, "");
+    // Remove markdown code blocks (case insensitive) - optimized single pass
+    let cleanedContent = content.replace(codeBlockPattern, "").replace(/```\s*/g, "");
 
     // Remove common prefixes and explanations
-    cleanedContent = cleanedContent.replace(/^(here is|here's|this is|the json is|json:|response:):?\s*/gim, "");
+    cleanedContent = cleanedContent.replace(prefixPattern, "");
     
     // Remove any text before the first {
     const firstBrace = cleanedContent.indexOf('{');
@@ -383,25 +445,32 @@ export default async function handler(req, res) {
       console.error("First 500 chars:", content.substring(0, 500));
       console.error("Last 500 chars:", content.substring(Math.max(0, content.length - 500)));
 
-      // Try to fix common JSON issues
+      // Try to fix common JSON issues - use pre-compiled patterns
       try {
         let fixedContent = content;
         
+        // Pre-compiled regex patterns for JSON fixing
+        const trailingCommaPattern = /,(\s*[}\]])/g;
+        const unescapedNewlinePattern = /("(?:[^"\\]|\\.)*")\s*\n\s*/g;
+        const unescapedQuotePattern = /("(?:[^"\\]|\\.)*")\s*:\s*"([^"]*)"([,}])/g;
+        const lineCommentPattern = /\/\/.*$/gm;
+        const blockCommentPattern = /\/\*[\s\S]*?\*\//g;
+        
         // Remove trailing commas before } or ]
-        fixedContent = fixedContent.replace(/,(\s*[}\]])/g, '$1');
+        fixedContent = fixedContent.replace(trailingCommaPattern, '$1');
         
         // Fix unescaped newlines in strings
-        fixedContent = fixedContent.replace(/("(?:[^"\\]|\\.)*")\s*\n\s*/g, '$1 ');
+        fixedContent = fixedContent.replace(unescapedNewlinePattern, '$1 ');
         
         // Fix unescaped quotes in string values (but not keys)
-        fixedContent = fixedContent.replace(/("(?:[^"\\]|\\.)*")\s*:\s*"([^"]*)"([,}])/g, (match, key, value, ending) => {
+        fixedContent = fixedContent.replace(unescapedQuotePattern, (match, key, value, ending) => {
           const escapedValue = value.replace(/"/g, '\\"');
           return `${key}: "${escapedValue}"${ending}`;
         });
         
         // Remove comments (JSON doesn't support comments)
-        fixedContent = fixedContent.replace(/\/\/.*$/gm, '');
-        fixedContent = fixedContent.replace(/\/\*[\s\S]*?\*\//g, '');
+        fixedContent = fixedContent.replace(lineCommentPattern, '');
+        fixedContent = fixedContent.replace(blockCommentPattern, '');
         
         // Try parsing again
         resumeContent = JSON.parse(fixedContent);
@@ -410,13 +479,17 @@ export default async function handler(req, res) {
         console.error("Failed to parse even after fixes");
         console.error("Second error:", secondError.message);
         
-        // Try one more time with more aggressive fixes
+        // Try one more time with more aggressive fixes - pre-compiled patterns
         try {
           let aggressiveFix = content;
+          // Pre-compiled patterns for aggressive fixing
+          const controlCharPattern = /[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g;
+          const quoteFixPattern = /([^\\])"([^",:}\]]*)"\s*:/g;
+          
           // Remove all control characters except newlines and tabs
-          aggressiveFix = aggressiveFix.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+          aggressiveFix = aggressiveFix.replace(controlCharPattern, '');
           // Fix any remaining issues with quotes
-          aggressiveFix = aggressiveFix.replace(/([^\\])"([^",:}\]]*)"\s*:/g, '$1"$2":');
+          aggressiveFix = aggressiveFix.replace(quoteFixPattern, '$1"$2":');
           resumeContent = JSON.parse(aggressiveFix);
           console.log("✅ Successfully parsed after aggressive fixes");
         } catch (thirdError) {
@@ -480,21 +553,28 @@ export default async function handler(req, res) {
       education: profileData.education || []
     };
 
-    // Performance: Generate filename first (before PDF rendering)
+    // Performance: Generate filename first (before PDF rendering) - optimized
+    // Pre-compile sanitization pattern
+    const sanitizePattern = /[^A-Za-z0-9_-]/g;
+    const spacePattern = /\s+/g;
+    
     const nameParts = resumeName ? resumeName.trim().split(/\s+/) : [];
     let baseName;
-    if (!nameParts || nameParts.length === 0) baseName = 'resume';
-    else if (nameParts.length === 1) baseName = nameParts[0];
-    else baseName = `${nameParts[0]}_${nameParts[nameParts.length - 1]}`;
-    baseName = baseName.replace(/\s+/g, "_").replace(/[^A-Za-z0-9_-]/g, "");
+    if (nameParts.length === 0) {
+      baseName = 'resume';
+    } else if (nameParts.length === 1) {
+      baseName = nameParts[0].replace(sanitizePattern, "");
+    } else {
+      baseName = `${nameParts[0]}_${nameParts[nameParts.length - 1]}`.replace(sanitizePattern, "");
+    }
 
-    // Append role name (required)
-    const sanitizedRoleName = roleName.trim().replace(/\s+/g, "_").replace(/[^A-Za-z0-9_-]/g, "");
+    // Append role name (required) - optimized
+    const sanitizedRoleName = roleName.trim().replace(spacePattern, "_").replace(sanitizePattern, "");
     baseName = `${baseName}_${sanitizedRoleName}`;
 
-    // Append company name if provided
+    // Append company name if provided - optimized
     if (companyName && companyName.trim()) {
-      const sanitizedCompanyName = companyName.trim().replace(/\s+/g, "_").replace(/[^A-Za-z0-9_-]/g, "");
+      const sanitizedCompanyName = companyName.trim().replace(spacePattern, "_").replace(sanitizePattern, "");
       baseName = `${baseName}_${sanitizedCompanyName}`;
     }
 

@@ -1,0 +1,114 @@
+ATS optimization expert specializing in SAP ERP implementation and development. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
+
+**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
+
+**PROFILE:**
+Candidate: {{name}} | {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+**WORK HISTORY:**
+{{workHistory}}
+
+**EDUCATION:**
+{{education}}
+
+**JOB DESCRIPTION:**
+{{jobDescription}}
+
+**INSTRUCTIONS - SAP SPECIALIZATION:**
+
+**1. DOMAIN KEYWORDS** (10-15 from JD "About Us"): Focus on ERP, enterprise resource planning, business processes, SAP modules, implementation, customization, integration, business transformation. Use in Summary (3-5), Skills (dedicated category), Experience (2-3 bullets).
+
+---
+
+### **2. TITLE - SAP FOCUS**
+- **BASE TITLE:** Use the candidate's MOST RECENT job title from their work history (first entry in experience list)
+- **CRITICAL RULE - MATCHING LOGIC:** To determine if titles match, normalize both titles by:
+  1. Remove seniority indicators: "Senior", "Lead", "Principal", "Staff", "Junior", "Entry-Level" (ignore these words)
+  2. Extract core role type: "SAP", "SAP Consultant", "SAP Developer", "SAP Analyst", "SAP Architect", etc.
+  3. Compare core role types - they MATCH if they refer to SAP/ERP work
+  
+**TITLES MATCH IF:**
+- Both are SAP roles: "Senior SAP Consultant" = "SAP Developer" = "SAP Analyst" = "SAP Architect" → MATCH
+- Both are ERP roles: "ERP Consultant" = "SAP FICO Consultant" = "SAP MM Consultant" → MATCH
+
+**TITLES DON'T MATCH IF:**
+- Profile is Software Engineer, JD is SAP-only → NO MATCH (add "SAP Specialist")
+- Profile is Backend, JD is SAP-only → NO MATCH (add "SAP Developer")
+
+- **If titles MATCH:** Use format: [Profile's Most Recent Title] | [SAP Module] | [Key SAP Tech 1] | [Key SAP Tech 2] | [Key Integration Tech] (NO specialization added)
+- **If titles DON'T match:** Use format: [Profile's Most Recent Title] | SAP Specialist | [SAP Module] | [Key SAP Tech 1] | [Key SAP Tech 2]
+
+- **Tech Stack:** Extract 4-6 most important SAP technologies from JD (prioritize: SAP Modules, ABAP, SAP HANA, S/4HANA, SAP Fiori, SAP PI/PO, SAP BW/BI, SAP Basis)
+- Separate all items with " | " (space-pipe-space)
+
+---
+
+**3. SUMMARY - SAP FOCUS** (5-6 lines, 8-12 JD keywords + 3-5 domain): 
+- Line 1: [Title] with {{yearsOfExperience}}+ years implementing and customizing SAP ERP solutions.
+- Line 2: Expertise in [SAP Module] + [ABAP/SAP HANA] + [3-4 JD SAP techs with versions].
+- Line 3: Track record in [SAP implementation/customization with metric] + [business process optimization].
+- Line 4: Proficient in [SAP platform features] + [3-4 more JD SAP techs] + [integrations].
+- Line 5: [Soft skill] professional with experience in [SAP consulting/implementation].
+- Line 6: Focus on [SAP best practices] + [enterprise solutions] + [business transformation].
+
+---
+
+**4. SKILLS - SAP CATEGORIES** (60-80 total, 5-8 categories): 
+Categories: SAP Modules, Development & Customization, SAP Platform, Integration & Middleware, Data Management, Basis & Administration, Reporting & Analytics, Related Technologies.
+8-12 skills/category. Capitalize first letter. NO version spam. 
+70% JD keywords + 30% complementary. 
+Include: SAP FICO, SAP MM, SAP SD, SAP PP, SAP HR, SAP ABAP, SAP HANA, S/4HANA, SAP Fiori, SAP PI/PO, SAP BW/BI, SAP Basis, SAP ECC, SAP SuccessFactors, SAP Ariba, SAP Hybris, IDoc, RFC, BAPI.
+
+---
+
+**5. EXPERIENCE - SAP FOCUS** ({{experienceCount}} entries, 6-8 bullets each): 
+The **JOB DESCRIPTION IS PRIMARY**. Every bullet must highlight SAP/ERP achievements while accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, users, transactions, process efficiency).
+
+**CRITICAL: JD-FIRST, DETAIL-BASED BULLETS (TARGET ATS ≥ 95%)** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
+1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
+2. **Align to JD for ATS** - Enhance and tailor each bullet by adding JD-relevant SAP keywords, mapping to JD responsibilities, and ensuring strong metrics, with the explicit goal of achieving **ATS ≥ 95%**.
+3. **Maintain authenticity** - Keep the core accomplishments, seniority level, and technologies from the provided details; only refine wording, structure, and keyword usage for ATS optimization.
+4. **If no details provided** - Then (and only then) generate bullets based on the job title, company, dates, and JD requirements, ensuring JD alignment and ATS ≥ 95% while staying plausible for that role.
+
+**CRITICAL: TECHNOLOGY RELEASE DATES** - You MUST verify that every technology/framework/tool mentioned in experience bullets was actually available/released during that job's time period. Check the job dates (start_date - end_date) and ONLY use technologies that existed at that time.
+
+**SAP Bullet Examples:**
+- "Developed and implemented custom ABAP programs and SAP FICO enhancements, automating financial reporting for 200+ users and reducing month-end closing time by 50%"
+- "Led SAP MM (Materials Management) implementation with custom workflows and integration, processing $100M+ in annual procurement and improving inventory accuracy by 35%"
+- "Architected SAP S/4HANA migration strategy and executed data migration, migrating 10M+ records and reducing system response time by 60%"
+
+**Bullet:** [Action Verb] + [SAP Tech that existed during job period] + [developed/implemented] + [ERP/business impact] + [metric]. 
+Verbs: Architected, Engineered, Designed, Built, Developed, Implemented, Configured, Customized, Optimized, Enhanced, Led, Spearheaded, Automated, Deployed, Migrated.
+AVOID: "Responsible for", "Worked on".
+
+**Metrics:** Performance (50% faster, 60% reduction), Scale (200+ users, $100M+ transactions, 10M+ records), Time (month-end 50% faster, 60% reduction in processing time), Efficiency (35% improvement, 50% automation), Cost (saved $500K, reduced costs 30%), Quality (99.9% uptime, 95% accuracy).
+
+---
+
+**ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority SAP keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, strong metrics, SAP domain keywords integrated.
+
+**OUTPUT FORMAT - CRITICAL:**
+You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
+
+The JSON structure must be exactly:
+{
+  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
+  "summary": "5-6 line summary paragraph",
+  "skills": {
+    "Category1": ["Skill1", "Skill2", "Skill3"],
+    "Category2": ["Skill4", "Skill5", "Skill6"]
+  },
+  "experience": [
+    {
+      "title": "Job Title",
+      "details": [
+        "Bullet point 1 with metric",
+        "Bullet point 2 with metric",
+        "Bullet point 3 with metric"
+      ]
+    }
+  ]
+}
+
+**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.
