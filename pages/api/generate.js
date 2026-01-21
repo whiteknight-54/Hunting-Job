@@ -26,10 +26,12 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
   try {
-    const { profile: profileSlug, jd, template, provider = "claude", model = null, companyName = null } = req.body;
+    const { profile: profileSlug, jd, template, provider = "claude", model = null, roleName, companyName = null } = req.body;
 
     if (!profileSlug) return res.status(400).send("Profile slug required");
     if (!jd) return res.status(400).send("Job description required");
+    if (!roleName || !roleName.trim()) return res.status(400).send("Role name is required");
+    if (!roleName || !roleName.trim()) return res.status(400).send("Role name is required");
 
     // **Job Description Validation: Check if job is remote or hybrid/onsite**
     console.log("Checking job location type...");
@@ -356,13 +358,17 @@ export default async function handler(req, res) {
 
     console.log("PDF generated successfully!");
 
-    // Generate filename from resume name + company name (if provided)
+    // Generate filename from resume name + role name + company name (if provided)
     const nameParts = resumeName ? resumeName.trim().split(/\s+/) : [];
     let baseName;
     if (!nameParts || nameParts.length === 0) baseName = 'resume';
     else if (nameParts.length === 1) baseName = nameParts[0];
     else baseName = `${nameParts[0]}_${nameParts[nameParts.length - 1]}`;
     baseName = baseName.replace(/\s+/g, "_").replace(/[^A-Za-z0-9_-]/g, "");
+
+    // Append role name (required)
+    const sanitizedRoleName = roleName.trim().replace(/\s+/g, "_").replace(/[^A-Za-z0-9_-]/g, "");
+    baseName = `${baseName}_${sanitizedRoleName}`;
 
     // Append company name if provided
     if (companyName && companyName.trim()) {

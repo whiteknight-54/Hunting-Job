@@ -30,6 +30,7 @@ export default function ProfilePage() {
   const { profile: profileSlug } = router.query;
 
   const [jd, setJd] = useState("");
+  const [roleName, setRoleName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [disable, setDisable] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -130,6 +131,11 @@ export default function ProfilePage() {
       return;
     }
 
+    if (!roleName.trim()) {
+      alert("Please enter a role name");
+      return;
+    }
+
     if (!selectedProfileData || !profileSlug) {
       alert("Profile data not loaded");
       return;
@@ -153,6 +159,7 @@ export default function ProfilePage() {
         body: JSON.stringify({
           profile: profileSlug,
           jd: jd,
+          roleName: roleName.trim(),
           companyName: companyName.trim() || null
         })
       });
@@ -485,6 +492,49 @@ export default function ProfilePage() {
               />
             </div>
 
+            {/* Role Name */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{
+                display: "block",
+                fontSize: "11px",
+                fontWeight: "600",
+                color: colors.textSecondary,
+                marginBottom: "6px",
+                textTransform: "uppercase",
+                letterSpacing: "0.3px"
+              }}>
+                Role Name <span style={{ fontWeight: "400", textTransform: "none", color: colors.textMuted }}>(Required)</span>
+              </label>
+              <input
+                type="text"
+                value={roleName}
+                onChange={(e) => setRoleName(e.target.value)}
+                placeholder="Enter role name (e.g., Senior Software Engineer)..."
+                required
+                style={{
+                  width: "100%",
+                  padding: "8px 12px",
+                  fontSize: "13px",
+                  fontFamily: "inherit",
+                  color: colors.text,
+                  background: colors.inputBg,
+                  border: `1px solid ${roleName.trim() ? colors.inputBorder : colors.infoText}`,
+                  borderRadius: "6px",
+                  outline: "none",
+                  transition: "all 0.2s ease",
+                  boxSizing: "border-box"
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = colors.inputFocus;
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${colors.infoBg}`;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = roleName.trim() ? colors.inputBorder : colors.infoText;
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+            </div>
+
             {/* Company Name */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{
@@ -530,30 +580,30 @@ export default function ProfilePage() {
             {/* Generate Button */}
             <button
               onClick={handleGenerate}
-              disabled={disable || !jd.trim()}
+              disabled={disable || !jd.trim() || !roleName.trim()}
               style={{
                 width: "100%",
                 padding: "10px 16px",
                 fontSize: "14px",
                 fontWeight: "600",
                 color: colors.buttonText,
-                background: disable || !jd.trim() ? colors.buttonDisabled : colors.buttonBg,
+                background: disable || !jd.trim() || !roleName.trim() ? colors.buttonDisabled : colors.buttonBg,
                 border: "none",
                 borderRadius: "6px",
-                cursor: disable || !jd.trim() ? "not-allowed" : "pointer",
+                cursor: disable || !jd.trim() || !roleName.trim() ? "not-allowed" : "pointer",
                 transition: "all 0.2s ease",
                 marginBottom: "12px",
-                boxShadow: disable || !jd.trim() ? "none" : theme === 'dark' ? "0 2px 8px rgba(59, 130, 246, 0.3)" : "0 1px 4px rgba(59, 130, 246, 0.2)"
+                boxShadow: disable || !jd.trim() || !roleName.trim() ? "none" : theme === 'dark' ? "0 2px 8px rgba(59, 130, 246, 0.3)" : "0 1px 4px rgba(59, 130, 246, 0.2)"
               }}
               onMouseEnter={(e) => {
-                if (!disable && jd.trim()) {
+                if (!disable && jd.trim() && roleName.trim()) {
                   e.currentTarget.style.background = colors.buttonHover;
                   e.currentTarget.style.transform = "translateY(-1px)";
                   e.currentTarget.style.boxShadow = theme === 'dark' ? "0 4px 12px rgba(59, 130, 246, 0.4)" : "0 2px 8px rgba(59, 130, 246, 0.3)";
                 }
               }}
               onMouseLeave={(e) => {
-                if (!disable && jd.trim()) {
+                if (!disable && jd.trim() && roleName.trim()) {
                   e.currentTarget.style.background = colors.buttonBg;
                   e.currentTarget.style.transform = "translateY(0)";
                   e.currentTarget.style.boxShadow = theme === 'dark' ? "0 2px 8px rgba(59, 130, 246, 0.3)" : "0 1px 4px rgba(59, 130, 246, 0.2)";
