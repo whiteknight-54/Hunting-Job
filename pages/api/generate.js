@@ -204,15 +204,21 @@ export default async function handler(req, res) {
         throw new Error("AI response has no content");
       }
       // Handle multiple content blocks and join them
-      return (response.content || [])
+      const extracted = (response.content || [])
         .map(part => {
           if (typeof part === 'string') return part;
           if (part?.text) return part.text;
+          if (part?.type === 'text' && part?.text) return part.text;
           if (typeof part === 'object') return JSON.stringify(part);
           return String(part || '');
         })
         .join('')
         .trim();
+      
+      // Log first 500 chars for debugging
+      console.log("Raw AI response (first 500 chars):", extracted.substring(0, 500));
+      
+      return extracted;
     };
 
     let content;
@@ -246,24 +252,46 @@ export default async function handler(req, res) {
     }
 
     // Enhanced JSON extraction - handle various formats
-    // Remove markdown code blocks (case insensitive)
+    // Remove markdown code blocks (case insensitive) - be more aggressive
     content = content.replace(/```json\s*/gi, "");
     content = content.replace(/```javascript\s*/gi, "");
+    content = content.replace(/```js\s*/gi, "");
     content = content.replace(/```\s*/g, "");
 
-    // Remove common prefixes
-    content = content.replace(/^(here is|here's|this is|the json is):?\s*/gi, "");
-
-    // Try to extract JSON from text if wrapped
-    // Look for content between first { and last }
+    // Remove common prefixes and explanations
+    content = content.replace(/^(here is|here's|this is|the json is|json:|response:):?\s*/gim, "");
+    
+    // Remove any text before the first {
     const firstBrace = content.indexOf('{');
-    const lastBrace = content.lastIndexOf('}');
+    if (firstBrace > 0) {
+      content = content.substring(firstBrace);
+    }
 
-    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-      content = content.substring(firstBrace, lastBrace + 1);
+    // Find the last } that matches the first {
+    let braceCount = 0;
+    let lastBrace = -1;
+    for (let i = 0; i < content.length; i++) {
+      if (content[i] === '{') braceCount++;
+      if (content[i] === '}') {
+        braceCount--;
+        if (braceCount === 0) {
+          lastBrace = i;
+          break;
+        }
+      }
+    }
+
+    if (lastBrace !== -1) {
+      content = content.substring(0, lastBrace + 1);
     } else {
-      console.error("No JSON object found in response");
-      throw new Error("AI did not return valid JSON format. Please try again.");
+      // Fallback to original method
+      const fallbackLastBrace = content.lastIndexOf('}');
+      if (fallbackLastBrace !== -1) {
+        content = content.substring(0, fallbackLastBrace + 1);
+      } else {
+        console.error("No JSON object found in response");
+        throw new Error("AI did not return valid JSON format. Please try again.");
+      }
     }
 
     content = content.trim();
@@ -275,21 +303,51 @@ export default async function handler(req, res) {
     } catch (parseError) {
       console.error("=== JSON PARSE ERROR ===");
       console.error("Parse error:", parseError.message);
+      console.error("Error position:", parseError.message.match(/position (\d+)/)?.[1] || "unknown");
       console.error("Content length:", content.length);
-      console.error("First 1000 chars:", content.substring(0, 1000));
+      console.error("First 500 chars:", content.substring(0, 500));
       console.error("Last 500 chars:", content.substring(Math.max(0, content.length - 500)));
 
       // Try to fix common JSON issues
       try {
-        // Remove trailing commas
-        let fixedContent = content.replace(/,(\s*[}\]])/g, '$1');
-        // Fix unescaped quotes in strings (basic attempt)
-        fixedContent = fixedContent.replace(/([^\\])"([^",:}\]]*)":/g, '$1\\"$2":');
+        let fixedContent = content;
+        
+        // Remove trailing commas before } or ]
+        fixedContent = fixedContent.replace(/,(\s*[}\]])/g, '$1');
+        
+        // Fix unescaped newlines in strings
+        fixedContent = fixedContent.replace(/("(?:[^"\\]|\\.)*")\s*\n\s*/g, '$1 ');
+        
+        // Fix unescaped quotes in string values (but not keys)
+        fixedContent = fixedContent.replace(/("(?:[^"\\]|\\.)*")\s*:\s*"([^"]*)"([,}])/g, (match, key, value, ending) => {
+          const escapedValue = value.replace(/"/g, '\\"');
+          return `${key}: "${escapedValue}"${ending}`;
+        });
+        
+        // Remove comments (JSON doesn't support comments)
+        fixedContent = fixedContent.replace(/\/\/.*$/gm, '');
+        fixedContent = fixedContent.replace(/\/\*[\s\S]*?\*\//g, '');
+        
+        // Try parsing again
         resumeContent = JSON.parse(fixedContent);
         console.log("✅ Successfully parsed after fixing common issues");
       } catch (secondError) {
         console.error("Failed to parse even after fixes");
-        throw new Error(`AI returned invalid JSON: ${parseError.message}. Please try again.`);
+        console.error("Second error:", secondError.message);
+        
+        // Try one more time with more aggressive fixes
+        try {
+          let aggressiveFix = content;
+          // Remove all control characters except newlines and tabs
+          aggressiveFix = aggressiveFix.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+          // Fix any remaining issues with quotes
+          aggressiveFix = aggressiveFix.replace(/([^\\])"([^",:}\]]*)"\s*:/g, '$1"$2":');
+          resumeContent = JSON.parse(aggressiveFix);
+          console.log("✅ Successfully parsed after aggressive fixes");
+        } catch (thirdError) {
+          console.error("All parsing attempts failed");
+          throw new Error(`AI returned invalid JSON: ${parseError.message}. The AI response may be malformed. Please try again with a shorter job description.`);
+        }
       }
     }
 

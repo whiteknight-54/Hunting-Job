@@ -1,25 +1,19 @@
 ATS optimization expert. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
 
-**OUTPUT: ONLY valid JSON, no markdown/explanations.**
+**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
 
 **PROFILE:**
-Candidate: ${profileData.name} | ${profileData.email} | ${profileData.phone} | ${profileData.location}
-Experience: ${yearsOfExperience} years | Most Recent: ${profileData.experience[0]?.title || 'N/A'}
+Candidate: {{name}} | {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
 
-**WORK:**
-${profileData.experience.map((job, idx) => {
-  let workEntry = `${idx + 1}. ${job.company} | ${job.title || ''} | ${job.start_date} - ${job.end_date}`;
-  if (job.details && job.details.length > 0) {
-    workEntry += '\n   Details:\n' + job.details.map((detail, detailIdx) => `   - ${detail}`).join('\n');
-  }
-  return workEntry;
-}).join('\n\n')}
+**WORK HISTORY:**
+{{workHistory}}
 
 **EDUCATION:**
-${profileData.education.map(edu => `${edu.degree}, ${edu.school} (${edu.start_year}-${edu.end_year})`).join('\n')}
+{{education}}
 
 **JOB DESCRIPTION:**
-${jd}
+{{jobDescription}}
 
 **INSTRUCTIONS:**
 
@@ -71,7 +65,7 @@ ${jd}
 
 ---
 
-**3. SUMMARY** (5-6 lines, 8-12 JD keywords + 3-5 domain): Line 1: [Title] with ${yearsOfExperience}+ years in [domain]. Line 2: Expertise in [domain keyword] + [3-4 JD techs with versions]. Line 3: Track record in [domain keyword] + [achievement with metric]. Line 4: Proficient in [3-4 more JD techs]. Line 5: [Soft skill] professional with Agile/leadership experience. Line 6: Focus on [2-3 JD skill areas] + scalable solutions.
+**3. SUMMARY** (5-6 lines, 8-12 JD keywords + 3-5 domain): Line 1: [Title] with {{yearsOfExperience}}+ years in [domain]. Line 2: Expertise in [domain keyword] + [3-4 JD techs with versions]. Line 3: Track record in [domain keyword] + [achievement with metric]. Line 4: Proficient in [3-4 more JD techs]. Line 5: [Soft skill] professional with Agile/leadership experience. Line 6: Focus on [2-3 JD skill areas] + scalable solutions.
 
 ---
 
@@ -79,7 +73,7 @@ ${jd}
 
 ---
 
-**5. EXPERIENCE** (${profileData.experience.length} entries, 6-8 bullets each): The **JOB DESCRIPTION IS PRIMARY**. Every bullet must be mapped to 1-3 high-priority JD requirements while still accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, users). Industry context in 2-3 bullets/job. Overall targeting **ATS score ≥ 95%**.
+**5. EXPERIENCE** ({{experienceCount}} entries, 6-8 bullets each): The **JOB DESCRIPTION IS PRIMARY**. Every bullet must be mapped to 1-3 high-priority JD requirements while still accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. EVERY bullet needs a metric (%, $, time, scale, users). Industry context in 2-3 bullets/job. Overall targeting **ATS score ≥ 95%**.
 
 **CRITICAL: JD-FIRST, DETAIL-BASED BULLETS (TARGET ATS ≥ 95%)** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
 1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
@@ -107,4 +101,27 @@ ${jd}
 
 **ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, strong metrics, domain keywords integrated.
 
-**OUTPUT:** ONLY valid JSON: {"title":"...","summary":"...","skills":{"Category":["Skill1","Skill2"]},"experience":[{"title":"...","details":["bullet1","bullet2"]}]}
+**OUTPUT FORMAT - CRITICAL:**
+You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
+
+The JSON structure must be exactly:
+{
+  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
+  "summary": "5-6 line summary paragraph",
+  "skills": {
+    "Category1": ["Skill1", "Skill2", "Skill3"],
+    "Category2": ["Skill4", "Skill5", "Skill6"]
+  },
+  "experience": [
+    {
+      "title": "Job Title",
+      "details": [
+        "Bullet point 1 with metric",
+        "Bullet point 2 with metric",
+        "Bullet point 3 with metric"
+      ]
+    }
+  ]
+}
+
+**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.
