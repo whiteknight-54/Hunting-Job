@@ -1,12 +1,11 @@
 # Resume Generator - AI-Powered ATS-Optimized Resume Builder
 
-An intelligent resume generation system that uses AI to create ATS-optimized resumes tailored to specific job descriptions. The system automatically detects the role type and uses specialized prompts to generate highly targeted resumes.
+An intelligent resume generation system that uses AI to create ATS-optimized resumes tailored to specific job descriptions. The system uses a single default prompt to generate targeted resumes.
 
 ## 🚀 Features
 
 ### Core Features
 - **AI-Powered Resume Generation**: Uses Claude (Anthropic) or OpenAI to generate ATS-optimized resume content
-- **Role-Based Prompt Selection**: Automatically detects job role (Frontend, Backend, Full-Stack, DevOps, Salesforce, SAP, etc.) and uses specialized prompts
 - **Multiple Resume Templates**: 10+ professional PDF resume templates with different styles
 - **Profile Management**: Support for multiple candidate profiles with easy switching
 - **Job Description Analysis**: Validates job descriptions (remote-only, mid-level+ positions)
@@ -14,7 +13,6 @@ An intelligent resume generation system that uses AI to create ATS-optimized res
 - **PDF Export**: High-quality PDF resumes ready for ATS systems
 
 ### Advanced Features
-- **Intelligent Role Detection**: Analyzes job descriptions to identify role type (<10ms detection time)
 - **Prompt Caching**: Optimized prompt loading with in-memory caching
 - **Technology Date Validation**: Ensures technologies mentioned in experience existed during job periods
 - **ATS Optimization**: Targets 95%+ ATS compatibility score
@@ -28,7 +26,6 @@ Hunting-Job/
 ├── lib/                          # Core library files
 │   ├── ai-service.js             # AI API integration (Claude/OpenAI)
 │   ├── models.js                 # Available AI models configuration
-│   ├── role-detector.js          # Role detection from job descriptions
 │   ├── profile-template-mapping.js  # Profile to template/prompt mapping
 │   ├── prompt-loader.js          # Prompt template loading utility
 │   ├── pdf-templates/            # PDF resume templates
@@ -47,18 +44,7 @@ Hunting-Job/
 │   │   │   └── ResumeAcademicPurple.js
 │   │   └── utils.js              # Template utilities
 │   └── prompts/                  # AI prompt templates
-│       ├── default.txt           # Default/general purpose prompt
-│       ├── frontend.txt          # Frontend/UI specialization
-│       ├── backend.txt           # Backend/server-side specialization
-│       ├── fullstack.txt        # Full-stack specialization
-│       ├── devops.txt           # DevOps/infrastructure specialization
-│       ├── data-science.txt     # Data science/ML specialization
-│       ├── mobile.txt           # Mobile app development specialization
-│       ├── qa.txt               # QA/testing specialization
-│       ├── security.txt         # Cybersecurity specialization
-│       ├── salesforce.txt       # Salesforce/CRM specialization
-│       ├── sap.txt             # SAP ERP specialization
-│       └── product-manager.txt  # Product management specialization
+│       └── default.txt           # Default prompt for resume generation
 │
 ├── pages/                        # Next.js pages
 │   ├── index.js                 # Home page (profile selection)
@@ -242,44 +228,9 @@ Get specific profile data.
 ### GET `/api/templates`
 List all available resume templates.
 
-## 🎯 Role Detection
+## 📝 Prompt
 
-The system automatically detects the role type from job descriptions:
-
-### Supported Roles
-- **Frontend**: React, Vue, Angular, UI/UX
-- **Backend**: Node.js, Python, APIs, microservices
-- **Full-Stack**: End-to-end development
-- **DevOps**: Infrastructure, CI/CD, cloud
-- **Data Science**: ML, analytics, data pipelines
-- **Mobile**: iOS, Android, React Native, Flutter
-- **QA**: Test automation, quality assurance
-- **Security**: Cybersecurity, information security
-- **Salesforce**: CRM, Salesforce platform
-- **SAP**: ERP, SAP modules
-- **Product Manager**: Product strategy, roadmap
-
-### Detection Process
-1. Analyzes job description text
-2. Matches keywords against role patterns
-3. Calculates weighted scores
-4. Selects highest-scoring role
-5. Uses role-specific prompt template
-
-**Detection Time**: <10ms (negligible impact)
-
-## 📝 Prompt Templates
-
-Each role has a specialized prompt template that:
-- Focuses on role-specific keywords
-- Emphasizes relevant technologies
-- Uses role-appropriate metrics
-- Targets ATS optimization (95%+ score)
-
-### Prompt Priority
-1. Role-based prompt (e.g., `frontend.txt`)
-2. Profile-specific prompt (from mapping)
-3. Default prompt (`default.txt`)
+Resume generation uses the single default prompt (`lib/prompts/default.txt`), which targets ATS optimization (95%+ score).
 
 ## ⚡ Performance
 
@@ -293,14 +244,12 @@ Each role has a specialized prompt template that:
 - AI API Call: 20-50 seconds (main bottleneck)
 - PDF Rendering: 2-5 seconds
 - File Operations: <2 seconds
-- Role Detection: <10ms (negligible)
 - Other Processing: <3 seconds
 
 ### Optimizations
 - Prompt caching (in-memory)
 - Async file operations
 - Streaming PDF generation
-- Efficient role detection
 
 ## 🎨 Resume Templates
 
@@ -338,11 +287,6 @@ Each role has a specialized prompt template that:
 - Configures available models per provider
 - Sets default models
 - Supports Claude and OpenAI models
-
-### Role Patterns (`lib/role-detector.js`)
-- Keyword patterns for each role
-- Weight adjustments for better detection
-- Special handling (e.g., fullstack detection)
 
 ## 🚢 Deployment
 
@@ -400,11 +344,6 @@ Each role has a specialized prompt template that:
 ### Profile Data Format
 See `resumes/_template.json` for complete structure.
 
-### Adding New Roles
-1. Add role pattern to `lib/role-detector.js`
-2. Create prompt template in `lib/prompts/[role].txt`
-3. Update `getPromptForRole()` mapping
-
 ### Adding New Templates
 1. Create template component in `lib/pdf-templates/templates/`
 2. Register in `lib/pdf-templates/index.js`
@@ -418,11 +357,6 @@ See `resumes/_template.json` for complete structure.
 - Reduce job description length
 - Use faster model (Claude Haiku)
 - Check API key validity
-
-**Role not detected**
-- Add more keywords to role patterns
-- Check job description contains role keywords
-- Falls back to default prompt
 
 **PDF generation fails**
 - Check profile JSON structure

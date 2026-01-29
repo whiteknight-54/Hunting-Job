@@ -5,8 +5,7 @@ import React from "react";
 import { renderToStream } from "@react-pdf/renderer";
 import { getTemplate } from "../../lib/pdf-templates";
 import { callAI } from "../../lib/ai-service";
-import { getTemplateForProfile, getProfileBySlug, getPromptForProfile } from "../../lib/profile-template-mapping";
-import { detectRole, getPromptForRole } from "../../lib/role-detector";
+import { getTemplateForProfile, getProfileBySlug } from "../../lib/profile-template-mapping";
 
 // Performance: Cache prompt templates in memory
 const promptCache = new Map();
@@ -217,58 +216,18 @@ export default async function handler(req, res) {
     }
     const education = educationParts.join('\n');
 
-    // Performance: Load prompt template with caching
+    // Load default prompt only (no role detection)
     console.time('prompt-loading');
-    
-    // Detect role from job description and role name for targeted prompts
-    const detectedRole = detectRole(jd, roleName);
-    const roleBasedPromptName = getPromptForRole(detectedRole);
-    console.log(`Detected role: ${detectedRole} → Using prompt: ${roleBasedPromptName}`);
-    
-    // Cache key includes both profile slug and role (different roles may need different prompts)
-    const promptCacheKey = `${profileSlug}-${roleBasedPromptName}`;
-    
+    const promptCacheKey = `${profileSlug}-default`;
+
     let promptTemplate;
     if (promptCache.has(promptCacheKey)) {
-      // Use cached prompt template
       promptTemplate = promptCache.get(promptCacheKey);
       console.log("Using cached prompt template");
     } else {
-      // Try role-based prompt first, then profile-specific, then default
-      // Use async file operations for better performance
-      const promptsDir = path.join(process.cwd(), 'lib', 'prompts');
-      const rolePromptPath = path.join(promptsDir, `${roleBasedPromptName}.txt`);
-      const profilePromptName = getPromptForProfile(profileSlug);
-      const profilePromptPath = path.join(promptsDir, `${profilePromptName}.txt`);
-      const defaultPath = path.join(promptsDir, 'default.txt');
-      
-      // Try to read files in priority order (async)
-      try {
-        promptTemplate = await fsPromises.readFile(rolePromptPath, 'utf-8');
-        console.log(`Using role-based prompt: ${roleBasedPromptName}.txt`);
-      } catch (err) {
-        if (err.code === 'ENOENT') {
-          try {
-            promptTemplate = await fsPromises.readFile(profilePromptPath, 'utf-8');
-            console.log(`Using profile-specific prompt: ${profilePromptName}.txt`);
-          } catch (err2) {
-            if (err2.code === 'ENOENT') {
-              try {
-                promptTemplate = await fsPromises.readFile(defaultPath, 'utf-8');
-                console.log(`Using default prompt`);
-              } catch (err3) {
-                throw new Error(`Prompt template not found for ${profileSlug} (role: ${detectedRole})`);
-              }
-            } else {
-              throw err2;
-            }
-          }
-        } else {
-          throw err;
-        }
-      }
-      
-      // Cache the raw template
+      const defaultPath = path.join(process.cwd(), 'lib', 'prompts', 'default.txt');
+      promptTemplate = await fsPromises.readFile(defaultPath, 'utf-8');
+      console.log("Using default prompt");
       promptCache.set(promptCacheKey, promptTemplate);
     }
     
