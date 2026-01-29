@@ -40,6 +40,7 @@ export default function ProfilePage() {
   const [profileName, setProfileName] = useState("");
   const [loading, setLoading] = useState(true);
   const [copiedField, setCopiedField] = useState(null);
+  const [gdriveFolderId, setGdriveFolderId] = useState(null);
   const timerIntervalRef = useRef(null);
   const startTimeRef = useRef(null);
 
@@ -47,6 +48,14 @@ export default function ProfilePage() {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
+  }, []);
+
+  // Fetch config (e.g. GDRIVE_FOLDER_ID for Drive folder link)
+  useEffect(() => {
+    fetch("/api/config")
+      .then((r) => r.ok ? r.json() : {})
+      .then((d) => setGdriveFolderId(d.gdriveFolderId || null))
+      .catch(() => setGdriveFolderId(null));
   }, []);
 
   // Lazy load profile data when profile slug changes
@@ -293,17 +302,24 @@ export default function ProfilePage() {
     );
   }
 
-  // Quick copy fields
+  const driveFolderLink = gdriveFolderId
+    ? `https://drive.google.com/drive/folders/${gdriveFolderId}`
+    : null;
+
+  // Quick copy fields (iconUrl = image URL, icon = emoji)
   const quickCopyFields = [
-    { key: 'email', label: 'Email', value: selectedProfileData.email, icon: '📧' },
-    { key: 'phone', label: 'Phone', value: selectedProfileData.phone, icon: '📞' },
-    { key: 'location', label: 'Address', value: selectedProfileData.location, icon: '📍' },
+    { key: 'email', label: 'Email', value: selectedProfileData.email, iconUrl: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
+    { key: 'phone', label: 'Phone', value: selectedProfileData.phone, iconUrl: 'https://img.icons8.com/color/96/iphone-x.png' },
+    { key: 'location', label: 'Address', value: selectedProfileData.location, iconUrl: 'https://img.icons8.com/color/96/google-maps-new.png' },
     { key: 'postalCode', label: 'Postal Code', value: selectedProfileData.postalCode, icon: '✉️' },
     { key: 'lastCompany', label: 'Last Company', value: getLastCompany(), icon: '🏢' },
-    { key: 'lastRole', label: 'Last Role', value: getLastRole(), icon: '💼' },
-    { key: 'linkedin', label: 'LinkedIn', value: selectedProfileData.linkedin, icon: '💼' },
-    { key: 'github', label: 'GitHub', value: selectedProfileData.github, icon: '💻' },
-  ].filter(field => field.value); // Only show fields with values
+    { key: 'lastRole', label: 'Last Role', value: getLastRole(), iconUrl: 'https://img.icons8.com/color/96/employee-card.png' },
+    { key: 'linkedin', label: 'LinkedIn', value: selectedProfileData.linkedin, iconUrl: 'https://www.linkedin.com/favicon.ico' },
+    { key: 'github', label: 'GitHub', value: selectedProfileData.github, iconUrl: 'https://github.com/favicon.ico' },
+    ...(driveFolderLink
+      ? [{ key: 'driveLink', label: 'Google Drive', value: driveFolderLink, iconUrl: 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png', alwaysShow: true }]
+      : []),
+  ].filter(field => field.value || field.alwaysShow);
 
   return (
     <>
@@ -395,7 +411,7 @@ export default function ProfilePage() {
                 paddingTop: "12px",
                 borderTop: `1px solid ${colors.cardBorder}`
               }}>
-                {quickCopyFields.map(({ key, label, value, icon }) => (
+                {quickCopyFields.map(({ key, label, value, icon, iconUrl }) => (
                   <button
                     key={key}
                     onClick={() => copyToClipboard(value, key)}
@@ -427,7 +443,11 @@ export default function ProfilePage() {
                       }
                     }}
                   >
-                    <span style={{ fontSize: "clamp(14px, 3.5vw, 16px)" }}>{icon}</span>
+                    {iconUrl ? (
+                      <img src={iconUrl} alt="" style={{ width: "clamp(18px, 4vw, 22px)", height: "clamp(18px, 4vw, 22px)", objectFit: "contain" }} />
+                    ) : (
+                      <span style={{ fontSize: "clamp(14px, 3.5vw, 16px)" }}>{icon}</span>
+                    )}
                     <div style={{
                       fontSize: "clamp(9px, 2vw, 10px)",
                       fontWeight: "500",
