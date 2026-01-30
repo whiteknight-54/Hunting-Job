@@ -1,0 +1,58 @@
+{
+  "name": "Bruno Camara",
+  "email": "brunomcamara@outlook.com",
+  "phone": "+55 47 99209-0669",
+  "location": "Rua Pedro Teixeira de Melo",
+  "postalCode": "181",
+  "linkedin": "https://www.linkedin.com/in/bmcamara/",
+  "github": "https://github.com/nubrao",
+  "website": "",
+  
+  "experience": [
+     {
+      "company": "MadeiraMadeira"
+      "title": "Full-stack developer PL Engineer",
+      "location": "",
+      "start_date": "Aug 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "Softtek",
+      "title": "Full-stack developer JR",
+      "location": "Curitiba, Parana, Brazil",
+      "start_date": "Apr 2023",
+      "end_date": "Jul 2025"
+    },
+    {
+      "company": "Avell Notebooks",
+      "title": "Tech Lead",
+      "location": "Joinville, Santa Catarinam Brazil",
+      "start_date": "Feb 2019",
+      "end_date": "Oct 2022
+    },
+    {
+      "company": "Agropecuária Água Azul",
+      "title": "IT Analyst",
+      "location": "Campo Mourao, Parana, Brazil",
+      "start_date": "Jul 2016",
+      "end_date": "Feb 2019"
+    },    
+    {
+      "company": "Qnet Telecom",
+      "title": "Telecom Analyst",
+      "location": "Umuarama, Parana, Brazil",
+      "start_date": "Jan 2016",
+      "end_date": "Jun 2016"
+    }
+  ],
+  
+  "education": [
+    {
+      "degree": "Bachelor's degree, Computer Science",
+      "school": "Federal University of Technology",
+      "start_year": "2016",
+      "end_year": "2019"
+    }
+  ]
+
+}
