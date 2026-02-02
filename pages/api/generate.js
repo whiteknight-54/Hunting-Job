@@ -259,7 +259,7 @@ export default async function handler(req, res) {
 
     // Performance: AI call timing
     console.time('ai-call');
-    const aiResponse = await callAI(prompt, provider, model);
+    const aiResponse = await callAI(prompt, provider, model, 5000);
     console.timeEnd('ai-call');
 
     // Log token usage to debug if we're hitting limits
@@ -269,6 +269,9 @@ export default async function handler(req, res) {
     console.log("- Stop reason:", aiResponse.stop_reason);
     console.log("- Input tokens:", aiResponse.usage?.input_tokens);
     console.log("- Output tokens:", aiResponse.usage?.output_tokens);
+
+    let totalInputTokens = aiResponse.usage?.input_tokens ?? 0;
+    let totalOutputTokens = aiResponse.usage?.output_tokens ?? 0;
 
     // Extract content from AI response (handle both single and multiple content blocks)
     const extractContent = (response) => {
@@ -322,7 +325,9 @@ export default async function handler(req, res) {
           .replace(/6 bullets each/g, '5 bullets each')
           .replace(/5-6 bullets per job/g, '4-5 bullets per job');
 
-        const retryResponse = await callAI(concisePrompt, provider, model);
+        const retryResponse = await callAI(concisePrompt, provider, model, 5000);
+        totalInputTokens += retryResponse.usage?.input_tokens ?? 0;
+        totalOutputTokens += retryResponse.usage?.output_tokens ?? 0;
         console.log("Retry Response Metadata:");
         console.log("- Stop reason:", retryResponse.stop_reason);
         console.log("- Output tokens:", retryResponse.usage?.output_tokens);
@@ -557,11 +562,14 @@ export default async function handler(req, res) {
     res.end();
     console.timeEnd('pdf-streaming');
 
-    // Performance: Log total time
+    // Performance: Log total time and token usage
     const totalTime = Date.now() - startTime;
     console.timeEnd('total-generation');
     console.log(`✅ PDF generated successfully in ${(totalTime / 1000).toFixed(2)}s`);
-
+    console.log("--- Token usage ---");
+    console.log("Input tokens:", totalInputTokens);
+    console.log("Output tokens:", totalOutputTokens);
+    console.log("Total tokens:", totalInputTokens + totalOutputTokens);
 
   } catch (err) {
     console.error("PDF generation error:", err);

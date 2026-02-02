@@ -1,6 +1,7 @@
 ATS optimization expert. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
 
 **OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
+**QUALITY: Use the full response budget. Write a substantial summary (5-6 full sentences), complete skills, and detailed experience bullets. Do not truncate or abbreviate.**
 
 **PROFILE:**
 Candidate: {{name}} | {{email}} | {{location}}
@@ -65,7 +66,7 @@ Experience: {{yearsOfExperience}} years
 
 ---
 
-**3. SUMMARY** (5-6 lines, 8-12 JD keywords + 3-5 domain): Line 1: [Title] with {{yearsOfExperience}}+ years in [domain]. Line 2: Expertise in [domain keyword] + [3-4 JD techs with versions]. Line 3: Track record in [domain keyword] + [achievement with metric]. Line 4: Proficient in [3-4 more JD techs]. Line 5: [Soft skill] professional with Agile/leadership experience. Line 6: Focus on [2-3 JD skill areas] + scalable solutions.
+**3. SUMMARY** (REQUIRED: 5-6 full sentences, 80-120 words total. This is critical—write a proper professional summary.): Line 1: [Title] with {{yearsOfExperience}}+ years in [domain]. Line 2: Expertise in [domain keyword] and [3-4 JD techs with versions]. Line 3: Track record in [domain keyword] and [concrete achievement with metric]. Line 4: Proficient in [3-4 more JD techs] and [methodology]. Line 5: [Soft skill] professional with Agile/leadership experience. Line 6: Focus on [2-3 JD skill areas] and scalable solutions. Use 8-12 exact JD keywords + 3-5 domain keywords. Each line must be a complete sentence (15-25 words). No fragments or bullet-style phrases.
 
 ---
 
@@ -107,7 +108,7 @@ You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, n
 The JSON structure must be exactly:
 {
   "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
-  "summary": "5-6 line summary paragraph",
+  "summary": "5-6 full sentences, 80-120 words. Professional summary paragraph—do not shorten.",
   "skills": {
     "Category1": ["Skill1", "Skill2", "Skill3"],
     "Category2": ["Skill4", "Skill5", "Skill6"]
