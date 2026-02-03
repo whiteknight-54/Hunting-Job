@@ -1,0 +1,43 @@
+{
+  "name": "Rafael Eduardo Miranda Alcocer",
+  "email": "rafaeleduardo.malcocer@outlook.com",
+  "phone": "+52 985 605 8365",
+  "location": "Valladolid, Yucatán, MX",
+  "postalCode": "97780",
+  "linkedin": "https://www.linkedin.com/in/rafael-miranda-79a773397",
+  "github": "https://github.com/rafael-miranda999",
+  "website": "",
+  
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Senior Software Engineer",
+      "location": "FL, US",
+      "start_date": "Jan 2023",
+      "end_date": "Jan 2026"
+    },
+    {
+      "company": "Humana / Tata Consultancy Services",
+      "title": "Software Engineer",
+      "location": "Louisville, KY (Remote)",
+      "start_date": "Jun 2018",
+      "end_date": "Jan 2023"
+    },
+    {
+      "company": "FEMSA",
+      "title": "Junior Full-Stack Developer",
+      "location": "Mexico",
+      "start_date": "Aug 2015",
+      "end_date": "May 2018"
+    }
+  ],
+  
+  "education": [
+    {
+      "degree": "Bachelor's Degree, Computer Science",
+      "school": "University of Memphis",
+      "start_year": "2011",
+      "end_year": "2015"
+    }
+  ]
+}
