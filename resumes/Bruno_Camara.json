@@ -1,8 +1,8 @@
 {
   "name": "Bruno Camara",
-  "email": "brunomcamara@outlook.com",
+  "email": "bmcamara.jobs@gmail.com",
   "phone": "+55 47 99209-0669",
-  "location": "Santa Catarina, Brazil",
+  "location": "Itajaí, Santa Catarina, Brazil",
   "postalCode": "88305-670",
   "linkedin": "https://www.linkedin.com/in/bmcamara/",
   "github": "https://github.com/nubrao",
@@ -11,14 +11,14 @@
   "experience": [
      {
       "company": "MadeiraMadeira",
-      "title": "Full-stack developer PL",
+      "title": "Software Engineer",
       "location": "Curitiba, Parana, Brazil",
       "start_date": "Aug 2025",
       "end_date": "Present"
     },
     {
       "company": "Softtek",
-      "title": "Full-stack developer JR",
+      "title": "Full-stack developer",
       "location": "",
       "start_date": "Apr 2023",
       "end_date": "Jul 2025"
