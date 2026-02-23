@@ -1,0 +1,48 @@
+{
+  "name": "Santiago Reyes",
+  "email": "santiawork20@gmail.com",
+  "phone": "",
+  "location": "Davao City, Davao del Sur",
+  "postalCode": "8000",
+  "linkedin": "",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "PuzzleHR",
+      "title": "Cloud DevOps Engineer",
+      "location": "FL, US",
+      "start_date": "Oct 2023",
+      "end_date": "Dec 2025"
+    },
+    {
+      "company": "Cargo Express Freight",
+      "title": "DevOps Engineer",
+      "location": "CA, US",
+      "start_date": "July 2019",
+      "end_date": "Aug 2023"
+    },
+    {
+      "company": "Scribo Learning Pte. Ltd.",
+      "title": "Jr. Software Engineer",
+      "location": "Singapore",
+      "start_date": "Feb 2017",
+      "end_date": "May 2019"
+    },
+    {
+      "company": "FPT Software",
+      "title": "Web Developer",
+      "location": "Hanoi, VN",
+      "start_date": "Sep 2016",
+      "end_date": "Feb 2017"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's Degree in Computer Science",
+      "school": "Hanoi University",
+      "start_year": "2013",
+      "end_year": "2017"
+    }
+  ]
+}
