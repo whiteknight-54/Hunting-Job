@@ -1,1 +1,48 @@
-{"name":"Rodelio Escueta","email":"rodelio_june93@outlook.com","phone":"63 (932) 614-8537","location":"Davao City, Davao del Sur","postalCode":"8000","linkedin":"","github":"","website":"","experience":[{"company":"PuzzleHR","title":"Sr. DevSecOps Engineer","location":"FL, US","start_date":"Oct 2022","end_date":"Present"},{"company":"CyberJutsu","title":"Cloud Security Engineer","location":"Hanoi, VN","start_date":"Mar 2019","end_date":"Sep 2022"},{"company":"Sotatek JSC","title":"DevOps Engineer","location":"Hanoi, VN","start_date":"Sep 2016","end_date":"Feb 2019"},{"company":"FPT Software","title":"SysAdmin","location":"Hanoi, VN","start_date":"Feb 2014","end_date":"Aug 2016"}],"education":[{"degree":"Bachelor of Science in Computer Science, 2013","school":"Vietnam National University, Hanoi","start_year":"2009","end_year":"2013"}]}
+{
+    "name": "Rodelio Escueta",
+    "email": "rodelio_june93@outlook.com",
+    "phone": "63 (932) 614-8537",
+    "location": "Davao City, Davao del Sur",
+    "postalCode": "8000",
+    "linkedin": "",
+    "github": "",
+    "website": "",
+    "experience": [
+        {
+            "company": "PuzzleHR",
+            "title": "Sr. DevSecOps Engineer",
+            "location": "FL, US",
+            "start_date": "Oct 2022",
+            "end_date": "Present"
+        },
+        {
+            "company": "CyberJutsu",
+            "title": "Cloud Security Engineer",
+            "location": "Hanoi, VN",
+            "start_date": "Mar 2019",
+            "end_date": "Sep 2022"
+        },
+        {
+            "company": "Sotatek JSC",
+            "title": "DevOps Engineer",
+            "location": "Hanoi, VN",
+            "start_date": "Sep 2016",
+            "end_date": "Feb 2019"
+        },
+        {
+            "company": "FPT Software",
+            "title": "SysAdmin",
+            "location": "Hanoi, VN",
+            "start_date": "Feb 2014",
+            "end_date": "Aug 2016"
+        }
+    ],
+    "education": [
+        {
+            "degree": "Bachelor of Science in Computer Science",
+            "school": "Vietnam National University, Hanoi",
+            "start_year": "2009",
+            "end_year": "2013"
+        }
+    ]
+}

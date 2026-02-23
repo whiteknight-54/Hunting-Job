@@ -1,1 +1,48 @@
-{"name":"Nathan Olivar","email":"nathan.0504@outlook.com","phone":"63 (974) 105-6721","location":"Quezon City, Metro Manila","postalCode":"1108","linkedin":"","github":"","website":"","experience":[{"company":"Capgemini","title":"Sr. Data Architect","location":"Arlington, US","start_date":"Sep 2022","end_date":"Oct 2025"},{"company":"Kiggla","title":"Sr. Data Engineer","location":"FL, US","start_date":"May 2019","end_date":"Aug 2022"},{"company":"Stanga1","title":"Data Engineer","location":"Sofia, Bulgaria","start_date":"Jan 2017","end_date":"Apr 2019"},{"company":"FPT Software","title":"Data Engineer","location":"Hanoi, Vietnam","start_date":"Jul 2014","end_date":"Dec 2016"}],"education":[{"degree":"Bachelor of Science in Information Technology, 2012","school":"Wuhan University","start_year":"2008","end_year":"2012"}]}
+{
+    "name": "Nathan Olivar",
+    "email": "nathan.0504@outlook.com",
+    "phone": "63 (974) 105-6721",
+    "location": "Quezon City, Metro Manila",
+    "postalCode": "1108",
+    "linkedin": "",
+    "github": "",
+    "website": "",
+    "experience": [
+        {
+            "company": "Capgemini",
+            "title": "Sr. Data Architect",
+            "location": "Arlington, US",
+            "start_date": "Sep 2022",
+            "end_date": "Oct 2025"
+        },
+        {
+            "company": "Kiggla",
+            "title": "Sr. Data Engineer",
+            "location": "FL, US",
+            "start_date": "May 2019",
+            "end_date": "Aug 2022"
+        },
+        {
+            "company": "Stanga1",
+            "title": "Data Engineer",
+            "location": "Sofia, Bulgaria",
+            "start_date": "Jan 2017",
+            "end_date": "Apr 2019"
+        },
+        {
+            "company": "FPT Software",
+            "title": "Data Engineer",
+            "location": "Hanoi, Vietnam",
+            "start_date": "Jul 2014",
+            "end_date": "Dec 2016"
+        }
+    ],
+    "education": [
+        {
+            "degree": "Bachelor of Science in Information Technology",
+            "school": "Wuhan University",
+            "start_year": "2008",
+            "end_year": "2012"
+        }
+    ]
+}
