@@ -11,6 +11,9 @@ const TEMPLATE_LIST = [
   { id: "Resume-Executive-Navy", name: "Executive Navy" },
   { id: "Resume-Modern-Green", name: "Modern Green" },
   { id: "Resume-Tech-Teal", name: "Tech Teal" },
+  { id: "Resume-Vision-Midnight", name: "Vision Midnight" },
+  { id: "Resume-Vision-Sage", name: "Vision Sage" },
+  { id: "Resume-Vision-Coral", name: "Vision Coral" },
 ];
 
 export default function handler(req, res) {
