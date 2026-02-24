@@ -1,0 +1,48 @@
+{
+  "name": "Hans Dela Cruz",
+  "email": "Hans0work@protonmail.com",
+  "phone": "",
+  "location": "Mandaluyong City, Metro Manila, PH",
+  "postalCode": "1550",
+  "linkedin": "",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Senior Software Engineer",
+      "location": "FL, US",
+      "start_date": "Jun 2025",
+      "end_date": "Jan 2026"
+    },
+    {
+      "company": "Scribo Learning Pte. Ltd.",
+      "title": "Software Full Stack Engineer",
+      "location": "Singapore",
+      "start_date": "Jul 2019",
+      "end_date": "Apr 2025"
+    },
+    {
+      "company": "LARION",
+      "title": "Junior Software Engineer",
+      "location": "Vietnam",
+      "start_date": "Jul 2018",
+      "end_date": "Mar 2019"
+    },
+    {
+      "company": "TPS Software Corporation",
+      "title": "Software Engineer Intern",
+      "location": "Vietnam",
+      "start_date": "Aug 2016",
+      "end_date": "Jun 2018"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's degree in Information and Technology",
+      "school": "Ho Chi Minh City University of Technology (HCMUT)",
+      "start_year": "2014",
+      "end_year": "2018"
+    }
+  ]
+}
