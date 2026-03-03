@@ -1,0 +1,42 @@
+{
+  "name": "Igor Paszewski",
+  "title": "AI & Machine Learning Engineer",
+  "email": "igor.paszewski02@outlook.com",
+  "phone": "",
+  "location": "Wojkowice, Poland",
+  "postalCode": "42-580",
+  "linkedin": "https://www.linkedin.com/in/igor-p-24b0653b3/",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "PuzzleHR",
+      "title": "AI Engineer",
+      "location": "",
+      "start_date": "Jul 2022",
+      "end_date": "Present"
+    },
+    {
+      "company": "Cargo Express Freight",
+      "title": "Machine Learning Engineer",
+      "location": "",
+      "start_date": "Sep 2019",
+      "end_date": "May 2022"
+    },
+    {
+      "company": "Kornit Digital",
+      "title": "Software Engineer",
+      "location": "Israel",
+      "start_date": "Nov 2017",
+      "end_date": "Aug 2019"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master's degree, Computer Science",
+      "school": "Tavrija State Agrotechnical Academy, Melitopol",
+      "start_year": "2011",
+      "end_year": "2017"
+    }
+  ]
+}

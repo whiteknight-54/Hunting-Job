@@ -31,7 +31,7 @@
         },
         {
             "company": "FPT Software",
-            "title": "SysAdmin",
+            "title": "Sys Admin",
             "location": "Hanoi, VN",
             "start_date": "Feb 2014",
             "end_date": "Aug 2016"
@@ -39,7 +39,7 @@
     ],
     "education": [
         {
-            "degree": "Bachelor of Science in Computer Science",
+            "degree": "Bachelor's Degree in Computer Science",
             "school": "Vietnam National University, Hanoi",
             "start_year": "2009",
             "end_year": "2013"
