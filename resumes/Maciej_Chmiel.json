@@ -1,0 +1,42 @@
+{
+  "name": "Maciej Chmiel",
+  "title": "Senior QA Engineer",
+  "email": "maciej.chmiel01@outlook.com",
+  "phone": "",
+  "location": "Łódź, Łódzkie, Poland",
+  "postalCode": "91-496",
+  "linkedin": "",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "PuzzleHR",
+      "title": "Senior QA Automation Engineer",
+      "location": "",
+      "start_date": "Oct 2023",
+      "end_date": "Feb 2026"
+    },
+    {
+      "company": "Cargo Express Freight",
+      "title": "QA Automation Engineer",
+      "location": "",
+      "start_date": "Aug 2020",
+      "end_date": "Sep 2023"
+    },
+    {
+      "company": "AB soft",
+      "title": "QA Automation Engineer",
+      "location": "Odessa, Ukraine",
+      "start_date": "Sep 2016",
+      "end_date": "Jun 2020"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master's degree, Computer Science",
+      "school": "European University",
+      "start_year": "2011",
+      "end_year": "2017"
+    }
+  ]
+}
