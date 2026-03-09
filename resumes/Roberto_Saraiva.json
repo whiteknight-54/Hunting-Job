@@ -1,0 +1,52 @@
+{
+    "name": "Roberto Saraiva",
+    "email": "beto.saraiva1955@gmail.com",
+    "phone": "",
+    "location": "Natal, Rio Grande do Norte, Brazil",
+    "postalCode": "59000-000",
+    "linkedin": "",
+    "github": "",
+    "website": "",
+    
+    "experience": [
+      {
+        "company": "PuzzleHR",
+        "title": "Senior Software Engineer",
+        "location": "Florida, US",
+        "start_date": "Jun 2023",
+        "end_date": "Feb 2026"
+      },
+      {
+        "company": "Cargo Express Freight",
+        "title": "Software Engineer",
+        "location": "CA, US",
+        "start_date": "May 2019",
+        "end_date": "Jun 2023"
+      },
+      {
+        "company": "Upwork - Freelancer",
+        "title": "Software Full stack Engineer",
+        "location": "",
+        "start_date": "Mar 2018",
+        "end_date": "Apr 2019"
+      },
+      {
+        "company": "Cloud++ B.V.",
+        "title": "Junior Software Engineer",
+        "location": "Natal, Brazil",
+        "start_date": "Sep 2016",
+        "end_date": "Feb 2018"
+      }
+    ],
+    
+    "education": [
+      {
+        "degree": "Bachelor's Degree in Computer Science",
+        "school": "Universidade Federal do Rio Grande do Norte",
+        "start_year": "2012",
+        "end_year": "2016"
+      }
+    ]
+  
+  }
+  
