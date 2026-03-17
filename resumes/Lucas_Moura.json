@@ -1,33 +1,40 @@
 {
   "name": "Lucas Moura",
-  "email": "lucasm6784@gmail.com",
+  "email": "lucas.moura.04@outlook.com",
   "phone": "",
   "location": "Greater Natal, Brazil",
-  "postalCode": "",
-  "linkedin": "https://www.linkedin.com/in/lucas-moura-41455b245/",
+  "postalCode": "59575-000",
+  "linkedin": "https://www.linkedin.com/in/lucas-a-moura-3767473b5/",
   "github": "",
   "website": "",
   
   "experience": [
     {
-      "company": "Kiggla",
-      "title": "Software Engineer",
-      "location": "Florida, US",
-      "start_date": "Jun 2025",
-      "end_date": "12/2025"
+      "company": "BrightOps",
+      "title": "Senior Software Engineer",
+      "location": "Massachusetts, US",
+      "start_date": "Feb 2024",
+      "end_date": "Present"
     },
     {
       "company": "PuzzleHR",
       "title": "Software Engineer",
       "location": "Florida, US",
-      "start_date": "May 2020",
-      "end_date": "Feb 2025"
+      "start_date": "Sep 2020",
+      "end_date": "Jan 2024"
+    },
+    {
+      "company": "Censeo Consulting Group",
+      "title": "Software Engineer",
+      "location": "Washington, DC",
+      "start_date": "Jun 20219",
+      "end_date": "Aug 2020"
     },
     {
       "company": "Icone Sistems",
       "title": "Junior Software Engineer",
       "location": "Rio Grande do Norte, Brazil",
-      "start_date": "Jul 2017",
+      "start_date": "May 2017",
       "end_date": "Oct 2019"
     }
   ],
