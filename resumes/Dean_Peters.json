@@ -1,0 +1,49 @@
+{
+  "name": "Igor Paszewski",
+  "title": "Senior Software Engineer",
+  "email": "dean512363@outlook.com",
+  "phone": "",
+  "location": "Georgia, United Status",
+  "postalCode": "",
+  "linkedin": "https://www.linkedin.com/in/dean-peters-19498588/",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "PuzzleHR",
+      "title": "Senior Software Engineer",
+      "location": "Tampa, FL",
+      "start_date": "Apr 2023",
+      "end_date": "Present"
+    },
+    {
+      "company": "Cognizant",
+      "title": "Senior Software Engineer",
+      "location": "United States",
+      "start_date": "Jan 2019",
+      "end_date": "Mar 2023"
+    },
+    {
+      "company": "Instrumentl",
+      "title": "Software Engineer",
+      "location": "Oakland, CA",
+      "start_date": "Oct 2016",
+      "end_date": "Dec 2018"
+    },
+    {
+      "company": "KBR, Inc",
+      "title": "Junior Software Engineer",
+      "location": "Huston, TX",
+      "start_date": "Oct 2014",
+      "end_date": "Sep 2016"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's Degree in Computer Science",
+      "school": "University of North Texas",
+      "start_year": "2010",
+      "end_year": "2014"
+    }
+  ]
+}
