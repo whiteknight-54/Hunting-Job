@@ -1,0 +1,56 @@
+{
+  "name": "Robert Bednarek",
+  "title": "Senior Software Engineer",
+  "email": "robert.bednarek000@outlook.com",
+  "phone": "",
+  "location": "Żmigród, Poland",
+  "postalCode": "55-140",
+  "linkedin": "https://www.linkedin.com/in/robert-bednarek-27292139b/",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Senior Software Engineer",
+      "location": "FL, US",
+      "start_date": "Jul 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "BrightOps",
+      "title": "Senior Software Engineer",
+      "location": "MA, US",
+      "start_date": "Apr 2022",
+      "end_date": "May 2025"
+    },
+    {
+      "company": "Cargo Express Freight",
+      "title": "Software Engineer",
+      "location": "CA, US",
+      "start_date": "Sep 2019",
+      "end_date": "Mar 2022"
+    },
+    {
+      "company": "Trustmi",
+      "title": "Full Stack Engineer",
+      "location": "",
+      "start_date": "Jun 2018",
+      "end_date": "Aug 2019"
+    },
+    {
+      "company": "DataArt",
+      "title": "Junior Software Engineer",
+      "location": "",
+      "start_date": "Sep 2017",
+      "end_date": "Jun 2018"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master's Degree in Computer Science",
+      "school": "Euorpean University",
+      "start_year": "2011",
+      "end_year": "2017"
+    }
+  ]
+}
