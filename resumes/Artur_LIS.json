@@ -1,0 +1,42 @@
+{
+  "name": "Artur LIS",
+  "title": "Senior AI Engineer",
+  "email": "artur.lis01@outlook.com",
+  "phone": "",
+  "location": "Woj. Łódzkie, Polska",
+  "postalCode": "91-151",
+  "linkedin": "https://www.linkedin.com/in/artur-lis-3375063b2/",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Senior AI Engineer",
+      "location": "FL, US",
+      "start_date": "June 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "Accenture",
+      "title": "AI/ML Engineer",
+      "location": "",
+      "start_date": "Feb 2020",
+      "end_date": "May 2025"
+    },
+    {
+      "company": "Fetcherr",
+      "title": "Manchine Learning Engineer",
+      "location": "Israel",
+      "start_date": "Sep 2016",
+      "end_date": "Jan 2020"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's Degree in Information Technology",
+      "school": "European University",
+      "start_year": "2012",
+      "end_year": "2016"
+    }
+  ]
+}
