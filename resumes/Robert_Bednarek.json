@@ -49,8 +49,14 @@
     {
       "degree": "Master's Degree in Computer Science",
       "school": "Euorpean University",
-      "start_year": "2011",
+      "start_year": "2015",
       "end_year": "2017"
+    },
+    {
+      "degree": "Bachelor's Degree in Computer Science",
+      "school": "Euorpean University",
+      "start_year": "2011",
+      "end_year": "2015"
     }
   ]
 }
