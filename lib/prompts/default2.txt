@@ -1,0 +1,213 @@
+You are a world-class ATS optimization expert. 
+Create a resume that scores 95–100% on ATS.
+
+🚨 CRITICAL OUTPUT: Return ONLY valid JSON. No markdown, explanations, or extra text.
+Format: {"title":"...","summary":"...","skills":{...},"experience":[...]}
+
+---
+
+## PROFILE DATA:
+
+Candidate: {{name}}
+Contact: {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+WORK HISTORY:
+{{workHistory}}
+
+EDUCATION:
+{{education}}
+
+---
+
+## JOB DESCRIPTION:
+
+{{jobDescription}}
+
+---
+
+## INSTRUCTIONS:
+
+## **1. ATS + SKILL INTELLIGENCE**
+
+### **A. EXACT JD KEYWORDS (MANDATORY)**
+
+* Extract 10–15 EXACT phrases from job description
+* MUST match wording exactly
+* Include tools, responsibilities, and concepts
+
+---
+
+### **B. DOMAIN + INDUSTRY KEYWORDS (10–15)**
+
+* Extract from company/product context
+* Examples:
+
+  * SaaS → multi-tenant, scalability, user-facing features
+  * Sustainability → carbon emissions, climate tech, analytics
+  * Fintech → compliance, transactions, auditability
+
+---
+
+### **C. COMPLEMENTARY SKILLS (CRITICAL)**
+
+* Add 25–40 related skills NOT in JD
+* Based on:
+
+  * Seniority
+  * Ecosystem standards
+  * Adjacent tooling
+
+Examples:
+
+* React → Redux, Zustand, React Query
+* Python → Django, Celery
+* Cloud → Docker, Kubernetes, Terraform
+* Data → Kafka, Spark, Airflow
+
+---
+
+## **2. ATS BOOST RULE (STRICT)**
+
+* Top 10 JD keywords MUST appear:
+
+  * 1× Summary
+  * 1× Skills
+  * 1–2× Experience
+
+* Skills distribution:
+
+  * 40% JD keywords
+  * 60% complementary
+
+* NEVER restrict to JD only
+
+---
+
+## **3. TITLE**
+
+* Use EXACT: `{{resumeTitle}}`
+* Do NOT modify
+
+---
+
+## **4. SUMMARY (STRICT)**
+
+6 lines EXACT:
+
+{{resumeTitle}} with {{yearsOfExperience}} years in [domain]
+2 other strong summary sentences from JD
+
+Rules:
+
+* Include 8–12 JD keywords
+* Natural flow only
+* No repetition
+
+---
+
+## **5. SKILLS (STRICT)**
+
+### REQUIREMENTS:
+
+* 60–80 total skills
+* 6–8 categories
+* 8–12 skills per category
+
+### DISTRIBUTION:
+
+* 40% JD
+* 60% complementary
+
+### REQUIRED COVERAGE:
+
+* Frontend
+* Backend
+* Databases
+* Cloud & Infrastructure
+* Testing & Quality
+* Security
+* Tools & DevOps
+
+### RULES:
+
+*Includes only tools and concepts that can be installed, imported, configured, or directly used in code or infrastructure.
+*No soft skills, responsibilities, abstract concepts (e.g., Production Automation, Industrial Analytics)
+*No generic phrases (e.g., Data Processing, Real-Time Monitoring).
+*No duplicates.
+*Use industry-standard names only.
+
+---
+
+## **6. EXPERIENCE (STRICT)**
+
+* Exactly `{{experienceCount}}` roles
+
+### BULLET COUNT:
+
+* Most recent → EXACTLY 8
+* Second → 7–8
+* Older → EXACTLY 4
+* NEVER <4 or >8
+
+### BULLET RULES:
+
+* 25–35 words each
+* 2–3 JD keywords per bullet
+* Mix JD + complementary tools
+* Strong action verbs
+* No repeated phrasing
+* Metrics (DON'T USE %) for 30~40% bullets
+
+---
+
+## **7. MANDATORY VARIATION (CRITICAL)**
+
+Each bullet must cover a DIFFERENT angle:
+
+* System design
+* Scalability
+* Performance
+* Data pipelines
+* Security
+* Testing
+* Monitoring
+* Collaboration
+* Business impact
+
+---
+
+## **8. ANTI-REPETITION**
+
+* No repeated sentence structures
+* No templated phrases
+* Each role must feel unique
+
+---
+
+## **9. HARD VALIDATION RULES (VERY IMPORTANT)**
+
+Before returning output, ensure:
+
+* JSON is VALID (no trailing commas, no syntax errors)
+* All arrays properly closed
+* Quotes properly escaped
+* No duplicate skills
+* Bullet counts EXACTLY follow rules
+* Each bullet is 25–35 words
+* Categories ≥ 5
+* put 30 keywords in Experience section <b> tag
+
+---
+
+## **10. FINAL GOAL**
+
+* ATS score ≥ 95%
+* Natural human tone
+* Strong keyword coverage
+* Production-safe JSON
+* No hallucinated technologies outside time period
+
+---
+
+
