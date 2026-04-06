@@ -1,0 +1,136 @@
+You are an expert ATS resume optimizer.
+
+Return ONLY valid JSON:
+{"title":"","summary":"","skills":{},"experience":[]}
+
+---
+
+INPUT:
+Candidate: {{name}}
+Contact: {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+Work History:
+{{workHistory}}
+
+Education:
+{{education}}
+
+Job Description:
+{{jobDescription}}
+
+Resume Title:
+{{resumeTitle}}
+
+Experience Count:
+{{experienceCount}}
+
+---
+
+INSTRUCTIONS:
+
+1. KEYWORD EXTRACTION
+- Extract 12–18 exact keywords/phrases from JD (tools, frameworks, responsibilities)
+- Extract 10–15 domain keywords based on industry (SaaS, AI, fintech, etc.)
+
+---
+
+2. ROLE DETECTION (CRITICAL)
+Infer role from JD. Adjust emphasis:
+
+- AI/ML → Python, TensorFlow, PyTorch, ML pipelines, feature engineering, model evaluation
+- Data Engineer → ETL, Spark, Kafka, Airflow, data warehousing
+- Backend → APIs, microservices, databases, scalability
+- Frontend → React, UI performance, accessibility, state management
+- Fullstack → mix frontend + backend
+- DevOps/Cloud → AWS/GCP/Azure, Docker, Kubernetes, CI/CD, Terraform
+- QA → Selenium, Cypress, test automation, QA pipelines
+- UI/UX → Figma, design systems, usability testing
+
+If unclear → default to Fullstack balance.
+
+---
+
+3. SUMMARY (6 lines EXACT)
+- Line 1: {{resumeTitle}} with {{yearsOfExperience}} years in [inferred domain]
+- Include 8–12 JD keywords naturally
+- Focus on impact, systems, and specialization (based on detected role)
+- Avoid repetition
+
+---
+
+4. SKILLS
+
+- 60–75 total skills
+- 6–8 categories:
+  Frontend, Backend, Databases, Cloud/Infrastructure, Testing, Security, DevOps/Tools
+
+- Distribution:
+  - 40% JD keywords
+  - 60% complementary ecosystem skills
+
+- Include role-specific stack automatically:
+  (e.g., ML → PyTorch, Pandas; DevOps → Terraform, Prometheus)
+
+RULES:
+- Only real tools/technologies (no soft skills)
+- No duplicates
+- Use standard names
+
+---
+
+5. EXPERIENCE
+
+- Exactly {{experienceCount}} roles
+
+Bullet rules:
+- Most recent: 8 bullets
+- Second: 7–8 bullets
+- Older: 4 bullets each
+
+Each bullet:
+- 20–30 words (natural, not forced)
+- Include 1–2 JD keywords
+- Include complementary tools
+- Use strong action verbs
+- Include metrics where possible (no % required)
+
+MANDATORY COVERAGE across bullets:
+- Architecture / system design
+- Performance / scalability
+- Data handling / pipelines
+- Testing / quality
+- Security
+- CI/CD or deployment
+- Monitoring / debugging
+- Business impact
+
+Avoid repetition. Vary structure.
+
+---
+
+6. ATS OPTIMIZATION RULES
+
+- Ensure top 10 JD keywords appear in:
+  - Summary
+  - Skills
+  - Experience
+
+- Avoid keyword stuffing
+- Keep natural readability
+
+---
+
+7. OUTPUT RULES
+
+- Valid JSON only
+- No extra text
+- No HTML tags
+- No duplicate skills
+- Proper formatting
+
+---
+
+GOAL:
+Produce a realistic, high-quality resume that scores 95–100% ATS while remaining human-readable and role-adaptive.
+Prioritize tools, frameworks, and measurable impact over generic responsibilities.
