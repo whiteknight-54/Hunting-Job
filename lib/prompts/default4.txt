@@ -36,7 +36,7 @@ Create a senior-level, ATS-optimized resume (95–100% match) that:
 Adapts automatically to ANY role or industry (tech, non-tech, business, healthcare, finance, etc.)
 Balances keyword precision + natural human readability
 Reflects realistic, credible experience
-Avoids forced or excessive metrics (use metrics ONLY when natural and meaningful, NEVER percentages unless unavoidable)
+Avoids forced or excessive metrics (use metrics ONLY when natural and meaningful, NEVER percentages unless unavoidable - even if must )
 1. ROLE & DOMAIN DETECTION (CRITICAL)
 
 Automatically infer from the Job Description:
@@ -162,8 +162,8 @@ Cross-functional collaboration
 Business or operational impact
 METRICS RULE (IMPORTANT):
 DO NOT force metrics
-DO NOT use percentages unless absolutely necessary
-Use realistic metrics only when natural:
+DO NOT use percentages unless absolutely necessary, even if neccssary less than 10 in most case, max 17 ~ 18
+Use realistic metrics only when natural 
 scale (users, data volume, transactions)
 time improvements
 cost savings
