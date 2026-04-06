@@ -1,4 +1,56 @@
 {
-"title":AI/ML Engineer
-  
+  "name": "James Elefante",
+  "title": "Generative AI & ML Engineer | Senior Data Scientist",
+  "email": "dean512363@outlook.com",
+  "phone": "",
+  "location": "Holbrook, New York, USA",
+  "postalCode": "",
+  "linkedin": "https://www.linkedin.com/in/jim-elefante-19641386/",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "BrightOps",
+      "title": "Generative AI Engineer",
+      "location": "Massachusetts, US",
+      "start_date": "May 2023",
+      "end_date": "Present"
+    },
+    {
+      "company": "FTI Consulting",
+      "title": "Senior Data Scientist",
+      "location": "Massachusetts, US",
+      "start_date": "Feb 2021",
+      "end_date": "Apr 2023"
+    },
+    {
+      "company": "FTI Consulting",
+      "title": "Data Scientist",
+      "location": "",
+      "start_date": "July 2018",
+      "end_date": "Jan 2021"
+    },
+    {
+      "company": "Cuseum",
+      "title": "Data Scientist",
+      "location": "Massachusetts, US",
+      "start_date": "Apr 2017",
+      "end_date": "June 2018"
+    },
+    {
+      "company": "American Tower",
+      "title": "Data Analyst",
+      "location": "Boston, MA",
+      "start_date": "July 2015",
+      "end_date": "Mar 2017"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's Degree in Computer Science",
+      "school": "Becker College",
+      "start_year": "2011",
+      "end_year": "2015"
+    }
+  ]
 }
