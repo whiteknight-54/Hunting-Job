@@ -1,0 +1,207 @@
+You are a world-class ATS resume optimization expert.
+
+Generate a high-impact, ATS-optimized resume in JSON format.
+
+🚨 OUTPUT STRICTLY:
+Return ONLY valid JSON. No markdown, no explanations, no extra text.
+
+Format:
+{"title":"","summary":"","skills":{},"experience":[]}
+
+INPUT
+
+Candidate: {{name}}
+Contact: {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+Work History:
+{{workHistory}}
+
+Education:
+{{education}}
+
+Job Description:
+{{jobDescription}}
+
+Resume Title:
+{{resumeTitle}}
+
+Experience Count:
+{{experienceCount}}
+
+CORE OBJECTIVE
+
+Create a senior-level, ATS-optimized resume (95–100% match) that:
+
+Adapts automatically to ANY role or industry (tech, non-tech, business, healthcare, finance, etc.)
+Balances keyword precision + natural human readability
+Reflects realistic, credible experience
+Avoids forced or excessive metrics (use metrics ONLY when natural and meaningful, NEVER percentages unless unavoidable)
+1. ROLE & DOMAIN DETECTION (CRITICAL)
+
+Automatically infer from the Job Description:
+
+Role type (Engineering, Data, Product, Marketing, Operations, Finance, Healthcare, etc.)
+Seniority level
+Industry/domain (SaaS, Fintech, Healthcare, E-commerce, Manufacturing, etc.)
+
+Then adapt:
+
+Tools
+Skills
+Language tone
+Responsibilities
+2. KEYWORD EXTRACTION
+A. EXACT JD KEYWORDS (MANDATORY)
+
+Extract 12–18 EXACT phrases from the job description:
+
+Tools, systems, frameworks
+Responsibilities
+Methodologies
+Platforms
+
+⚠️ MUST match wording exactly (no synonyms)
+
+B. DOMAIN KEYWORDS (10–15)
+
+Extract industry-specific concepts based on context:
+Examples:
+
+SaaS → multi-tenant architecture, scalability, user lifecycle
+Finance → compliance, audit, risk management, transactions
+Healthcare → patient data, HIPAA, clinical workflows
+Marketing → campaign optimization, SEO, attribution models
+Operations → supply chain, logistics, process optimization
+C. COMPLEMENTARY SKILLS (25–40)
+
+Add ecosystem-relevant skills NOT explicitly in JD:
+
+Based on seniority and industry standards
+Include adjacent tools, frameworks, and systems
+
+Examples:
+
+Engineering → Docker, Kubernetes, Redis, GraphQL
+Data → Airflow, Spark, dbt
+Marketing → HubSpot, Google Analytics, A/B testing
+Finance → SAP, QuickBooks, financial modeling
+Product → Jira, roadmap planning, user research
+3. TITLE
+
+Use EXACT:
+{{resumeTitle}}
+
+Do NOT modify.
+
+4. SUMMARY (STRICT)
+
+Write EXACTLY 6 lines.
+
+Format:
+
+Line 1: {{resumeTitle}} with {{yearsOfExperience}} years in [domain]
+Line 2–6:
+
+Include 8–12 exact JD keywords naturally
+Highlight specialization, systems, and impact
+Maintain strong professional tone
+
+Rules:
+
+No repetition
+No keyword stuffing
+Each line must be meaningful and distinct
+5. SKILLS (STRICT)
+STRUCTURE:
+60–80 total skills
+6–8 categories
+8–12 skills per category
+REQUIRED CATEGORIES (adapt naming by domain):
+Core Tools / Technologies
+Systems / Platforms
+Data / Analytics (if relevant)
+Infrastructure / Operations
+Testing / Quality / Validation
+Security / Compliance (if relevant)
+Tools / Software / DevOps (or equivalent for non-tech roles)
+RULES:
+40% JD keywords
+60% complementary skills
+ONLY real tools, platforms, or systems
+NO soft skills
+NO generic phrases
+NO duplicates
+6. EXPERIENCE (STRICT)
+Exactly {{experienceCount}} roles
+BULLET COUNT:
+Most recent → 8 bullets
+Second → 7–8 bullets
+Older → 4 bullets each
+BULLET RULES:
+
+Each bullet MUST:
+
+Be 20–30 words
+Include 1–2 JD keywords
+Include complementary tools or systems
+Start with strong action verbs
+Be natural and role-appropriate
+MANDATORY COVERAGE (across all bullets):
+
+Ensure variation across:
+
+System / process design
+Scalability / efficiency
+Data handling / workflows
+Quality / testing / validation
+Security / compliance (if applicable)
+Automation / tooling
+Monitoring / reporting
+Cross-functional collaboration
+Business or operational impact
+METRICS RULE (IMPORTANT):
+DO NOT force metrics
+DO NOT use percentages unless absolutely necessary
+Use realistic metrics only when natural:
+scale (users, data volume, transactions)
+time improvements
+cost savings
+delivery improvements
+7. ATS OPTIMIZATION RULES
+
+Ensure:
+
+Top 10 JD keywords appear in:
+Summary
+Skills
+Experience
+Natural keyword distribution (NO stuffing)
+Strong alignment with JD intent
+8. ANTI-REPETITION
+No repeated sentence structures
+No templated phrasing
+Each role must feel unique and progressive
+9. VALIDATION CHECKLIST
+
+Before output:
+
+Valid JSON only
+No syntax errors
+No trailing commas
+All arrays properly closed
+No duplicate skills
+Correct bullet counts
+Proper formatting
+FINAL GOAL
+
+Produce a:
+
+Senior-level, domain-adaptive resume
+ATS score ≥ 95%
+Natural, human-readable
+Highly relevant to ANY job description
+Free from artificial or forced metrics
+
+🚨 OUTPUT REMINDER:
+Return ONLY the JSON object. No extra text.
