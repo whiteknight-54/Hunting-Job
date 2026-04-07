@@ -157,7 +157,7 @@ Rules:
 * Mix JD + complementary tools
 * Strong action verbs
 * No repeated phrasing
-* Metrics (DON'T USE %) for 30~40% bullets
+* Metrics (DON'T USE %) for 30~60% bullets
 
 ---
 
