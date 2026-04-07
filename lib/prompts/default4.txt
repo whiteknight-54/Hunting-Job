@@ -160,8 +160,8 @@ Automation / tooling
 Monitoring / reporting
 Cross-functional collaboration
 Business or operational impact
-METRICS RULE (IMPORTANT): DO NOT use percentages (excep AI and Data Engineer, QA relevant roles)
-Use realistic metrics only when natural 
+METRICS RULE (IMPORTANT): 
+Use realistic metrics only when natural (DO NOT use for percentage for 25% - 80%)
 scale (users, data volume, transactions)
 time improvements
 cost savings
