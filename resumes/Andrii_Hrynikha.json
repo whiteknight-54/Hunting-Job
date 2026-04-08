@@ -1,0 +1,55 @@
+{
+  "name": "Andrii Hrynikha",
+  "title": "Senior Software Engineer",
+  "email": "andrii.hrynikha.04@outlook.com",
+  "phone": "+48 457415866",
+  "location": "Katowice, Woj, Slaskie, Polska",
+  "postalCode": "55-140",
+  "linkedin": "https://www.linkedin.com/in/andrii-hrynikha-3539183b8/",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "Cargo Express Freight",
+      "title": "Senior Software Engineer",
+      "location": "CA, US",
+      "start_date": "Jun 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "Humana",
+      "title": "Senior Software Engineer",
+      "location": "US",
+      "start_date": "Feb 2019",
+      "end_date": "May 2023"
+    },
+    {
+      "company": "Infosys",
+      "title": "Software Engineer",
+      "location": "",
+      "start_date": "Apr 2017",
+      "end_date": "Dec 2018"
+    },
+    {
+      "company": "Artelogica",
+      "title": "Software Engineer",
+      "location": "",
+      "start_date": "Sep 2016",
+      "end_date": "Mar 2017"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master's Degree in Computer Science",
+      "school": "Euorpean University",
+      "start_year": "2014",
+      "end_year": "2016"
+    },
+    {
+      "degree": "Bachelor's Degree in Computer Science",
+      "school": "Euorpean University",
+      "start_year": "2010",
+      "end_year": "2014"
+    }
+  ]
+}
