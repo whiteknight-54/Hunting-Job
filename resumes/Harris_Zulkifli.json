@@ -10,14 +10,14 @@
     "experience": [
         {
             "company": "Cargo Express Freight",
-            "title": "Sr. Database Administrator",
+            "title": "Senior. Data Arcitect",
             "location": "CA, US",
             "start_date": "Aug 2023",
-            "end_date": "Feb 2026"
+            "end_date": "Mar 2026"
         },
         {
             "company": "QuoStar",
-            "title": "Senior DBA / Data Engineer",
+            "title": "Data Architect",
             "location": "London, UK",
             "start_date": "Apr 2019",
             "end_date": "Jul 2023"
@@ -31,7 +31,7 @@
         },
         {
             "company": "Audacious Inquiry",
-            "title": "Junior DBA",
+            "title": "Backend Developer",
             "location": "Maryland, US",
             "start_date": "May 2014",
             "end_date": "Oct 2016"
