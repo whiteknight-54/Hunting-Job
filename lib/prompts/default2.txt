@@ -158,6 +158,7 @@ Rules:
 * Strong action verbs
 * No repeated phrasing
 * Metrics (DON'T USE %) for 30~60% bullets
+* Mention Stack Version as that years
 
 ---
 
