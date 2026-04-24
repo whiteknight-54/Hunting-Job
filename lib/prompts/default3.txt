@@ -94,6 +94,7 @@ Each bullet:
 - Include complementary tools
 - Use strong action verbs
 - Include metrics where possible (no % required)
+- Mention Stack Version as that years
 
 MANDATORY COVERAGE across bullets:
 - Architecture / system design
