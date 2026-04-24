@@ -1,0 +1,63 @@
+{
+  "name": "Ihor Pastushenko",
+  "title": "Cloud DevOps and Database Engineer",
+  "email": "ig7893800@gmail.com",
+  "phone": "",
+  "location": "Wojkowice, Poland",
+  "postalCode": "42-582",
+  "linkedin": "https://www.linkedin.com/in/iihor-pastushenko-57b14428b",
+  "github": "",
+  "website": "",
+  "experience": [
+    {
+      "company": "PuzzleHR",
+      "title": "Senior Software Engineer",
+      "location": "FL, US",
+      "start_date": "Mar 2022",
+      "end_date": "Apr 2026"
+    },
+    {
+      "company": "Upwork",
+      "title": "Softwaare Engineer",
+      "location": "",
+      "start_date": "Sep 2019",
+      "end_date": "May 2022"
+    },
+    {
+      "company": "INFOPULSE UKRAINE LTD",
+      "title": "Software Engineer",
+      "location": "Ukraine",
+      "start_date": "July 2020",
+      "end_date": "Feb 2022"
+    },
+    {
+      "company": "CRMOZ",
+      "title": "DevOps and Database Engineer",
+      "location": "Ukraine",
+      "start_date": "Sep 2018",
+      "end_date": "May 2020"
+    },
+    {
+      "company": "iTechs",
+      "title": "Junior Software Engineer",
+      "location": "Ukraine",
+      "start_date": "May 2018",
+      "end_date": "Mar 2020"
+    },
+
+  ],
+  "education": [
+    {
+      "degree": "Master's Degree in Computer Science",
+      "school": "Tavrija State Agrotechnical Academy, Melitopol",
+      "start_year": "2015",
+      "end_year": "2017"
+    },
+    {
+      "degree": "Bachelor's Degree",
+      "school": "Kyiv Polytechnic Institute",
+      "start_year": "2014",
+      "end_year": "2018"
+    }
+  ]
+}
