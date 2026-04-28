@@ -1,0 +1,53 @@
+{
+    "name": "João Guilherme Barbosa Franco",
+    "email": "joaoguilhermebarbosafranco@gmail.com",
+    "title" : "Senior Software Engineer",
+    "phone": "+55 (11) 99220-6141",
+    "location": "Mogi das Cruzes - SP, Brazil",
+    "postalCode": "08740-040",
+    "linkedin": "https://www.linkedin.com/in/jo%C3%A3o-guilherme-barbosa-06814a218/",
+    "github": "",
+    "website": "",
+    
+    "experience": [
+      {
+        "company": "Hexagon",
+        "title": "Senior Software Engineer",
+        "location": "United States",
+        "start_date": "May 2023",
+        "end_date": "Present"
+      },
+      {
+        "company": "BrightOps",
+        "title": "Software Engineer",
+        "location": "United States",
+        "start_date": "May 2020",
+        "end_date": "Apr 2023"
+      },
+      {
+        "company": "Ramo Sistemas",
+        "title": "Software Developer",
+        "location": "Brazil",
+        "start_date": "Aug 2018",
+        "end_date": "Apr 2020"
+      },
+      {
+        "company": "TEEVO",
+        "title": "Junior Software Developer",
+        "location": "Brazil",
+        "start_date": "Sep 2017",
+        "end_date": "July 2018"
+      }
+    ],
+    
+    "education": [
+      {
+        "degree": "Bachelor's Degree in Computer Science",
+        "school": "Universidade Metodista de São Paulo",
+        "start_year": "2013",
+        "end_year": "2017"
+      }
+    ]
+  
+  }
+  
