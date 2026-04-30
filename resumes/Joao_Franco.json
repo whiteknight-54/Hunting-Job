@@ -1,9 +1,9 @@
 {
     "name": "João Guilherme Barbosa Franco",
-    "email": "joaoguilhermebarbosafranco@gmail.com",
+    "email": "joaofranco.dev01@outlook.com",
     "title" : "Senior Software Engineer",
     "phone": "+55 (11) 99220-6141",
-    "location": "Mogi das Cruzes - SP, Brazil",
+    "location": "Mogi das Cruzes, São Paulo, Brazil",
     "postalCode": "08740-040",
     "linkedin": "https://www.linkedin.com/in/jo%C3%A3o-guilherme-barbosa-06814a218/",
     "github": "",
@@ -11,7 +11,7 @@
     
     "experience": [
       {
-        "company": "Hexagon",
+        "company": "Nordstrom",
         "title": "Senior Software Engineer",
         "location": "United States",
         "start_date": "May 2023",
