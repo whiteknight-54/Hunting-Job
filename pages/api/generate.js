@@ -10,34 +10,6 @@ import { getTemplateForProfile, getProfileBySlug } from "../../lib/profile-templ
 // Performance: Cache prompt templates in memory
 const promptCache = new Map();
 
-// Pre-compile validation patterns for performance
-const hybridKeywords = [
-  'hybrid', 'hybrid work', 'hybrid model', 'hybrid schedule',
-  'days in office', 'days per week in office', 'in-office days',
-  'office presence', 'some days in office'
-];
-
-const onsiteKeywords = [
-  'on-site', 'onsite', 'on site', 'in-office', 'in office',
-  'office based', 'office-based', 'must be located in',
-  'must be based in', 'must relocate', 'relocation required',
-  'physical presence required', 'in person', 'local candidates',
-  'candidates must be in', 'candidates must reside'
-];
-
-// Pre-compile regex for faster validation
-const remoteKeywords = ['remote', 'work from home', 'fully remote', '100% remote', 'remote-first', 'distributed team'];
-const juniorKeywords = ['junior role', 'entry level', 'entry-level'];
-const internKeywords = [' intern ', 'internship'];
-
-// Helper function for fast keyword checking
-const hasAnyKeyword = (text, keywords) => {
-  for (const keyword of keywords) {
-    if (text.includes(keyword)) return true;
-  }
-  return false;
-};
-
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
@@ -47,51 +19,6 @@ export default async function handler(req, res) {
     if (!profileSlug) return res.status(400).send("Profile slug required");
     if (!jd) return res.status(400).send("Job description required");
     if (!roleName || !roleName.trim()) return res.status(400).send("Role name is required");
-
-    // **Job Description Validation: Check if job is remote or hybrid/onsite**
-    console.log("Checking job location type...");
-    // Cache lowercase conversion - used multiple times
-    const jdLower = jd.toLowerCase();
-    
-    // Optimized validation using helper function
-    const isHybrid = hasAnyKeyword(jdLower, hybridKeywords);
-    const hasOnsiteKeywords = hasAnyKeyword(jdLower, onsiteKeywords);
-    const hasRemoteKeywords = hasAnyKeyword(jdLower, remoteKeywords);
-    const hasJuniorKeywords = hasAnyKeyword(jdLower, juniorKeywords);
-    const hasInternKeywords = hasAnyKeyword(jdLower, internKeywords);
-
-    const isJunior = hasJuniorKeywords && !hasInternKeywords;
-    const isIntern = hasInternKeywords && !hasJuniorKeywords;
-    const isEntryLevel = isJunior || isIntern;
-
-    // Determine if it's truly onsite (has onsite keywords but not strong remote indicators)
-    const isOnsite = hasOnsiteKeywords && !hasRemoteKeywords;
-    
-    if (isHybrid) {
-      console.log("❌ Job is HYBRID - Rejecting");
-      return res.status(400).json({ 
-        error: "This position is HYBRID (requires some office days). This tool is designed for REMOTE-ONLY positions. Please provide a fully remote job description.",
-        locationType: "hybrid"
-      });
-    }
-    
-    if (isOnsite) {
-      console.log("❌ Job is ONSITE - Rejecting");
-      return res.status(400).json({ 
-        error: "This position is ONSITE/IN-PERSON. This tool is designed for REMOTE-ONLY positions. Please provide a fully remote job description.",
-        locationType: "onsite"
-      });
-    }
-
-    if (isEntryLevel) {
-      console.log("❌ Job is ENTRY LEVEL - Rejecting");
-      return res.status(400).json({ 
-        error: "This position is ENTRY LEVEL. This tool is designed for MID-LEVEL and SENIOR positions. Please provide a more senior job description.",
-        locationType: "entry-level"
-      });
-    }
-    
-    console.log("✅ Job appears to be REMOTE - Proceeding");
 
     // Performance: Start timing
     const startTime = Date.now();
