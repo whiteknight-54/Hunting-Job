@@ -184,9 +184,14 @@ export default async function handler(req, res) {
     
     console.timeEnd('prompt-loading');
 
+    // Keep AI request within serverless limits (Vercel configured to 120s maxDuration)
+    // Leave headroom for JSON parsing + PDF render/stream.
+    const AI_TIMEOUT_MS = 105000;
+    const AI_RETRIES = 1;
+
     // Performance: AI call timing
     console.time('ai-call');
-    const aiResponse = await callAI(prompt, provider, model, 5000);
+    const aiResponse = await callAI(prompt, provider, model, 5000, AI_RETRIES, AI_TIMEOUT_MS);
     console.timeEnd('ai-call');
 
     // Log token usage to debug if we're hitting limits
@@ -252,7 +257,7 @@ export default async function handler(req, res) {
           .replace(/6 bullets each/g, '5 bullets each')
           .replace(/5-6 bullets per job/g, '4-5 bullets per job');
 
-        const retryResponse = await callAI(concisePrompt, provider, model, 5000);
+        const retryResponse = await callAI(concisePrompt, provider, model, 5000, AI_RETRIES, AI_TIMEOUT_MS);
         totalInputTokens += retryResponse.usage?.input_tokens ?? 0;
         totalOutputTokens += retryResponse.usage?.output_tokens ?? 0;
         console.log("Retry Response Metadata:");
