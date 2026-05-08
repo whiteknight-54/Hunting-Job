@@ -13,10 +13,13 @@ const extractJsonFromText = (rawText) => {
 
   const codeBlockPattern = /```(?:json|javascript|js)?\s*/gi;
   const prefixPattern = /^(here is|here's|this is|the json is|json:|response:):?\s*/gim;
+  const smartDoubleQuotesPattern = /[“”]/g;
+  const smartSingleQuotesPattern = /[‘’]/g;
 
   // Remove markdown code fences and common prefixes/explanations
   let cleaned = content.replace(codeBlockPattern, "").replace(/```\s*/g, "");
   cleaned = cleaned.replace(prefixPattern, "");
+  cleaned = cleaned.replace(smartDoubleQuotesPattern, '"').replace(smartSingleQuotesPattern, "'");
 
   const firstBrace = cleaned.indexOf("{");
   if (firstBrace === -1) throw new Error("No JSON object found in pasted content");
@@ -55,6 +58,10 @@ const extractJsonFromText = (rawText) => {
       const unescapedQuotePattern = /("(?:[^"\\]|\\.)*")\s*:\s*"([^"]*)"([,}])/g;
       const lineCommentPattern = /\/\/.*$/gm;
       const blockCommentPattern = /\/\*[\s\S]*?\*\//g;
+      // Common ChatGPT mistake: missing commas between array elements / objects
+      const missingCommaBetweenObjectsPattern = /}\s*\n\s*{/g;
+      const missingCommaBetweenArraysPattern = /]\s*\n\s*\[/g;
+      const missingCommaBetweenStringsPattern = /"\s*\n\s*"/g;
 
       fixed = fixed.replace(trailingCommaPattern, "$1");
       fixed = fixed.replace(unescapedNewlinePattern, "$1 ");
@@ -64,6 +71,9 @@ const extractJsonFromText = (rawText) => {
       });
       fixed = fixed.replace(lineCommentPattern, "");
       fixed = fixed.replace(blockCommentPattern, "");
+      fixed = fixed.replace(missingCommaBetweenObjectsPattern, "},\n{");
+      fixed = fixed.replace(missingCommaBetweenArraysPattern, "],\n[");
+      fixed = fixed.replace(missingCommaBetweenStringsPattern, '",\n"');
 
       return JSON.parse(fixed);
     } catch (secondError) {
