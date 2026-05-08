@@ -1,0 +1,48 @@
+{
+    "name": "Noel Talastas",
+    "email": "n.talastas55@outlook.com",
+    "phone": "+63 945 532 1632",
+    "location": "Cebu City, Cebu, Philippines",
+    "postalCode": "6000",
+    "linkedin": "linkedin.com/in/noel-talastas-1a27273a4",
+    "github": "",
+    "website": "",
+    "experience": [
+        {
+            "company": "Scribo Learning",
+            "title": "Senior. Software Engineer",
+            "location": "United Kingdom",
+            "start_date": "Jun 2023",
+            "end_date": "Present"
+        },
+        {
+            "company": "Infosys",
+            "title": "Software Engineer",
+            "location": "Philippine",
+            "start_date": "Apr 2020",
+            "end_date": "May 2023"
+        },
+        {
+            "company": "iTech Global",
+            "title": "Fullstack Engineer",
+            "location": "Philippine",
+            "start_date": "Oct 2018",
+            "end_date": "Mar 2020"
+        },
+        {
+            "company": "CyStack",
+            "title": "Junior Web Developer",
+            "location": "Vietnam",
+            "start_date": "Aug 2017",
+            "end_date": "Sep 2018"
+        }
+    ],
+    "education": [
+        {
+            "degree": "Bachelor's Degree in Computer Science",
+            "school": "Hanoi University of Science and Technology",
+            "start_year": "2013",
+            "end_year": "2017"
+        }
+    ]
+}
