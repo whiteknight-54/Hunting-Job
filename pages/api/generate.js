@@ -186,7 +186,7 @@ export default async function handler(req, res) {
 
     // Keep AI request within serverless limits (Vercel configured to 120s maxDuration)
     // Leave headroom for JSON parsing + PDF render/stream.
-    const AI_TIMEOUT_MS = 105000;
+    const AI_TIMEOUT_MS = 180000;
     const AI_RETRIES = 1;
 
     // Performance: AI call timing
