@@ -1,22 +1,22 @@
 {
     "name": "Jason Revilla",
     "email": "jason.713@outlook.com",
-    "phone": "63 (916) 208-1945",
+    "phone": "+63 992 856 8694",
     "location": "Manila, Metro Manila",
     "postalCode": "1004",
-    "linkedin": "",
+    "linkedin": "linkedin.com/in/jason-revilla-8101b3407",
     "github": "",
     "website": "",
     "experience": [
         {
             "company": "Capgemini",
-            "title": "Sr. DevOps Engineer",
+            "title": "Sr. Software Engineer",
             "location": "Arlington, US",
             "start_date": "Jul 2022",
             "end_date": "Mar 2026"
         },
         {
-            "company": "InsiderSecurity",
+            "company": "PuzzleHR",
             "title": "DevOps Engineer",
             "location": "Singapore",
             "start_date": "Feb 2019",
@@ -25,7 +25,7 @@
         {
             "company": "NCS Group",
             "title": "Automation Engineer",
-            "location": "Singapore",
+            "location": "Australia",
             "start_date": "Aug 2016",
             "end_date": "Jan 2019"
         },
@@ -41,8 +41,8 @@
         {
             "degree": "Bachelor's Degree in Computer Science",
             "school": "Vietnam National University, Hanoi",
-            "start_year": "2008",
-            "end_year": "2012"
+            "start_year": "2010",
+            "end_year": "2014"
         }
     ]
 }
