@@ -162,8 +162,7 @@ Automation / tooling
 Monitoring / reporting
 Cross-functional collaboration
 Business or operational impact
-METRICS RULE (IMPORTANT): 
-Use realistic metrics only when natural (DO NOT use for percentage for 25% - 80%)
+
 scale (users, data volume, transactions)
 time improvements
 cost savings
@@ -201,7 +200,6 @@ Senior-level, domain-adaptive resume
 ATS score ≥ 95%
 Natural, human-readable
 Highly relevant to ANY job description
-Free from artificial or forced metrics
 
 🚨 OUTPUT REMINDER:
 Return ONLY the JSON object. No extra text.

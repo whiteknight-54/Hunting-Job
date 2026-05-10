@@ -85,7 +85,7 @@ RULES:
 
 Bullet rules:
 - Most recent: 8 bullets
-- Second: 7–8 bullets
+- Second: 7–8 bullets`
 - Older: 4 bullets each
 
 Each bullet:
@@ -93,7 +93,6 @@ Each bullet:
 - Include 1–2 JD keywords
 - Include complementary tools
 - Use strong action verbs
-- Include metrics where possible (no % required)
 - Mention Stack Version as that years
 
 MANDATORY COVERAGE across bullets:
