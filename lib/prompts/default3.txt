@@ -29,6 +29,12 @@ Experience Count:
 
 INSTRUCTIONS:
 
+0. METRICS (CRITICAL — SUMMARY + EXPERIENCE)
+- **Default (every role except the two exceptions below):** Never use exact quantitative impact in the resume text—no percentages, revenue or dollar figures, user/transaction/install counts, headcount, SLA numbers, or precise time/cost/duration savings. Use qualitative, credible outcomes tied to the work history. Do not copy numeric claims from the JD. Never invent numbers.
+- **Exception — QA / Quality Engineering (infer from JD + title):** Test, quality, automation, or coverage metrics are allowed **only** when present in supplied work details or clearly implied there without invention.
+- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from JD + title):** Model, evaluation, or serving metrics are allowed **only** when present in supplied work details or clearly tied to that work without invention.
+- If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
+
 1. KEYWORD EXTRACTION
 - Extract 12–18 exact keywords/phrases from JD (tools, frameworks, responsibilities)
 - Extract 10–15 domain keywords based on industry (SaaS, AI, fintech, etc.)
@@ -65,9 +71,7 @@ If unclear → default to Fullstack balance.
 - 6–8 categories:
   Frontend, Backend, Databases, Cloud/Infrastructure, Testing, Security, DevOps/Tools
 
-- Distribution:
-  - 40% JD keywords
-  - 60% complementary ecosystem skills
+- Distribution: emphasize JD keywords first, then round out with complementary ecosystem skills (no fixed percentage split).
 
 - Include role-specific stack automatically:
   (e.g., ML → PyTorch, Pandas; DevOps → Terraform, Prometheus)
@@ -85,7 +89,7 @@ RULES:
 
 Bullet rules:
 - Most recent: 8 bullets
-- Second: 7–8 bullets`
+- Second: 7–8 bullets
 - Older: 4 bullets each
 
 Each bullet:
@@ -132,5 +136,5 @@ Avoid repetition. Vary structure.
 ---
 
 GOAL:
-Produce a realistic, high-quality resume that scores 95–100% ATS while remaining human-readable and role-adaptive.
-Prioritize tools, frameworks, and measurable impact over generic responsibilities.
+Produce a realistic, high-quality resume with strong ATS keyword alignment and human-readable prose.
+Prioritize tools, frameworks, and clear outcomes (default roles: qualitative impact only; QA and ML Engineer family roles: grounded metrics per section 0 only).

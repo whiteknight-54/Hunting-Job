@@ -31,12 +31,18 @@ Experience Count:
 
 CORE OBJECTIVE
 
-Create a senior-level, ATS-optimized resume (95–100% match) that:
+Create a senior-level, ATS-optimized resume that:
 
 Adapts automatically to ANY role or industry (tech, non-tech, business, healthcare, finance, etc.)
 Balances keyword precision + natural human readability
 Reflects realistic, credible experience
-Avoids forced or excessive metrics (use metrics ONLY when natural and meaningful, NEVER percentages unless unavoidable - even if must )
+
+0. METRICS (CRITICAL — SUMMARY + EXPERIENCE)
+- **Default (every role except the two exceptions below):** Never use exact quantitative impact in the resume text—no percentages, revenue or dollar figures, user/transaction/install counts, headcount, SLA numbers, or precise time/cost/duration savings. Describe outcomes qualitatively and credibly, grounded in the work history. Do not copy numeric claims from the JD. Never invent numbers.
+- **Exception — QA / Quality Engineering (infer from JD + title):** Test, quality, automation, or coverage metrics are allowed **only** when grounded in supplied work details or clearly implied there without invention.
+- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from JD + title):** Model, evaluation, or serving metrics are allowed **only** when grounded in supplied work details or clearly tied to that work without invention.
+- If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
+
 1. ROLE & DOMAIN DETECTION (CRITICAL)
 
 Automatically infer from the Job Description:
@@ -104,7 +110,7 @@ Line 1: {{resumeTitle}} with {{yearsOfExperience}} years in [domain]
 Line 2–6:
 
 Include 8–12 exact JD keywords naturally
-Highlight specialization, systems, and impact
+Highlight specialization, systems, and impact in qualitative terms (per section 0; no exact metrics for default roles)
 Maintain strong professional tone
 
 Rules:
@@ -154,19 +160,14 @@ MANDATORY COVERAGE (across all bullets):
 Ensure variation across:
 
 System / process design
-Scalability / efficiency
+Scalability / efficiency (describe without invented counts or percentages)
 Data handling / workflows
 Quality / testing / validation
 Security / compliance (if applicable)
 Automation / tooling
 Monitoring / reporting
 Cross-functional collaboration
-Business or operational impact
-
-scale (users, data volume, transactions)
-time improvements
-cost savings
-delivery improvements
+Business or operational impact (qualitative: reliability, throughput posture, cost discipline—no fabricated figures unless QA/ML per section 0)
 7. ATS OPTIMIZATION RULES
 
 Ensure:
@@ -197,9 +198,9 @@ FINAL GOAL
 Produce a:
 
 Senior-level, domain-adaptive resume
-ATS score ≥ 95%
+Strong ATS keyword alignment and natural phrasing (do not state ATS match “scores” or percentages in the resume text)
 Natural, human-readable
-Highly relevant to ANY job description
+Highly relevant to the job description
 
 🚨 OUTPUT REMINDER:
 Return ONLY the JSON object. No extra text.
