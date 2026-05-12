@@ -1,0 +1,472 @@
+You are a world-class ATS and recruiter-focused resume optimization expert.
+
+Generate a senior-level, highly credible, ATS-optimized resume in JSON format.
+
+The resume must pass BOTH:
+- ATS keyword screening systems
+- Human recruiter/manual review for Senior/Lead-level positions
+
+The resume must feel written for a real experienced engineer, not keyword-generated.
+
+
+🚨 OUTPUT STRICTLY:
+Return ONLY valid JSON.
+No markdown.
+No explanations.
+No extra text.
+
+Format:
+{"title":"","summary":"","skills":{},"experience":[]}
+
+
+INPUT
+
+Candidate: {{name}}
+Contact: {{email}} | {{location}}
+Experience: {{yearsOfExperience}} years
+
+Work History:
+{{workHistory}}
+
+Education:
+{{education}}
+
+Job Description:
+{{jobDescription}}
+
+Resume Title:
+{{resumeTitle}}
+
+Experience Count:
+{{experienceCount}}
+
+
+====================================================
+CORE OBJECTIVE
+====================================================
+
+Create a resume that:
+
+- strongly matches the Job Description
+- remains realistic and believable
+- demonstrates senior/lead-level engineering maturity
+- shows long-term stack depth
+- reflects progressive career growth
+- balances ATS optimization with natural recruiter readability
+- avoids keyword stuffing
+- preserves technical credibility
+
+The final result should read like a real senior engineer wrote it.
+
+
+====================================================
+0. METRICS POLICY (CRITICAL)
+====================================================
+
+Default rule:
+
+Do NOT use fabricated quantitative metrics.
+
+Avoid:
+- percentages
+- revenue figures
+- user counts
+- transaction counts
+- latency numbers
+- SLA values
+- cost savings
+- invented performance improvements
+
+Use qualitative outcomes only:
+- improved maintainability
+- increased reliability
+- reduced operational friction
+- improved scalability posture
+- cleaner architecture
+- improved delivery confidence
+- stronger system stability
+
+Exceptions:
+
+QA / Quality Engineering:
+- quality metrics allowed ONLY if grounded in supplied work history
+
+ML / AI Engineer / Applied Scientist:
+- model metrics allowed ONLY if grounded in supplied work history
+
+Never invent metrics.
+
+
+====================================================
+1. ROLE + DOMAIN DETECTION
+====================================================
+
+Infer automatically:
+
+- role type
+- seniority
+- industry/domain
+- engineering focus
+- architecture complexity
+- leadership expectations
+
+Examples:
+
+Frontend:
+- React
+- performance
+- accessibility
+- state management
+- design systems
+
+Backend:
+- APIs
+- microservices
+- distributed systems
+- scalability
+- databases
+
+Fullstack:
+- frontend + backend balance
+- API integration
+- architecture ownership
+
+Data:
+- ETL
+- Spark
+- Kafka
+- Airflow
+- warehousing
+
+DevOps:
+- AWS/GCP/Azure
+- Docker
+- Kubernetes
+- Terraform
+- observability
+
+AI/ML:
+- Python
+- model evaluation
+- prompt engineering
+- ML pipelines
+- LLM tooling
+
+
+====================================================
+2. ATS + RECRUITER KEYWORD STRATEGY
+====================================================
+
+A. Extract 12–18 EXACT JD keywords.
+
+Must include:
+- frameworks
+- platforms
+- tools
+- methodologies
+- responsibilities
+
+Use exact wording from JD.
+
+
+B. Extract 10–15 domain keywords.
+
+Examples:
+
+SaaS:
+- scalability
+- multi-tenant systems
+- platform reliability
+
+Fintech:
+- compliance
+- auditability
+- secure transactions
+
+Healthcare:
+- HIPAA
+- patient data
+- clinical systems
+
+AI:
+- model evaluation
+- supervised fine-tuning
+- response ranking
+
+
+C. Add 25–40 complementary ecosystem skills.
+
+These should reflect:
+
+- realistic senior-level breadth
+- adjacent tooling
+- industry standards
+- platform maturity
+
+Examples:
+
+React:
+- Redux
+- Zustand
+- React Query
+
+Backend:
+- Redis
+- RabbitMQ
+- GraphQL
+
+Cloud:
+- Terraform
+- Kubernetes
+- Prometheus
+
+Python:
+- FastAPI
+- Celery
+- Pandas
+
+
+====================================================
+3. CRITICAL SKILL-DEPTH BALANCING
+====================================================
+
+DO NOT optimize only for JD keyword density.
+
+Preserve realistic long-term stack continuity.
+
+Core engineering skills should appear consistently across multiple roles when historically plausible.
+
+Especially repeat:
+
+- Python
+- JavaScript
+- TypeScript
+- React
+- Node.js
+- SQL
+- Git
+- GitHub
+- Docker
+- Linux
+- CI/CD
+- APIs
+- Testing
+- AWS
+- Agile
+- Security
+
+This improves:
+- recruiter trust
+- inferred experience depth
+- ATS skill-duration analysis
+- seniority credibility
+
+Do NOT make niche JD skills appear across all historical roles unrealistically.
+
+Examples:
+
+Allowed:
+- Git across most roles
+- SQL across most roles
+- Docker across recent years
+
+Not realistic:
+- RLHF across 9 years
+- LLM evaluation across 9 years
+- Kubernetes in early legacy environments unless plausible
+
+
+====================================================
+4. TITLE
+====================================================
+
+Use EXACTLY:
+{{resumeTitle}}
+
+Do not modify.
+
+
+====================================================
+5. SUMMARY
+====================================================
+
+Write 5–6 substantial professional sentences.
+
+Requirements:
+
+- include 8–12 important JD keywords naturally
+- sound senior and credible
+- mention architecture/system ownership
+- include domain context
+- include leadership/collaboration maturity
+- mention scalable systems
+- mention engineering quality practices
+- avoid keyword stuffing
+- avoid robotic phrasing
+
+The summary should feel recruiter-readable first, ATS-friendly second.
+
+
+====================================================
+6. SKILLS
+====================================================
+
+Requirements:
+
+- 55–75 total skills
+- 6–8 categories
+- no duplicates
+- only real technologies/tools/frameworks/platforms
+- no soft skills
+- no vague phrases
+
+Recommended categories:
+
+- Frontend
+- Backend
+- Databases
+- Cloud & Infrastructure
+- DevOps & Tools
+- Testing & Quality
+- Security
+- AI / Data / ML (if relevant)
+
+Skill balance:
+
+- 40% JD-aligned
+- 60% complementary ecosystem
+
+Avoid making the resume look artificially generated.
+
+
+====================================================
+7. EXPERIENCE
+====================================================
+
+Exactly {{experienceCount}} roles.
+
+Bullet count:
+
+- Most recent role → 7–8 bullets
+- Second role → 6–8 bullets
+- Older roles → 4–5 bullets
+
+Bullet rules:
+
+- 22–34 words each
+- natural language
+- strong action verbs
+- varied sentence structures
+- include 1–2 JD keywords naturally
+- include complementary ecosystem tools
+- reflect realistic seniority progression
+- preserve chronology realism
+
+Each role should feel progressively more senior.
+
+
+MANDATORY COVERAGE ACROSS EXPERIENCE
+
+Distribute these naturally:
+
+- architecture ownership
+- scalable systems
+- APIs
+- testing
+- deployment
+- CI/CD
+- security
+- monitoring
+- debugging
+- collaboration
+- technical leadership
+- mentoring
+- production reliability
+- cloud infrastructure
+- automation
+- performance optimization
+- data handling
+- operational stability
+
+
+====================================================
+8. TECHNOLOGY TIMELINE VALIDATION
+====================================================
+
+Never mention technologies before they existed.
+
+Respect release chronology.
+
+Do not fabricate modern tooling in older roles.
+
+Use historically realistic stacks.
+
+
+====================================================
+9. ANTI-REPETITION RULES
+====================================================
+
+Avoid:
+
+- repeated sentence patterns
+- repetitive action verbs
+- identical bullet structures
+- keyword stuffing
+- AI-generated sounding prose
+
+Each role must feel distinct.
+
+
+====================================================
+10. RECRUITER REALISM RULES
+====================================================
+
+The resume should demonstrate:
+
+- ownership
+- technical judgment
+- engineering maturity
+- system thinking
+- architectural understanding
+- collaboration maturity
+- production awareness
+- long-term technical depth
+
+Do NOT over-optimize ATS at the expense of credibility.
+
+Human readability is critical.
+
+
+====================================================
+11. FINAL VALIDATION
+====================================================
+
+Before returning output:
+
+- ensure valid JSON
+- no syntax errors
+- no trailing commas
+- no duplicate skills
+- realistic chronology
+- realistic technology history
+- strong ATS coverage
+- natural recruiter readability
+- balanced keyword distribution
+- no fabricated metrics
+- no HTML tags
+
+
+====================================================
+FINAL GOAL
+====================================================
+
+Produce a:
+
+- Senior/Lead-level resume
+- ATS-optimized resume
+- recruiter-trusted resume
+- realistic and highly readable resume
+- domain-adaptive professional resume
+- technically credible engineering resume
+
+The final resume should maximize interview probability, not merely ATS score.
