@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { getThemeColors } from "../lib/theme-tokens";
 
 export default function Home() {
   const router = useRouter();
@@ -29,39 +30,7 @@ export default function Home() {
     localStorage.setItem("theme", newTheme);
   };
 
-  // Theme colors
-  const themeColors = {
-    dark: {
-      bg: "#1a1d24",
-      cardBg: "rgba(30, 33, 40, 0.8)",
-      cardBorder: "rgba(255, 255, 255, 0.08)",
-      text: "#e4e7eb",
-      textSecondary: "#b0b5bb",
-      textMuted: "#8a8f95",
-      buttonBg: "#4a90e2",
-      buttonText: "#ffffff",
-      buttonHover: "#5aa0f2",
-      inputBg: "rgba(30, 33, 40, 0.8)",
-      inputBorder: "rgba(255, 255, 255, 0.08)",
-      buttonDisabled: "#475569",
-    },
-    light: {
-      bg: "#f5f6f8",
-      cardBg: "rgba(255, 255, 255, 0.95)",
-      cardBorder: "rgba(0, 0, 0, 0.1)",
-      text: "#2c3e50",
-      textSecondary: "#5a6c7d",
-      textMuted: "#7f8c9a",
-      buttonBg: "#4a90e2",
-      buttonText: "#ffffff",
-      buttonHover: "#5aa0f2",
-      inputBg: "rgba(255, 255, 255, 0.95)",
-      inputBorder: "rgba(0, 0, 0, 0.1)",
-      buttonDisabled: "#cbd5e1",
-    }
-  };
-
-  const colors = themeColors[theme];
+  const colors = getThemeColors(theme);
 
   return (
     <>

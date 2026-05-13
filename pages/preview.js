@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { getThemeColors } from "../lib/theme-tokens";
 
 export default function PreviewPage() {
   const router = useRouter();
@@ -51,35 +52,7 @@ export default function PreviewPage() {
     setExpandedTemplate(expandedTemplate === templateId ? null : templateId);
   };
 
-  // Theme colors
-  const themeColors = {
-    dark: {
-      bg: "#0f172a",
-      cardBg: "#1e293b",
-      cardBorder: "#334155",
-      text: "#f1f5f9",
-      textSecondary: "#cbd5e1",
-      textMuted: "#94a3b8",
-      buttonBg: "#3b82f6",
-      buttonHover: "#2563eb",
-      buttonText: "#ffffff",
-      buttonDisabled: "#475569",
-    },
-    light: {
-      bg: "#ffffff",
-      cardBg: "#ffffff",
-      cardBorder: "#e2e8f0",
-      text: "#0f172a",
-      textSecondary: "#475569",
-      textMuted: "#64748b",
-      buttonBg: "#3b82f6",
-      buttonHover: "#2563eb",
-      buttonText: "#ffffff",
-      buttonDisabled: "#cbd5e1",
-    }
-  };
-
-  const colors = themeColors[theme];
+  const colors = getThemeColors(theme);
 
   return (
     <>
