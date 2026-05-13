@@ -5,6 +5,11 @@ import { slugToProfileName, getPromptForProfile, getTemplateForProfile } from ".
 import { formatProfileForReview, profileToPrettyJson } from "../../lib/profile-format";
 import { MANUAL_HELP_SECTIONS } from "../../lib/manual-help-guide";
 import TemplatePdfMiniPreview from "../../lib/components/TemplatePdfMiniPreview";
+import PopoverPanel from "../../lib/components/PopoverPanel";
+import AppModal from "../../lib/components/AppModal";
+
+/** Shared preview column height — scales with viewport */
+const PREVIEW_COLUMN_HEIGHT = "clamp(280px, 38vh, 520px)";
 
 const LoadingSpinner = lazy(() =>
   Promise.resolve({
@@ -68,46 +73,12 @@ const ICON_BTN = {
   cursor: "pointer",
 };
 
-function useFixedDropdownStyle(anchorRef, isOpen) {
-  const [style, setStyle] = useState({});
-
-  useEffect(() => {
-    if (!isOpen || !anchorRef?.current) {
-      setStyle({});
-      return;
-    }
-    const update = () => {
-      const el = anchorRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const width = Math.min(320, window.innerWidth - 16);
-      const right = Math.max(8, window.innerWidth - r.right);
-      setStyle({
-        position: "fixed",
-        top: r.bottom + 8,
-        right,
-        width,
-        zIndex: 1200,
-      });
-    };
-    update();
-    window.addEventListener("resize", update);
-    window.addEventListener("scroll", update, true);
-    return () => {
-      window.removeEventListener("resize", update);
-      window.removeEventListener("scroll", update, true);
-    };
-  }, [isOpen, anchorRef]);
-
-  return style;
-}
-
 function HelpGuideContent({ colors }) {
   return (
     <div style={{ fontSize: 13, lineHeight: 1.55, color: colors.textSecondary }}>
       {MANUAL_HELP_SECTIONS.map((sec) => (
         <div key={sec.id} style={{ marginBottom: 16 }}>
-          <motionless
+          <div
             style={{
               fontSize: 14,
               fontWeight: 700,
@@ -118,7 +89,7 @@ function HelpGuideContent({ colors }) {
             }}
           >
             {sec.title}
-          </motionless>
+          </div>
           {(sec.paragraphs || []).map((p) => (
             <p key={p.slice(0, 24)} style={{ margin: "0 0 8px 0" }}>
               {p}
@@ -140,14 +111,6 @@ function HelpGuideContent({ colors }) {
           )}
         </div>
       ))}
-    </div>
-  );
-}
-
-function motionless({ style, children, ...rest }) {
-  return (
-    <div style={style} {...rest}>
-      {children}
     </div>
   );
 }
@@ -188,20 +151,12 @@ export default function ManualProfilePage() {
   const [showScreeningSection, setShowScreeningSection] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [profileReviewOpen, setProfileReviewOpen] = useState(false);
   const [profileReviewMode, setProfileReviewMode] = useState("formatted");
-  const [templatePreviewExpanded, setTemplatePreviewExpanded] = useState(false);
 
   const timerIntervalRef = useRef(null);
   const startTimeRef = useRef(null);
   const settingsRef = useRef(null);
-  const helpRef = useRef(null);
-  const profileMenuRef = useRef(null);
-
-  const settingsDropdownStyle = useFixedDropdownStyle(settingsRef, settingsOpen);
-  const helpDropdownStyle = useFixedDropdownStyle(helpRef, helpOpen);
-  const profileMenuDropdownStyle = useFixedDropdownStyle(profileMenuRef, profileMenuOpen);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
@@ -210,16 +165,6 @@ export default function ManualProfilePage() {
     setShowPreviewSection(readBoolLs(LS.preview, true));
     setShowScreeningSection(readBoolLs(LS.screening, true));
   }, []);
-
-  useEffect(() => {
-    const onDocMouseDown = (e) => {
-      if (settingsRef.current && !settingsRef.current.contains(e.target)) setSettingsOpen(false);
-      if (helpRef.current && !helpRef.current.contains(e.target)) setHelpOpen(false);
-      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) setProfileMenuOpen(false);
-    };
-    if (settingsOpen || helpOpen || profileMenuOpen) document.addEventListener("mousedown", onDocMouseDown);
-    return () => document.removeEventListener("mousedown", onDocMouseDown);
-  }, [settingsOpen, helpOpen, profileMenuOpen]);
 
   useEffect(() => {
     fetch("/api/config")
@@ -638,14 +583,6 @@ export default function ManualProfilePage() {
   const profileReviewFormatted = formatProfileForReview(selectedProfileData);
   const profileReviewJson = profileToPrettyJson(selectedProfileData);
 
-  const dropdownPanelStyle = (fixedStyle) => ({
-    ...fixedStyle,
-    background: colors.cardBg,
-    border: `1px solid ${colors.cardBorder}`,
-    borderRadius: 8,
-    boxShadow: theme === "dark" ? "0 12px 40px rgba(0,0,0,0.45)" : "0 8px 24px rgba(15,23,42,0.12)",
-  });
-
   const iconBtn = (active = false) => ({
     ...ICON_BTN,
     background: active ? colors.copyBg : colors.inputBg,
@@ -734,78 +671,35 @@ export default function ManualProfilePage() {
               <div style={{ flex: "1 1 200px", minWidth: 0 }}>
                 <h1 style={{ fontSize: "clamp(18px, 4vw, 22px)", fontWeight: "700", margin: "0 0 6px 0" }}>{displayName}</h1>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: 13, color: colors.textSecondary }}>
-                    Profile: <span style={{ color: colors.text, fontWeight: 600 }}>{profileTitle}</span>
-                  </span>
-                  <div style={{ position: "relative" }} ref={profileMenuRef}>
-                    <button
-                      type="button"
-                      title="Profile options"
-                      aria-label="Profile options"
-                      onClick={() => {
-                        setProfileMenuOpen((o) => !o);
-                        setHelpOpen(false);
-                        setSettingsOpen(false);
-                      }}
-                      style={iconBtn(profileMenuOpen)}
-                    >
-                      ⋮
-                    </button>
-                    {profileMenuOpen && (
-                      <div style={{ ...dropdownPanelStyle(profileMenuDropdownStyle), padding: "6px 0" }}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setProfileReviewOpen(true);
-                            setProfileMenuOpen(false);
-                          }}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            textAlign: "left",
-                            padding: "10px 14px",
-                            fontSize: 13,
-                            background: "transparent",
-                            border: "none",
-                            color: colors.text,
-                            cursor: "pointer",
-                          }}
-                        >
-                          Review profile
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                  <span style={{ fontSize: 13, color: colors.text, fontWeight: 600 }}>{profileTitle}</span>
+                  <button
+                    type="button"
+                    title="Review profile"
+                    aria-label="Review profile"
+                    onClick={() => {
+                      setProfileReviewOpen(true);
+                      setHelpOpen(false);
+                      setSettingsOpen(false);
+                    }}
+                    style={iconBtn(profileReviewOpen)}
+                  >
+                    ⋮
+                  </button>
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                <div style={{ position: "relative" }} ref={helpRef}>
                   <button
                     type="button"
                     title="Help"
                     aria-label="Help"
                     onClick={() => {
-                      setHelpOpen((o) => !o);
+                      setHelpOpen(true);
                       setSettingsOpen(false);
-                      setProfileMenuOpen(false);
                     }}
                     style={iconBtn(helpOpen)}
                   >
                     ?
                   </button>
-                  {helpOpen && (
-                    <div
-                      style={{
-                        ...dropdownPanelStyle(helpDropdownStyle),
-                        padding: "12px 14px",
-                        maxHeight: "min(70vh, 480px)",
-                        overflowY: "auto",
-                      }}
-                    >
-                      <HelpGuideContent colors={colors} />
-                    </div>
-                  )}
-                </div>
                 <button
                   type="button"
                   title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
@@ -815,7 +709,7 @@ export default function ManualProfilePage() {
                 >
                   {theme === "dark" ? "☀" : "☾"}
                 </button>
-                <div style={{ position: "relative" }} ref={settingsRef}>
+                <div ref={settingsRef}>
                   <button
                     type="button"
                     title="Settings"
@@ -823,7 +717,6 @@ export default function ManualProfilePage() {
                     onClick={() => {
                       setSettingsOpen((o) => !o);
                       setHelpOpen(false);
-                      setProfileMenuOpen(false);
                     }}
                     style={iconBtn(settingsOpen)}
                     aria-expanded={settingsOpen}
@@ -831,8 +724,16 @@ export default function ManualProfilePage() {
                   >
                     ⚙
                   </button>
-                  {settingsOpen && (
-                    <div style={{ ...dropdownPanelStyle(settingsDropdownStyle), padding: "4px 12px 12px" }}>
+                  <PopoverPanel
+                    open={settingsOpen}
+                    onClose={() => setSettingsOpen(false)}
+                    anchorRef={settingsRef}
+                    maxWidth={300}
+                    colors={colors}
+                    theme={theme}
+                    ariaLabel="Settings"
+                  >
+                    <div style={{ padding: "4px 12px 12px" }}>
                       <div style={{ fontSize: 11, fontWeight: 700, color: colors.textMuted, padding: "10px 0 4px", textTransform: "uppercase" }}>
                         Panels
                       </div>
@@ -840,7 +741,7 @@ export default function ManualProfilePage() {
                       {toggleRow("Preview section (prompt + template)", showPreviewSection, setShowPreviewSection, LS.preview)}
                       {toggleRow("Screening / 2nd prompts section", showScreeningSection, setShowScreeningSection, LS.screening)}
                     </div>
-                  )}
+                  </PopoverPanel>
                 </div>
               </div>
             </div>
@@ -1088,20 +989,30 @@ export default function ManualProfilePage() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
                   gap: 16,
                   alignItems: "stretch",
                 }}
               >
-                <div>
-                  <div style={{ fontSize: 12, color: colors.textMuted, marginBottom: 8 }}>ATS prompt (editable)</div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: PREVIEW_COLUMN_HEIGHT,
+                    minHeight: 280,
+                  }}
+                >
+                  <div style={{ fontSize: 12, color: colors.textMuted, marginBottom: 8, flexShrink: 0 }}>
+                    ATS prompt (editable)
+                  </div>
                   <textarea
                     value={manualPrompt}
                     onChange={(e) => setManualPrompt(e.target.value)}
                     placeholder='Use "Copy ATS prompt" to generate, or edit before copying.'
-                    rows={12}
                     style={{
+                      flex: 1,
                       width: "100%",
+                      minHeight: 0,
                       padding: "10px 12px",
                       fontSize: "12px",
                       fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
@@ -1110,24 +1021,55 @@ export default function ManualProfilePage() {
                       border: `1px solid ${colors.inputBorder}`,
                       borderRadius: "6px",
                       outline: "none",
-                      resize: "vertical",
-                      minHeight: 220,
+                      resize: "none",
                       lineHeight: 1.45,
                       boxSizing: "border-box",
                     }}
                   />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", minHeight: 220 }}>
-                  <div style={{ fontSize: 12, color: colors.textMuted, marginBottom: 8 }}>
-                    Template PDF preview ({selectedTemplate})
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: PREVIEW_COLUMN_HEIGHT,
+                    minHeight: 280,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 8,
+                      marginBottom: 8,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span style={{ fontSize: 12, color: colors.textMuted }}>
+                      Template PDF preview ({selectedTemplate})
+                    </span>
+                    <a
+                      href="/preview"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontSize: 12,
+                        color: colors.infoText,
+                        fontWeight: 600,
+                        textDecoration: "none",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      All templates →
+                    </a>
                   </div>
                   <TemplatePdfMiniPreview
                     templateId={selectedTemplate}
+                    profileSlug={profileSlug}
+                    pastedContent={pastedContent}
                     colors={colors}
                     theme={theme}
-                    miniHeight={220}
-                    expanded={templatePreviewExpanded}
-                    onToggleExpand={() => setTemplatePreviewExpanded((e) => !e)}
+                    fillParent
                   />
                 </div>
               </div>
@@ -1309,141 +1251,106 @@ export default function ManualProfilePage() {
         </div>
       </div>
 
-      {profileReviewOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Review profile"
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 2000,
-            background: "rgba(15, 23, 42, 0.65)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 16,
-          }}
-          onClick={() => setProfileReviewOpen(false)}
-        >
-          <div
-            style={{
-              width: "min(720px, 100%)",
-              maxHeight: "min(85vh, 720px)",
-              background: colors.cardBg,
-              border: `1px solid ${colors.cardBorder}`,
-              borderRadius: 10,
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              boxShadow: theme === "dark" ? "0 24px 64px rgba(0,0,0,0.5)" : "0 16px 48px rgba(15,23,42,0.15)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div
+      <AppModal
+        open={helpOpen}
+        onClose={() => setHelpOpen(false)}
+        title="Usage guide"
+        ariaLabel="Usage guide"
+        colors={colors}
+        theme={theme}
+        maxWidth={640}
+      >
+        <div style={{ padding: "14px 16px" }}>
+          <HelpGuideContent colors={colors} />
+        </div>
+      </AppModal>
+
+      <AppModal
+        open={profileReviewOpen}
+        onClose={() => setProfileReviewOpen(false)}
+        title={`Review profile — ${displayName}`}
+        ariaLabel="Review profile"
+        colors={colors}
+        theme={theme}
+        headerActions={
+          <>
+            <button
+              type="button"
+              onClick={() => setProfileReviewMode("formatted")}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 8,
-                padding: "12px 14px",
-                borderBottom: `1px solid ${colors.cardBorder}`,
-                flexWrap: "wrap",
+                padding: "6px 10px",
+                fontSize: 12,
+                fontWeight: 600,
+                borderRadius: 6,
+                border: `1px solid ${profileReviewMode === "formatted" ? colors.infoText : colors.inputBorder}`,
+                background: profileReviewMode === "formatted" ? colors.copyBg : colors.inputBg,
+                color: colors.text,
+                cursor: "pointer",
               }}
             >
-              <div style={{ fontWeight: 700, fontSize: 15 }}>Review profile — {displayName}</div>
-              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                <button
-                  type="button"
-                  onClick={() => setProfileReviewMode("formatted")}
-                  style={{
-                    padding: "6px 10px",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    borderRadius: 6,
-                    border: `1px solid ${profileReviewMode === "formatted" ? colors.infoText : colors.inputBorder}`,
-                    background: profileReviewMode === "formatted" ? colors.copyBg : colors.inputBg,
-                    color: colors.text,
-                    cursor: "pointer",
-                  }}
-                >
-                  Parsed
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProfileReviewMode("json")}
-                  style={{
-                    padding: "6px 10px",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    borderRadius: 6,
-                    border: `1px solid ${profileReviewMode === "json" ? colors.infoText : colors.inputBorder}`,
-                    background: profileReviewMode === "json" ? colors.copyBg : colors.inputBg,
-                    color: colors.text,
-                    cursor: "pointer",
-                  }}
-                >
-                  Raw JSON
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    copyToClipboard(
-                      profileReviewMode === "json" ? profileReviewJson : profileReviewFormatted,
-                      "profileReview"
-                    )
-                  }
-                  style={{
-                    padding: "6px 10px",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    borderRadius: 6,
-                    border: `1px solid ${colors.inputBorder}`,
-                    background: colors.inputBg,
-                    color: colors.text,
-                    cursor: "pointer",
-                  }}
-                >
-                  {copiedField === "profileReview" ? "Copied" : "Copy"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProfileReviewOpen(false)}
-                  style={{
-                    padding: "6px 10px",
-                    fontSize: 14,
-                    borderRadius: 6,
-                    border: `1px solid ${colors.inputBorder}`,
-                    background: colors.inputBg,
-                    color: colors.text,
-                    cursor: "pointer",
-                  }}
-                  aria-label="Close"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-            <textarea
-              readOnly
-              value={profileReviewMode === "json" ? profileReviewJson : profileReviewFormatted}
+              Parsed
+            </button>
+            <button
+              type="button"
+              onClick={() => setProfileReviewMode("json")}
               style={{
-                flex: 1,
-                minHeight: 320,
-                padding: "12px 14px",
+                padding: "6px 10px",
                 fontSize: 12,
-                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                fontWeight: 600,
+                borderRadius: 6,
+                border: `1px solid ${profileReviewMode === "json" ? colors.infoText : colors.inputBorder}`,
+                background: profileReviewMode === "json" ? colors.copyBg : colors.inputBg,
                 color: colors.text,
-                background: colors.textareaBg,
-                border: "none",
-                outline: "none",
-                resize: "none",
-                lineHeight: 1.45,
+                cursor: "pointer",
               }}
-            />
-          </div>
-        </div>
-      )}
+            >
+              Raw JSON
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                copyToClipboard(
+                  profileReviewMode === "json" ? profileReviewJson : profileReviewFormatted,
+                  "profileReview"
+                )
+              }
+              style={{
+                padding: "6px 10px",
+                fontSize: 12,
+                fontWeight: 600,
+                borderRadius: 6,
+                border: `1px solid ${colors.inputBorder}`,
+                background: colors.inputBg,
+                color: colors.text,
+                cursor: "pointer",
+              }}
+            >
+              {copiedField === "profileReview" ? "Copied" : "Copy"}
+            </button>
+          </>
+        }
+      >
+        <textarea
+          readOnly
+          value={profileReviewMode === "json" ? profileReviewJson : profileReviewFormatted}
+          style={{
+            display: "block",
+            width: "100%",
+            minHeight: 320,
+            padding: "12px 14px",
+            fontSize: 12,
+            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+            color: colors.text,
+            background: colors.textareaBg,
+            border: "none",
+            outline: "none",
+            resize: "none",
+            lineHeight: 1.45,
+            boxSizing: "border-box",
+          }}
+        />
+      </AppModal>
+
     </>
   );
 }
