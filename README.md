@@ -59,7 +59,7 @@ Hunting-Job/
 │       ├── templates.js         # List all templates
 │       └── resume-list.js      # List resume files
 │
-├── resumes/                      # Candidate profile data (JSON)
+├── profiles/                     # Candidate profile data (JSON)
 │   ├── _template.json          # Profile template structure
 │   ├── Boris_Varbanov.json
 │   ├── Christian_Carrasco.json
@@ -124,8 +124,8 @@ Hunting-Job/
    ```
 
 4. **Add candidate profiles**
-   - Place JSON profile files in the `resumes/` directory
-   - Follow the structure in `resumes/_template.json`
+   - Place JSON profile files in the `profiles/` directory
+   - Follow the structure in `profiles/_template.json`
    - Update `lib/profile-template-mapping.js` to map profile slugs
 
 5. **Run development server**
@@ -341,7 +341,7 @@ Resume generation uses the single default prompt (`lib/prompts/default.txt`), wh
 ## 📚 Additional Resources
 
 ### Profile Data Format
-See `resumes/_template.json` for complete structure.
+See `profiles/_template.json` for complete structure.
 
 ### Adding New Templates
 1. Create template component in `lib/pdf-templates/templates/`

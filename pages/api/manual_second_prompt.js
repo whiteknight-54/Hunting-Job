@@ -1,11 +1,15 @@
-import path from "path";
-import { promises as fsPromises } from "fs";
-import { getProfileBySlug } from "../../lib/profile-template-mapping";
 import { readSecondPromptTemplate, applyTemplateVariables } from "../../lib/second-prompts-registry";
-import { formatProfileForReview } from "../../lib/profile-format";
+import {
+  formatProfileForReview,
+  formatTailoredResumeContext,
+  tailoredResumeToPrettyJson,
+} from "../../lib/profile-format";
+import { tryParseTailoredResume } from "../../lib/tailored-resume/index.js";
+import { loadProfileBySlug, respondProfileLoadError } from "../../lib/load-profile";
+import { jsonError, methodNotAllowed, serverError } from "../../lib/api-response";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).send("Method not allowed");
+  if (req.method !== "POST") return methodNotAllowed(res);
 
   try {
     const {
@@ -18,43 +22,35 @@ export default async function handler(req, res) {
       resumeOutputJson = "",
     } = req.body || {};
 
-    if (!profileSlug) return res.status(400).json({ error: "Profile slug required" });
-    if (!secondPromptId) return res.status(400).json({ error: "secondPromptId required" });
-    if (!jd || !String(jd).trim()) return res.status(400).json({ error: "Job description required" });
-    if (!roleTitle || !String(roleTitle).trim()) return res.status(400).json({ error: "Role title required" });
-    if (!companyName || !String(companyName).trim()) return res.status(400).json({ error: "Company name required" });
+    if (!profileSlug) return jsonError(res, 400, "Profile slug required");
+    if (!secondPromptId) return jsonError(res, 400, "secondPromptId required");
+    if (!jd || !String(jd).trim()) return jsonError(res, 400, "Job description required");
+    if (!roleTitle || !String(roleTitle).trim()) return jsonError(res, 400, "Role title required");
+    if (!companyName || !String(companyName).trim()) return jsonError(res, 400, "Company name required");
 
-    const profileConfig = getProfileBySlug(profileSlug);
-    if (!profileConfig) {
-      return res.status(404).json({ error: `Profile with slug "${profileSlug}" not found` });
-    }
-
-    const profilePath = path.join(process.cwd(), "resumes", `${profileConfig.resume}.json`);
-    const profileContent = await fsPromises.readFile(profilePath, "utf-8");
-    const profileData = JSON.parse(profileContent);
-
+    const { data: profileData } = await loadProfileBySlug(profileSlug);
     const template = await readSecondPromptTemplate(String(secondPromptId));
 
-    let resumeBlock = String(resumeOutputJson || "").trim();
-    if (!resumeBlock) resumeBlock = "{}";
+    const resumeRaw = String(resumeOutputJson || "").trim();
+    const resumeContent = tryParseTailoredResume(resumeRaw);
 
     const variables = {
       jobDescription: String(jd || ""),
       roleTitle: String(roleTitle || "").trim(),
       companyName: String(companyName || "").trim(),
       questions: String(questions || ""),
-      profileJson: JSON.stringify(profileData, null, 2),
       profileContext: formatProfileForReview(profileData),
-      resumeOutputJson: resumeBlock,
+      profileJson: JSON.stringify(profileData, null, 2),
+      resumeOutputJson: resumeRaw || "{}",
+      tailoredResumeContext: formatTailoredResumeContext(profileData, resumeContent),
+      tailoredResumeJson: tailoredResumeToPrettyJson(profileData, resumeContent),
     };
 
     const prompt = applyTemplateVariables(template, variables);
     return res.status(200).json({ prompt });
   } catch (err) {
+    if (respondProfileLoadError(res, err)) return;
     console.error("manual_second_prompt error:", err);
-    return res.status(500).json({
-      error: "Failed to build second prompt",
-      message: err?.message || "Unknown error",
-    });
+    return serverError(res, "Failed to build second prompt", err?.message || "Unknown error");
   }
 }

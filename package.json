@@ -5,7 +5,9 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start"
+        "start": "next start",
+        "test": "node --experimental-vm-modules --test lib/**/*.test.js",
+        "validate:prompts": "node scripts/validate-prompt-vars.mjs"
     },
     "dependencies": {
         "@react-pdf/renderer": "^3.4.4",

@@ -9,15 +9,18 @@ You are helping a job applicant reply to recruiter FAQs, email threads, or short
 **Company**
 {{companyName}}
 
-**Candidate profile (readable summary)**
-{{profileContext}}
+**Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
+{{tailoredResumeContext}}
 
-**Candidate profile (full JSON)**
+**Tailored resume (merged JSON)**
 ```json
-{{profileJson}}
+{{tailoredResumeJson}}
 ```
 
-**Tailored resume JSON (if relevant)**
+**Reference — base profile only**
+{{profileContext}}
+
+**Reference — raw tailored resume JSON**
 ```json
 {{resumeOutputJson}}
 ```

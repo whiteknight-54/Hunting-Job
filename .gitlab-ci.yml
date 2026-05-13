@@ -1,0 +1,25 @@
+image: node:20
+
+stages:
+  - verify
+
+variables:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+verify:
+  stage: verify
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+      - .next/cache/
+  script:
+    - npm ci
+    - npm test
+    - npm run validate:prompts
+    - npm run build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

@@ -1,13 +1,9 @@
-import path from "path";
-import { promises as fsPromises } from "fs";
-import { getProfileBySlug, getPromptForProfile } from "../../lib/profile-template-mapping";
-import { readAtsPromptTemplate, sanitizeAtsPromptId } from "../../lib/ats-prompts";
-import { buildAtsSubstitutionVariables } from "../../lib/resume-prompt-variables";
-
-const promptCache = new Map();
+import { buildAtsPromptForProfile } from "../../lib/build-ats-prompt";
+import { loadProfileBySlug, respondProfileLoadError } from "../../lib/load-profile";
+import { jsonError, methodNotAllowed, serverError } from "../../lib/api-response";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).send("Method not allowed");
+  if (req.method !== "POST") return methodNotAllowed(res);
 
   try {
     const {
@@ -19,53 +15,25 @@ export default async function handler(req, res) {
       questions = "",
     } = req.body || {};
 
-    if (!profileSlug) return res.status(400).send("Profile slug required");
-    if (!jd) return res.status(400).send("Job description required");
+    if (!profileSlug) return jsonError(res, 400, "Profile slug required");
+    if (!jd) return jsonError(res, 400, "Job description required");
 
-    const profileConfig = getProfileBySlug(profileSlug);
-    if (!profileConfig) {
-      return res.status(404).send(`Profile with slug "${profileSlug}" not found`);
-    }
+    const { data: profileData } = await loadProfileBySlug(profileSlug);
 
-    const mappedAts = getPromptForProfile(profileSlug);
-    const atsPromptName = sanitizeAtsPromptId(atsPromptOverride || mappedAts);
-    const promptCacheKey = `${profileSlug}::${atsPromptName}`;
-
-    let promptTemplate;
-    if (promptCache.has(promptCacheKey)) {
-      promptTemplate = promptCache.get(promptCacheKey);
-    } else {
-      promptTemplate = await readAtsPromptTemplate(atsPromptName);
-      promptCache.set(promptCacheKey, promptTemplate);
-    }
-
-    const profilePath = path.join(process.cwd(), "resumes", `${profileConfig.resume}.json`);
-    const profileContent = await fsPromises.readFile(profilePath, "utf-8");
-    const profileData = JSON.parse(profileContent);
-
-    const variables = buildAtsSubstitutionVariables(profileData, {
+    const { prompt, atsPromptUsed } = await buildAtsPromptForProfile({
+      profileSlug,
+      profileData,
       jobDescription: jd,
+      atsPromptOverride,
       roleTitle,
       companyName,
       questions,
     });
 
-    const variablePatterns = Object.keys(variables).map((key) => ({
-      pattern: new RegExp(`\\{\\{${key}\\}\\}`, "g"),
-      value: String(variables[key] || ""),
-    }));
-
-    let prompt = promptTemplate;
-    for (const { pattern, value } of variablePatterns) {
-      prompt = prompt.replace(pattern, value);
-    }
-
-    return res.status(200).json({ prompt, atsPromptUsed: atsPromptName });
+    return res.status(200).json({ prompt, atsPromptUsed });
   } catch (err) {
+    if (respondProfileLoadError(res, err)) return;
     console.error("Manual prompt error:", err);
-    return res.status(500).json({
-      error: "Failed to build manual prompt",
-      message: err?.message || "Unknown error occurred",
-    });
+    return serverError(res, "Failed to build manual prompt", err?.message || "Unknown error occurred");
   }
 }

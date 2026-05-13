@@ -9,15 +9,20 @@ You are a senior technical recruiter doing a quick manual screening before the c
 **Company**
 {{companyName}}
 
-**Candidate profile (readable summary)**
-{{profileContext}}
+**Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
+Contact, companies, dates, and education from the stored profile; title, summary, skills, and experience bullets from the tailored resume JSON for this application.
 
-**Candidate profile (full JSON)**
+{{tailoredResumeContext}}
+
+**Tailored resume (merged JSON)**
 ```json
-{{profileJson}}
+{{tailoredResumeJson}}
 ```
 
-**Tailored resume JSON for this application**
+**Reference — base profile only**
+{{profileContext}}
+
+**Reference — raw tailored resume JSON from ChatGPT**
 ```json
 {{resumeOutputJson}}
 ```
@@ -26,7 +31,7 @@ You are a senior technical recruiter doing a quick manual screening before the c
 {{questions}}
 
 **Task**
-1. List the strongest alignments between the resume and the JD (5–10 bullets).
+1. List the strongest alignments between the tailored resume and the JD (5–10 bullets).
 2. List gaps or risks a recruiter might flag (honest, constructive).
 3. Suggest 3–5 concrete edits to improve clarity or credibility (without inventing experience).
 4. Give a short go / no-go / “edit first” recommendation for submitting as-is.
