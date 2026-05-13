@@ -1,11 +1,12 @@
-import fs from "fs";
 import path from "path";
 import { promises as fsPromises } from "fs";
 import React from "react";
 import { renderToStream } from "@react-pdf/renderer";
 import { getTemplate } from "../../lib/pdf-templates";
 import { callAI } from "../../lib/ai-service";
-import { getTemplateForProfile, getProfileBySlug } from "../../lib/profile-template-mapping";
+import { getTemplateForProfile, getProfileBySlug, getPromptForProfile } from "../../lib/profile-template-mapping";
+import { readAtsPromptTemplate, sanitizeAtsPromptId } from "../../lib/ats-prompts";
+import { buildAtsSubstitutionVariables } from "../../lib/resume-prompt-variables";
 
 // Performance: Cache prompt templates in memory
 const promptCache = new Map();
@@ -14,7 +15,17 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
   try {
-    const { profile: profileSlug, jd, template, provider = "openai", model = null, roleName, companyName = null } = req.body;
+    const {
+      profile: profileSlug,
+      jd,
+      template,
+      provider = "openai",
+      model = null,
+      roleName,
+      companyName = null,
+      atsPrompt,
+      questions = null,
+    } = req.body;
 
     if (!profileSlug) return res.status(400).send("Profile slug required");
     if (!jd) return res.status(400).send("Job description required");
@@ -59,116 +70,27 @@ export default async function handler(req, res) {
       throw error;
     }
 
-
-    // Calculate years of experience with improved date parsing - optimized
-    const calculateYears = (experience) => {
-      if (!experience || experience.length === 0) return 0;
-
-      // Pre-compile regex pattern
-      const mmYyyyPattern = /^(\d{1,2})\/(\d{4})\s*$/;
-      const presentLower = "present";
-      const msPerYear = 1000 * 60 * 60 * 24 * 365;
-
-      const parseDate = (dateStr) => {
-        if (!dateStr) return null;
-        
-        const trimmed = String(dateStr).trim();
-        const trimmedLower = trimmed.toLowerCase();
-        if (trimmedLower === presentLower) return new Date();
-        
-        // Handle MM/YYYY format (e.g., "12/2018", "07/2018") - optimized
-        const mmYyyyMatch = trimmed.match(mmYyyyPattern);
-        if (mmYyyyMatch) {
-          return new Date(parseInt(mmYyyyMatch[2], 10), parseInt(mmYyyyMatch[1], 10) - 1, 1);
-        }
-        
-        // Try standard Date parsing
-        const parsed = new Date(trimmed);
-        
-        // Check if date is valid
-        if (isNaN(parsed.getTime())) {
-          console.warn(`Failed to parse date: "${dateStr}"`);
-          return null;
-        }
-        
-        return parsed;
-      };
-
-      // Parse all dates and filter out invalid ones - optimized loop
-      const validDates = [];
-      for (let i = 0; i < experience.length; i++) {
-        const date = parseDate(experience[i]?.start_date);
-        if (date !== null) validDates.push(date);
-      }
-      
-      if (validDates.length === 0) {
-        console.warn("No valid dates found in experience");
-        return 0;
-      }
-      
-      // Find earliest date - optimized
-      let earliest = validDates[0];
-      for (let i = 1; i < validDates.length; i++) {
-        if (validDates[i] < earliest) {
-          earliest = validDates[i];
-        }
-      }
-      
-      const years = (Date.now() - earliest.getTime()) / msPerYear;
-      return Math.max(0, Math.round(years));
-    };
-
-    const yearsOfExperience = calculateYears(profileData.experience);
-
-    // Prepare variables for prompt template - optimized string building
-    const experience = profileData.experience || [];
-    const workHistoryParts = [];
-    for (let idx = 0; idx < experience.length; idx++) {
-      const job = experience[idx];
-      const parts = [`${idx + 1}. ${job?.company || 'Unknown Company'}`];
-      if (job?.title) parts.push(job.title);
-      if (job?.location) parts.push(job.location);
-      parts.push(`${job?.start_date || 'N/A'} - ${job?.end_date || 'N/A'}`);
-      workHistoryParts.push(parts.join(' | '));
-    }
-    const workHistory = workHistoryParts.join('\n');
-
-    const educationList = profileData.education || [];
-    const educationParts = [];
-    for (let i = 0; i < educationList.length; i++) {
-      const edu = educationList[i];
-      let eduStr = `- ${edu?.degree || 'N/A'}, ${edu?.school || 'N/A'} (${edu?.start_year || ''}-${edu?.end_year || ''})`;
-      if (edu?.grade) eduStr += ` | GPA: ${edu.grade}`;
-      educationParts.push(eduStr);
-    }
-    const education = educationParts.join('\n');
-
-    // Load default prompt only (no role detection)
-    console.time('prompt-loading');
-    const promptCacheKey = `${profileSlug}-default`;
+    console.time("prompt-loading");
+    const mappedAts = getPromptForProfile(profileSlug);
+    const atsPromptName = sanitizeAtsPromptId(atsPrompt || mappedAts);
+    const promptCacheKey = `${profileSlug}::${atsPromptName}`;
 
     let promptTemplate;
     if (promptCache.has(promptCacheKey)) {
       promptTemplate = promptCache.get(promptCacheKey);
-      console.log("Using cached prompt template");
+      console.log("Using cached ATS prompt template");
     } else {
-      const defaultPath = path.join(process.cwd(), 'lib', 'prompts', 'default.txt');
-      promptTemplate = await fsPromises.readFile(defaultPath, 'utf-8');
-      console.log("Using default prompt");
+      promptTemplate = await readAtsPromptTemplate(atsPromptName);
+      console.log("Using ATS prompt:", atsPromptName);
       promptCache.set(promptCacheKey, promptTemplate);
     }
-    
-    // Process template with variables - optimized single pass replacement
-    const variables = {
-      name: profileData.name || "Unknown",
-      email: profileData.email || "",
-      location: profileData.location || "",
-      yearsOfExperience: yearsOfExperience,
-      workHistory: workHistory,
-      education: education,
+
+    const variables = buildAtsSubstitutionVariables(profileData, {
       jobDescription: jd,
-      experienceCount: (profileData.experience || []).length
-    };
+      roleTitle: roleName || "",
+      companyName: companyName || "",
+      questions: questions || "",
+    });
     
     // Pre-compile regex patterns for all variables (one-time compilation)
     const variablePatterns = Object.keys(variables).map(key => ({

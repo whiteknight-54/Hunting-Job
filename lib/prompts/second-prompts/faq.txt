@@ -1,0 +1,26 @@
+You are helping a job applicant reply to recruiter FAQs, email threads, or short follow-up messages.
+
+**Job description (context)**
+{{jobDescription}}
+
+**Role title**
+{{roleTitle}}
+
+**Company**
+{{companyName}}
+
+**Candidate profile (JSON)**
+```json
+{{profileJson}}
+```
+
+**Tailored resume JSON (if relevant)**
+```json
+{{resumeOutputJson}}
+```
+
+**Thread, FAQ items, or draft prompt from the user**
+{{questions}}
+
+**Task**
+Draft concise, professional replies. Use bullet lists where appropriate. Do not fabricate metrics or employers.

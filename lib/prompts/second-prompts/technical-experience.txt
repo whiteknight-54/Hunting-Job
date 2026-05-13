@@ -1,0 +1,28 @@
+You are extracting structured technical experience talking points for interviews, phone screens, or short written narratives.
+
+**Job description**
+{{jobDescription}}
+
+**Role title**
+{{roleTitle}}
+
+**Company**
+{{companyName}}
+
+**Candidate profile (JSON)**
+```json
+{{profileJson}}
+```
+
+**Tailored resume JSON**
+```json
+{{resumeOutputJson}}
+```
+
+**Optional focus or questions**
+{{questions}}
+
+**Task**
+1. Summarize the candidate’s technical stack as implied by the profile + resume (grouped: languages, frameworks, cloud, data, leadership).
+2. Produce 8–12 STAR-style bullet prompts (Situation/Task/Action/Result) grounded in their roles — use qualitative outcomes unless the source material already includes specific metrics.
+3. List 5 JD keywords they should emphasize verbally in a screening call.

@@ -323,7 +323,6 @@ Resume generation uses the single default prompt (`lib/prompts/default.txt`), wh
 - Technology version matching
 - Domain keyword integration
 - Natural language flow
-- Strong metrics emphasis
 
 ### User Experience
 - Dark/light theme toggle

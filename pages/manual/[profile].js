@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { slugToProfileName } from "../../lib/profile-template-mapping";
+import { slugToProfileName, getPromptForProfile, getTemplateForProfile } from "../../lib/profile-template-mapping";
 
 const LoadingSpinner = lazy(() =>
   Promise.resolve({
@@ -16,7 +16,7 @@ const LoadingSpinner = lazy(() =>
             borderRadius: "50%",
             animation: "spin 1s linear infinite",
           }}
-        ></div>
+        />
         <style>{`
           @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -28,6 +28,30 @@ const LoadingSpinner = lazy(() =>
   })
 );
 
+const LS = {
+  quickCopy: "manual_ui_showQuickCopy",
+  preview: "manual_ui_showPreview",
+  screening: "manual_ui_showScreening",
+};
+
+const readBoolLs = (key, defaultVal) => {
+  try {
+    const v = localStorage.getItem(key);
+    if (v === null) return defaultVal;
+    return v === "1" || v === "true";
+  } catch {
+    return defaultVal;
+  }
+};
+
+const writeBoolLs = (key, val) => {
+  try {
+    localStorage.setItem(key, val ? "1" : "0");
+  } catch {
+    /* ignore */
+  }
+};
+
 export default function ManualProfilePage() {
   const router = useRouter();
   const { profile: profileSlug } = router.query;
@@ -35,12 +59,13 @@ export default function ManualProfilePage() {
   const [jd, setJd] = useState("");
   const [roleName, setRoleName] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [applicationQuestions, setApplicationQuestions] = useState("");
   const [disable, setDisable] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [lastGenerationTime, setLastGenerationTime] = useState(null);
   const [theme, setTheme] = useState("dark");
   const [selectedProfileData, setSelectedProfileData] = useState(null);
-  const [profileName, setProfileName] = useState("");
+  const [profileResumeFileName, setProfileResumeFileName] = useState("");
   const [loading, setLoading] = useState(true);
   const [copiedField, setCopiedField] = useState(null);
   const [gdriveFolderId, setGdriveFolderId] = useState(null);
@@ -49,13 +74,40 @@ export default function ManualProfilePage() {
   const [promptError, setPromptError] = useState(null);
   const [pastedContent, setPastedContent] = useState("");
 
+  const [atsPromptOptions, setAtsPromptOptions] = useState([]);
+  const [selectedAtsPrompt, setSelectedAtsPrompt] = useState("default");
+  const [templateOptions, setTemplateOptions] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState("Resume");
+  const [secondPromptCatalog, setSecondPromptCatalog] = useState([]);
+  const [selectedSecondPromptId, setSelectedSecondPromptId] = useState("screening");
+  const [secondPromptBody, setSecondPromptBody] = useState("");
+  const [secondPromptError, setSecondPromptError] = useState(null);
+
+  const [showQuickCopyPanel, setShowQuickCopyPanel] = useState(true);
+  const [showPreviewSection, setShowPreviewSection] = useState(true);
+  const [showScreeningSection, setShowScreeningSection] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   const timerIntervalRef = useRef(null);
   const startTimeRef = useRef(null);
+  const settingsRef = useRef(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
+    setShowQuickCopyPanel(readBoolLs(LS.quickCopy, true));
+    setShowPreviewSection(readBoolLs(LS.preview, true));
+    setShowScreeningSection(readBoolLs(LS.screening, true));
   }, []);
+
+  useEffect(() => {
+    const onDocMouseDown = (e) => {
+      if (!settingsRef.current) return;
+      if (!settingsRef.current.contains(e.target)) setSettingsOpen(false);
+    };
+    if (settingsOpen) document.addEventListener("mousedown", onDocMouseDown);
+    return () => document.removeEventListener("mousedown", onDocMouseDown);
+  }, [settingsOpen]);
 
   useEffect(() => {
     fetch("/api/config")
@@ -65,21 +117,54 @@ export default function ManualProfilePage() {
   }, []);
 
   useEffect(() => {
+    const loadLists = async () => {
+      try {
+        const [tRes, aRes, sRes] = await Promise.all([
+          fetch("/api/templates"),
+          fetch("/api/ats-prompts"),
+          fetch("/api/second-prompts"),
+        ]);
+        if (tRes.ok) {
+          const t = await tRes.json();
+          setTemplateOptions(Array.isArray(t) ? t : []);
+        }
+        if (aRes.ok) {
+          const a = await aRes.json();
+          setAtsPromptOptions(Array.isArray(a.prompts) ? a.prompts : []);
+        }
+        if (sRes.ok) {
+          const s = await sRes.json();
+          const list = Array.isArray(s.prompts) ? s.prompts : [];
+          setSecondPromptCatalog(list);
+          if (list.length) {
+            setSelectedSecondPromptId((cur) => (list.some((x) => x.id === cur) ? cur : list[0].id));
+          }
+        }
+      } catch {
+        /* non-fatal */
+      }
+    };
+    loadLists();
+  }, []);
+
+  useEffect(() => {
     if (!profileSlug) return;
 
     setLoading(true);
-    const profileNameFromSlug = slugToProfileName(profileSlug);
+    const resumeFile = slugToProfileName(profileSlug);
 
-    if (!profileNameFromSlug) {
+    if (!resumeFile) {
       router.push("/");
       return;
     }
 
-    setProfileName(profileNameFromSlug);
+    setProfileResumeFileName(resumeFile);
+    setSelectedAtsPrompt(getPromptForProfile(profileSlug));
+    setSelectedTemplate(getTemplateForProfile(profileSlug) || "Resume");
 
     const loadData = async () => {
       try {
-        const response = await fetch(`/api/profiles/${encodeURIComponent(profileNameFromSlug)}`);
+        const response = await fetch(`/api/profiles/${encodeURIComponent(resumeFile)}`);
         if (!response.ok) {
           router.push("/");
           return;
@@ -143,7 +228,7 @@ export default function ManualProfilePage() {
       inputBg: "#1e293b",
       inputBorder: "#475569",
       inputFocus: "#3b82f6",
-      textareaBg: "#1e293b",
+      textareaBg: "#0f172a",
       buttonBg: "#3b82f6",
       buttonHover: "#2563eb",
       buttonText: "#ffffff",
@@ -169,7 +254,7 @@ export default function ManualProfilePage() {
       inputBg: "#ffffff",
       inputBorder: "#cbd5e1",
       inputFocus: "#3b82f6",
-      textareaBg: "#ffffff",
+      textareaBg: "#f8fafc",
       buttonBg: "#3b82f6",
       buttonHover: "#2563eb",
       buttonText: "#ffffff",
@@ -189,9 +274,18 @@ export default function ManualProfilePage() {
 
   const colors = themeColors[theme];
 
-  const handleCopyPromptForChatGPT = async () => {
-    if (!jd.trim()) {
-      alert("Please enter a job description first");
+  const requireCoreFields = () => {
+    const missing = [];
+    if (!jd.trim()) missing.push("job description");
+    if (!roleName.trim()) missing.push("role title");
+    if (!companyName.trim()) missing.push("company name");
+    return missing;
+  };
+
+  const handleCopyAtsPrompt = async () => {
+    const missing = requireCoreFields();
+    if (missing.length) {
+      alert(`Please enter: ${missing.join(", ")}`);
       return;
     }
     if (!profileSlug) {
@@ -204,12 +298,19 @@ export default function ManualProfilePage() {
       const response = await fetch("/api/manual_prompt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile: profileSlug, jd }),
+        body: JSON.stringify({
+          profile: profileSlug,
+          jd,
+          atsPrompt: selectedAtsPrompt,
+          roleTitle: roleName.trim(),
+          companyName: companyName.trim(),
+          questions: applicationQuestions,
+        }),
       });
 
       if (!response.ok) {
         const err = await response.json().catch(() => null);
-        throw new Error(err?.error || (await response.text()) || "Failed to build prompt");
+        throw new Error(err?.error || err?.message || (await response.text()) || "Failed to build prompt");
       }
 
       const data = await response.json();
@@ -223,9 +324,51 @@ export default function ManualProfilePage() {
     }
   };
 
+  const handleBuildSecondPrompt = async (alsoCopy = false) => {
+    const missing = requireCoreFields();
+    if (missing.length) {
+      alert(`Please enter: ${missing.join(", ")}`);
+      return;
+    }
+    if (!profileSlug) return;
+
+    setSecondPromptError(null);
+    try {
+      const response = await fetch("/api/manual_second_prompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile: profileSlug,
+          secondPromptId: selectedSecondPromptId,
+          jd,
+          roleTitle: roleName.trim(),
+          companyName: companyName.trim(),
+          questions: applicationQuestions,
+          resumeOutputJson: pastedContent.trim() || "{}",
+        }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => null);
+        throw new Error(err?.error || err?.message || "Failed to build second prompt");
+      }
+      const data = await response.json();
+      const prompt = data?.prompt || "";
+      if (!prompt.trim()) throw new Error("Second prompt was empty");
+      setSecondPromptBody(prompt);
+      if (alsoCopy) await copyToClipboard(prompt, "secondPrompt");
+    } catch (e) {
+      setSecondPromptError(e?.message || "Failed to build second prompt");
+      alert("Second prompt: " + (e?.message || "Unknown error"));
+    }
+  };
+
   const handleManualGenerate = async () => {
     if (!roleName.trim()) {
       alert("Please enter a role name");
+      return;
+    }
+    if (!companyName.trim()) {
+      alert("Please enter a company name");
       return;
     }
     if (!selectedProfileData || !profileSlug) {
@@ -253,8 +396,9 @@ export default function ManualProfilePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           profile: profileSlug,
+          template: selectedTemplate,
           roleName: roleName.trim(),
-          companyName: companyName.trim() || null,
+          companyName: companyName.trim(),
           content: pastedContent,
         }),
       });
@@ -270,7 +414,7 @@ export default function ManualProfilePage() {
       a.href = url;
 
       const contentDisposition = response.headers.get("Content-Disposition");
-      let filename = `${profileName?.replace(/\s+/g, "_") || profileSlug}.pdf`;
+      let filename = `${profileResumeFileName?.replace(/\s+/g, "_") || profileSlug}.pdf`;
       if (contentDisposition) {
         const filenameMatch = contentDisposition.match(/filename="(.+)"/);
         if (filenameMatch) filename = filenameMatch[1];
@@ -296,9 +440,46 @@ export default function ManualProfilePage() {
     }
   };
 
+  const inputStyle = {
+    width: "100%",
+    padding: "10px 12px",
+    fontSize: "13px",
+    fontFamily: "inherit",
+    color: colors.text,
+    background: colors.inputBg,
+    border: `1px solid ${colors.inputBorder}`,
+    borderRadius: "6px",
+    outline: "none",
+    boxSizing: "border-box",
+  };
+
+  const labelStyle = {
+    display: "block",
+    fontSize: "clamp(10px, 2.5vw, 11px)",
+    fontWeight: "600",
+    color: colors.textSecondary,
+    marginBottom: "6px",
+    textTransform: "uppercase",
+    letterSpacing: "0.3px",
+  };
+
+  const cardStyle = {
+    background: colors.cardBg,
+    borderRadius: "8px",
+    border: `1px solid ${colors.cardBorder}`,
+    padding: "16px",
+    marginBottom: "12px",
+    boxShadow: theme === "dark" ? "0 2px 4px rgba(0, 0, 0, 0.2)" : "0 1px 2px rgba(0, 0, 0, 0.05)",
+  };
+
+  const previewPdfSrc =
+    selectedTemplate && showPreviewSection
+      ? `/api/preview?template=${encodeURIComponent(selectedTemplate)}`
+      : "";
+
   if (!router.isReady || !profileSlug) {
     return (
-      <Suspense fallback={<div style={{ padding: "40px", textAlign: "center", color: colors.text }}>Loading...</div>}>
+      <Suspense fallback={<div style={{ padding: "40px", textAlign: "center", color: "#64748b" }}>Loading...</div>}>
         <LoadingSpinner />
       </Suspense>
     );
@@ -345,12 +526,61 @@ export default function ManualProfilePage() {
       : []),
   ].filter((field) => field.value || field.alwaysShow);
 
+  const displayName = selectedProfileData.name || profileResumeFileName;
+
+  const toggleRow = (label, checked, onChange, keyLs) => (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        padding: "8px 0",
+        borderBottom: `1px solid ${colors.cardBorder}`,
+      }}
+    >
+      <span style={{ fontSize: 13, color: colors.text }}>{label}</span>
+      <button
+        type="button"
+        onClick={() => {
+          const next = !checked;
+          onChange(next);
+          writeBoolLs(keyLs, next);
+        }}
+        style={{
+          width: 44,
+          height: 24,
+          borderRadius: 12,
+          border: "none",
+          cursor: "pointer",
+          background: checked ? colors.buttonBg : colors.inputBorder,
+          position: "relative",
+          flexShrink: 0,
+        }}
+        aria-pressed={checked}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: 3,
+            left: checked ? 22 : 4,
+            width: 18,
+            height: 18,
+            borderRadius: "50%",
+            background: "#fff",
+            transition: "left 0.15s ease",
+          }}
+        />
+      </button>
+    </div>
+  );
+
   return (
     <>
       <Head>
-        <title>Manual Resume Generator - {profileName}</title>
+        <title>Manual Job Apply — {displayName}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="description" content={`Manual resume generation for ${profileName}`} />
+        <meta name="description" content={`Manual resume and prompts for ${displayName}`} />
       </Head>
 
       <div
@@ -360,423 +590,562 @@ export default function ManualProfilePage() {
           color: colors.text,
           fontFamily:
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif",
-          padding: "clamp(12px, 3vw, 16px)",
+          padding: "clamp(12px, 3vw, 20px)",
           transition: "background 0.3s ease, color 0.3s ease",
         }}
       >
-        <div style={{ maxWidth: "900px", margin: "0 auto", width: "100%" }}>
-          {/* Header Card */}
-          <div
-            style={{
-              background: colors.cardBg,
-              borderRadius: "8px",
-              border: `1px solid ${colors.cardBorder}`,
-              padding: "16px",
-              marginBottom: "12px",
-              boxShadow: theme === "dark" ? "0 2px 4px rgba(0, 0, 0, 0.2)" : "0 1px 2px rgba(0, 0, 0, 0.05)",
-            }}
-          >
+        <div style={{ maxWidth: "min(1200px, 100%)", margin: "0 auto", width: "100%" }}>
+          {/* 1. Header */}
+          <div style={cardStyle}>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "12px",
+                alignItems: "flex-start",
+                gap: 12,
                 flexWrap: "wrap",
-                gap: "8px",
               }}
             >
-              <div style={{ flex: 1, minWidth: "200px" }}>
-                <h1 style={{ fontSize: "clamp(16px, 4vw, 18px)", fontWeight: "600", margin: "0 0 2px 0" }}>
-                  {profileName}
-                </h1>
-                <p style={{ fontSize: "clamp(11px, 2.5vw, 12px)", color: colors.textSecondary, margin: 0 }}>
-                  Manual mode (no API key): copy prompt → paste ChatGPT JSON → generate PDF
+              <div style={{ flex: "1 1 240px", minWidth: 0 }}>
+                <h1 style={{ fontSize: "clamp(18px, 4vw, 22px)", fontWeight: "700", margin: "0 0 8px 0" }}>{displayName}</h1>
+                <p style={{ fontSize: "12px", color: colors.textSecondary, margin: "0 0 6px 0", lineHeight: 1.5 }}>
+                  <strong>Step 1 — Resume JSON:</strong> choose ATS prompt → copy → paste into ChatGPT → paste JSON back here.
+                </p>
+                <p style={{ fontSize: "12px", color: colors.textMuted, margin: 0, lineHeight: 1.5 }}>
+                  <strong>Step 2 — PDF:</strong> pick template → generate PDF.{" "}
+                  <strong>Step 3 — Follow-ups:</strong> choose a second prompt type (screening, FAQ, …) → build/copy for ChatGPT.
                 </p>
               </div>
-              <button
-                onClick={toggleTheme}
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "12px",
-                  fontWeight: "500",
-                  background: colors.inputBg,
-                  border: `1px solid ${colors.inputBorder}`,
-                  borderRadius: "6px",
-                  color: colors.text,
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                {theme === "dark" ? "☀️" : "🌙"}
-              </button>
-            </div>
-
-            {/* Quick Copy Buttons */}
-            {quickCopyFields.length > 0 && (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(min(70px, calc(50% - 4px)), 1fr))",
-                  gap: "8px",
-                  paddingTop: "12px",
-                  borderTop: `1px solid ${colors.cardBorder}`,
-                }}
-              >
-                {quickCopyFields.map(({ key, label, value, icon, iconUrl }) => (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  style={{
+                    padding: "8px 12px",
+                    fontSize: "14px",
+                    background: colors.inputBg,
+                    border: `1px solid ${colors.inputBorder}`,
+                    borderRadius: "8px",
+                    color: colors.text,
+                    cursor: "pointer",
+                  }}
+                >
+                  {theme === "dark" ? "Light mode" : "Dark mode"}
+                </button>
+                <div style={{ position: "relative" }} ref={settingsRef}>
                   <button
-                    key={key}
-                    onClick={() => copyToClipboard(value, key)}
+                    type="button"
+                    onClick={() => setSettingsOpen((o) => !o)}
                     style={{
-                      padding: "clamp(6px, 1.5vw, 8px) clamp(4px, 1vw, 6px)",
-                      background: copiedField === key ? colors.copyBg : colors.inputBg,
-                      border: `1px solid ${copiedField === key ? colors.infoText : colors.inputBorder}`,
-                      borderRadius: "6px",
+                      padding: "8px 12px",
+                      fontSize: "14px",
+                      background: colors.inputBg,
+                      border: `1px solid ${colors.inputBorder}`,
+                      borderRadius: "8px",
+                      color: colors.text,
                       cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      textAlign: "center",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "4px",
-                      minHeight: "clamp(50px, 12vw, 60px)",
-                      justifyContent: "center",
                     }}
+                    aria-expanded={settingsOpen}
+                    aria-haspopup="true"
                   >
-                    {iconUrl ? (
-                      <img
-                        src={iconUrl}
-                        alt=""
-                        style={{ width: "clamp(18px, 4vw, 22px)", height: "clamp(18px, 4vw, 22px)", objectFit: "contain" }}
-                      />
-                    ) : (
-                      <span style={{ fontSize: "clamp(14px, 3.5vw, 16px)" }}>{icon}</span>
-                    )}
+                    Settings
+                  </button>
+                  {settingsOpen && (
                     <div
                       style={{
-                        fontSize: "clamp(9px, 2vw, 10px)",
-                        fontWeight: "500",
-                        color: copiedField === key ? colors.successText : colors.textMuted,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.3px",
+                        position: "absolute",
+                        right: 0,
+                        top: "calc(100% + 8px)",
+                        minWidth: 260,
+                        background: colors.cardBg,
+                        border: `1px solid ${colors.cardBorder}`,
+                        borderRadius: 8,
+                        padding: "4px 12px 12px",
+                        boxShadow: theme === "dark" ? "0 12px 40px rgba(0,0,0,0.45)" : "0 8px 24px rgba(15,23,42,0.12)",
+                        zIndex: 100,
                       }}
                     >
-                      {copiedField === key ? "Copied!" : label}
+                      <div style={{ fontSize: 11, fontWeight: 700, color: colors.textMuted, padding: "10px 0 4px", textTransform: "uppercase" }}>
+                        Panels
+                      </div>
+                      {toggleRow("Quick copy panel", showQuickCopyPanel, setShowQuickCopyPanel, LS.quickCopy)}
+                      {toggleRow("Preview section (prompt + template)", showPreviewSection, setShowPreviewSection, LS.preview)}
+                      {toggleRow("Screening / 2nd prompts section", showScreeningSection, setShowScreeningSection, LS.screening)}
                     </div>
-                  </button>
-                ))}
+                  )}
+                </div>
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Manual cards */}
-          <div
-            style={{
-              background: colors.cardBg,
-              borderRadius: "8px",
-              border: `1px solid ${colors.cardBorder}`,
-              padding: "16px",
-              boxShadow: theme === "dark" ? "0 2px 4px rgba(0, 0, 0, 0.2)" : "0 1px 2px rgba(0, 0, 0, 0.05)",
-              marginBottom: "12px",
-            }}
-          >
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center", marginBottom: "10px" }}>
-              <button
-                onClick={handleCopyPromptForChatGPT}
-                disabled={!jd.trim()}
-                style={{
-                  padding: "10px 12px",
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  color: colors.buttonText,
-                  background: !jd.trim() ? colors.buttonDisabled : colors.buttonBg,
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: !jd.trim() ? "not-allowed" : "pointer",
-                }}
-              >
-                Copy prompt for ChatGPT
-              </button>
-              <button
-                onClick={() => manualPrompt && copyToClipboard(manualPrompt, "manualPrompt")}
-                disabled={!manualPrompt.trim()}
-                style={{
-                  padding: "10px 12px",
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  color: colors.text,
-                  background: colors.inputBg,
-                  border: `1px solid ${colors.inputBorder}`,
-                  borderRadius: "6px",
-                  cursor: !manualPrompt.trim() ? "not-allowed" : "pointer",
-                }}
-              >
-                {copiedField === "manualPrompt" ? "Prompt copied" : "Copy last prompt again"}
-              </button>
+          {/* 2. Main form */}
+          <div style={cardStyle}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: colors.textMuted, marginBottom: 12, textTransform: "uppercase" }}>
+              Application details
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 12, marginBottom: 16 }}>
+              <div>
+                <label style={labelStyle}>Role title (required)</label>
+                <input
+                  type="text"
+                  value={roleName}
+                  onChange={(e) => setRoleName(e.target.value)}
+                  placeholder="e.g. Senior Software Engineer"
+                  style={{
+                    ...inputStyle,
+                    borderColor: roleName.trim() ? colors.inputBorder : colors.infoText,
+                  }}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Company name (required)</label>
+                <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder="Used in prompts and PDF filename"
+                  style={{
+                    ...inputStyle,
+                    borderColor: companyName.trim() ? colors.inputBorder : colors.infoText,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
+                gap: 20,
+                alignItems: "stretch",
+              }}
+            >
+              {/* Left column */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 14, minWidth: 0 }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: colors.textMuted, marginBottom: 8, textTransform: "uppercase" }}>
+                    Step 1 — ATS resume prompt
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                    <button
+                      type="button"
+                      onClick={handleCopyAtsPrompt}
+                      disabled={!jd.trim() || !roleName.trim() || !companyName.trim()}
+                      style={{
+                        padding: "10px 14px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: colors.buttonText,
+                        background: !jd.trim() || !roleName.trim() || !companyName.trim() ? colors.buttonDisabled : colors.buttonBg,
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: !jd.trim() || !roleName.trim() || !companyName.trim() ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      Copy ATS prompt
+                    </button>
+                    <select
+                      value={selectedAtsPrompt}
+                      onChange={(e) => setSelectedAtsPrompt(e.target.value)}
+                      style={{ ...inputStyle, maxWidth: "100%", width: "auto", minWidth: 160, cursor: "pointer" }}
+                    >
+                      {(atsPromptOptions.length ? atsPromptOptions : [selectedAtsPrompt]).map((id) => (
+                        <option key={id} value={id}>
+                          {id}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => manualPrompt && copyToClipboard(manualPrompt, "manualPrompt")}
+                      disabled={!manualPrompt.trim()}
+                      style={{
+                        padding: "10px 12px",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: colors.text,
+                        background: colors.inputBg,
+                        border: `1px solid ${colors.inputBorder}`,
+                        borderRadius: "6px",
+                        cursor: !manualPrompt.trim() ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {copiedField === "manualPrompt" ? "Copied" : "Copy again"}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Job description</label>
+                  <textarea
+                    value={jd}
+                    onChange={(e) => setJd(e.target.value)}
+                    placeholder="Paste the full job description…"
+                    rows={10}
+                    style={{
+                      ...inputStyle,
+                      fontFamily: "inherit",
+                      resize: "vertical",
+                      minHeight: 160,
+                      lineHeight: 1.5,
+                      background: colors.textareaBg,
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Employer / application questions (optional)</label>
+                  <textarea
+                    value={applicationQuestions}
+                    onChange={(e) => setApplicationQuestions(e.target.value)}
+                    placeholder="Screening questions, form fields, or notes — included in ATS context and in step 3 prompts."
+                    rows={4}
+                    style={{
+                      ...inputStyle,
+                      fontFamily: "inherit",
+                      resize: "vertical",
+                      minHeight: 88,
+                      lineHeight: 1.45,
+                      background: colors.textareaBg,
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Right column */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 14, minWidth: 0 }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: colors.textMuted, marginBottom: 8, textTransform: "uppercase" }}>
+                    Step 2 — PDF
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                    <button
+                      type="button"
+                      onClick={handleManualGenerate}
+                      disabled={disable || !roleName.trim() || !companyName.trim() || !pastedContent.trim()}
+                      style={{
+                        padding: "10px 14px",
+                        fontSize: "13px",
+                        fontWeight: "700",
+                        color: colors.buttonText,
+                        background:
+                          disable || !roleName.trim() || !companyName.trim() || !pastedContent.trim()
+                            ? colors.buttonDisabled
+                            : colors.buttonBg,
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor:
+                          disable || !roleName.trim() || !companyName.trim() || !pastedContent.trim() ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {disable ? `Generating… (${elapsedTime}s)` : "Download resume PDF"}
+                    </button>
+                    <select
+                      value={selectedTemplate}
+                      onChange={(e) => setSelectedTemplate(e.target.value)}
+                      style={{ ...inputStyle, maxWidth: "100%", width: "auto", minWidth: 200, cursor: "pointer" }}
+                    >
+                      {templateOptions.length === 0 && (
+                        <option value={selectedTemplate}>{selectedTemplate}</option>
+                      )}
+                      {templateOptions.map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+                  <label style={labelStyle}>Paste ChatGPT resume JSON</label>
+                  <textarea
+                    value={pastedContent}
+                    onChange={(e) => setPastedContent(e.target.value)}
+                    placeholder="Paste JSON only output from ChatGPT (markdown fences are OK)."
+                    rows={14}
+                    style={{
+                      ...inputStyle,
+                      flex: 1,
+                      minHeight: 260,
+                      fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                      lineHeight: 1.45,
+                      resize: "vertical",
+                      background: colors.textareaBg,
+                    }}
+                  />
+                </div>
+
+                {lastGenerationTime != null && (
+                  <div
+                    style={{
+                      padding: "10px 12px",
+                      background: colors.successBg,
+                      border: `1px solid ${colors.successText}`,
+                      borderRadius: "6px",
+                      color: colors.successText,
+                      fontSize: "12px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    PDF generated in {lastGenerationTime}s
+                  </div>
+                )}
+              </div>
             </div>
 
             {promptError && (
               <div
                 style={{
+                  marginTop: 12,
                   padding: "10px 12px",
                   background: colors.errorBg,
                   border: `1px solid ${colors.errorText}`,
                   borderRadius: "6px",
                   color: colors.errorText,
                   fontSize: "12px",
-                  marginBottom: "10px",
                 }}
               >
                 {promptError}
               </div>
             )}
+          </div>
 
-            {/* Job Description */}
-            <div style={{ marginBottom: "14px" }}>
-              <label
+          {/* 3. Preview */}
+          {showPreviewSection && (
+            <div style={cardStyle}>
+              <div style={{ fontSize: 12, fontWeight: "700", color: colors.textSecondary, marginBottom: 12, textTransform: "uppercase" }}>
+                Preview
+              </div>
+              <div
                 style={{
-                  display: "block",
-                  fontSize: "clamp(10px, 2.5vw, 11px)",
-                  fontWeight: "600",
-                  color: colors.textSecondary,
-                  marginBottom: "6px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.3px",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+                  gap: 16,
                 }}
               >
-                Job Description (used to build the prompt)
-              </label>
-              <textarea
-                value={jd}
-                onChange={(e) => setJd(e.target.value)}
-                placeholder="Paste the job description here..."
-                rows="10"
-                style={{
-                  width: "100%",
-                  padding: "10px 12px",
-                  fontSize: "13px",
-                  fontFamily: "inherit",
-                  color: colors.text,
-                  background: colors.textareaBg,
-                  border: `1px solid ${colors.inputBorder}`,
-                  borderRadius: "6px",
-                  outline: "none",
-                  resize: "vertical",
-                  minHeight: "160px",
-                  lineHeight: "1.5",
-                  boxSizing: "border-box",
-                }}
-              />
-            </div>
-
-            {/* Role + Company */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "clamp(10px, 2.5vw, 11px)",
-                    fontWeight: "600",
-                    color: colors.textSecondary,
-                    marginBottom: "6px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.3px",
-                  }}
-                >
-                  Role Name (required)
-                </label>
-                <input
-                  type="text"
-                  value={roleName}
-                  onChange={(e) => setRoleName(e.target.value)}
-                  placeholder="e.g., Senior Software Engineer"
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    fontSize: "13px",
-                    fontFamily: "inherit",
-                    color: colors.text,
-                    background: colors.inputBg,
-                    border: `1px solid ${roleName.trim() ? colors.inputBorder : colors.infoText}`,
-                    borderRadius: "6px",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
+                <div>
+                  <div style={{ fontSize: 12, color: colors.textMuted, marginBottom: 8 }}>ATS prompt (editable)</div>
+                  <textarea
+                    value={manualPrompt}
+                    onChange={(e) => setManualPrompt(e.target.value)}
+                    placeholder='Use "Copy ATS prompt" to generate, or edit before copying.'
+                    rows={12}
+                    style={{
+                      width: "100%",
+                      padding: "10px 12px",
+                      fontSize: "12px",
+                      fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                      color: colors.text,
+                      background: colors.textareaBg,
+                      border: `1px solid ${colors.inputBorder}`,
+                      borderRadius: "6px",
+                      outline: "none",
+                      resize: "vertical",
+                      minHeight: 220,
+                      lineHeight: 1.45,
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+                <div>
+                  <div style={{ fontSize: 12, color: colors.textMuted, marginBottom: 8 }}>
+                    Template PDF preview ({selectedTemplate})
+                  </div>
+                  <div
+                    style={{
+                      border: `1px solid ${colors.inputBorder}`,
+                      borderRadius: 8,
+                      overflow: "hidden",
+                      background: colors.textareaBg,
+                      minHeight: 420,
+                    }}
+                  >
+                    {previewPdfSrc ? (
+                      <iframe title="Template preview" src={previewPdfSrc} style={{ width: "100%", height: 480, border: "none" }} />
+                    ) : (
+                      <div style={{ padding: 24, color: colors.textMuted, fontSize: 13 }}>Select a template to load preview.</div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div>
-                <label
+            </div>
+          )}
+
+          {/* 4. Quick copy */}
+          {showQuickCopyPanel && quickCopyFields.length > 0 && (
+            <div style={cardStyle}>
+              <div style={{ fontSize: 12, fontWeight: "700", color: colors.textSecondary, marginBottom: 12, textTransform: "uppercase" }}>
+                Quick copy panel
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(min(72px, calc(50% - 6px)), 1fr))",
+                  gap: "8px",
+                }}
+              >
+                {quickCopyFields.map(({ key, label, value, icon, iconUrl }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => copyToClipboard(value, key)}
+                    style={{
+                      padding: "clamp(6px, 1.5vw, 8px) 6px",
+                      background: copiedField === key ? colors.copyBg : colors.inputBg,
+                      border: `1px solid ${copiedField === key ? colors.infoText : colors.inputBorder}`,
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "4px",
+                      minHeight: "56px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {iconUrl ? (
+                      <img src={iconUrl} alt="" style={{ width: 22, height: 22, objectFit: "contain" }} />
+                    ) : (
+                      <span style={{ fontSize: 16 }}>{icon}</span>
+                    )}
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: "600",
+                        color: copiedField === key ? colors.successText : colors.textMuted,
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {copiedField === key ? "Copied" : label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 5. Screening / second prompts */}
+          {showScreeningSection && (
+            <div style={cardStyle}>
+              <div style={{ fontSize: 12, fontWeight: "700", color: colors.textSecondary, marginBottom: 8, textTransform: "uppercase" }}>
+                Step 3 — Second ChatGPT prompt
+              </div>
+              <p style={{ fontSize: 12, color: colors.textMuted, margin: "0 0 12px 0", lineHeight: 1.5 }}>
+                Uses this job, company, role, profile JSON, pasted resume JSON, and optional questions. Edit the preview before copying if you
+                want to tweak wording.
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 12 }}>
+                <select
+                  value={selectedSecondPromptId}
+                  onChange={(e) => setSelectedSecondPromptId(e.target.value)}
+                  style={{ ...inputStyle, width: "auto", minWidth: 260, cursor: "pointer" }}
+                >
+                  {secondPromptCatalog.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => handleBuildSecondPrompt(true)}
+                  disabled={!jd.trim() || !roleName.trim() || !companyName.trim()}
                   style={{
-                    display: "block",
-                    fontSize: "clamp(10px, 2.5vw, 11px)",
+                    padding: "10px 14px",
+                    fontSize: "13px",
                     fontWeight: "600",
-                    color: colors.textSecondary,
-                    marginBottom: "6px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.3px",
+                    color: colors.buttonText,
+                    background: !jd.trim() || !roleName.trim() || !companyName.trim() ? colors.buttonDisabled : colors.buttonBg,
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: !jd.trim() || !roleName.trim() || !companyName.trim() ? "not-allowed" : "pointer",
                   }}
                 >
-                  Company Name (optional)
-                </label>
-                <input
-                  type="text"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="Used in filename"
+                  Build &amp; copy prompt
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleBuildSecondPrompt(false)}
+                  disabled={!jd.trim() || !roleName.trim() || !companyName.trim()}
                   style={{
-                    width: "100%",
                     padding: "10px 12px",
                     fontSize: "13px",
-                    fontFamily: "inherit",
+                    fontWeight: "600",
                     color: colors.text,
                     background: colors.inputBg,
                     border: `1px solid ${colors.inputBorder}`,
                     borderRadius: "6px",
-                    outline: "none",
-                    boxSizing: "border-box",
+                    cursor: !jd.trim() || !roleName.trim() || !companyName.trim() ? "not-allowed" : "pointer",
                   }}
-                />
+                >
+                  Build only
+                </button>
+                <button
+                  type="button"
+                  onClick={() => secondPromptBody && copyToClipboard(secondPromptBody, "secondPrompt")}
+                  disabled={!secondPromptBody.trim()}
+                  style={{
+                    padding: "10px 12px",
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: colors.text,
+                    background: colors.inputBg,
+                    border: `1px solid ${colors.inputBorder}`,
+                    borderRadius: "6px",
+                    cursor: !secondPromptBody.trim() ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {copiedField === "secondPrompt" ? "Copied" : "Copy preview"}
+                </button>
               </div>
-            </div>
-
-            {/* Pasted JSON */}
-            <div style={{ marginBottom: "12px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "clamp(10px, 2.5vw, 11px)",
-                  fontWeight: "600",
-                  color: colors.textSecondary,
-                  marginBottom: "6px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.3px",
-                }}
-              >
-                Paste ChatGPT JSON output
-              </label>
+              {secondPromptCatalog.find((p) => p.id === selectedSecondPromptId)?.description && (
+                <div style={{ fontSize: 11, color: colors.textMuted, marginBottom: 10 }}>
+                  {secondPromptCatalog.find((p) => p.id === selectedSecondPromptId).description}
+                </div>
+              )}
+              {secondPromptError && (
+                <div
+                  style={{
+                    marginBottom: 10,
+                    padding: "10px 12px",
+                    background: colors.errorBg,
+                    border: `1px solid ${colors.errorText}`,
+                    borderRadius: "6px",
+                    color: colors.errorText,
+                    fontSize: "12px",
+                  }}
+                >
+                  {secondPromptError}
+                </div>
+              )}
+              <label style={labelStyle}>Second prompt preview</label>
               <textarea
-                value={pastedContent}
-                onChange={(e) => setPastedContent(e.target.value)}
-                placeholder='Paste the JSON response here (including ```json fences is OK). Must include: title, summary, skills, experience.'
-                rows="12"
+                value={secondPromptBody}
+                onChange={(e) => setSecondPromptBody(e.target.value)}
+                placeholder='Click "Build only" or "Build & copy" after step 1 fields are filled. Resume JSON defaults to {} if the paste area is empty.'
+                rows={14}
                 style={{
                   width: "100%",
                   padding: "10px 12px",
-                  fontSize: "13px",
-                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+                  fontSize: "12px",
+                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
                   color: colors.text,
                   background: colors.textareaBg,
                   border: `1px solid ${colors.inputBorder}`,
                   borderRadius: "6px",
                   outline: "none",
                   resize: "vertical",
-                  minHeight: "220px",
-                  lineHeight: "1.45",
+                  minHeight: 240,
+                  lineHeight: 1.45,
                   boxSizing: "border-box",
                 }}
               />
             </div>
-
-            <button
-              onClick={handleManualGenerate}
-              disabled={disable || !roleName.trim() || !pastedContent.trim()}
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: colors.buttonText,
-                background: disable || !roleName.trim() || !pastedContent.trim() ? colors.buttonDisabled : colors.buttonBg,
-                border: "none",
-                borderRadius: "6px",
-                cursor: disable || !roleName.trim() || !pastedContent.trim() ? "not-allowed" : "pointer",
-              }}
-            >
-              {disable ? `Generating PDF... (${elapsedTime}s)` : "Generate Resume PDF from pasted content"}
-            </button>
-
-            {lastGenerationTime && (
-              <div
-                style={{
-                  padding: "10px 12px",
-                  background: colors.successBg,
-                  border: `1px solid ${colors.successText}`,
-                  borderRadius: "6px",
-                  color: colors.successText,
-                  fontSize: "12px",
-                  textAlign: "center",
-                  fontWeight: "600",
-                  marginTop: "12px",
-                }}
-              >
-                ✓ PDF generated successfully in {lastGenerationTime}s
-              </div>
-            )}
-          </div>
-
-          {/* Prompt preview */}
-          <div
-            style={{
-              background: colors.cardBg,
-              borderRadius: "8px",
-              border: `1px solid ${colors.cardBorder}`,
-              padding: "16px",
-              boxShadow: theme === "dark" ? "0 2px 4px rgba(0, 0, 0, 0.2)" : "0 1px 2px rgba(0, 0, 0, 0.05)",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-              <div>
-                <div style={{ fontSize: "12px", fontWeight: "700", color: colors.textSecondary, textTransform: "uppercase", letterSpacing: "0.3px" }}>
-                  Prompt preview
-                </div>
-                <div style={{ fontSize: "12px", color: colors.textMuted }}>
-                  This is the exact prompt that gets copied to ChatGPT.
-                </div>
-              </div>
-              <button
-                onClick={() => manualPrompt && copyToClipboard(manualPrompt, "manualPrompt")}
-                disabled={!manualPrompt.trim()}
-                style={{
-                  padding: "8px 10px",
-                  fontSize: "12px",
-                  fontWeight: "700",
-                  color: colors.text,
-                  background: colors.inputBg,
-                  border: `1px solid ${colors.inputBorder}`,
-                  borderRadius: "6px",
-                  cursor: !manualPrompt.trim() ? "not-allowed" : "pointer",
-                }}
-              >
-                {copiedField === "manualPrompt" ? "Copied" : "Copy"}
-              </button>
-            </div>
-
-            <textarea
-              value={manualPrompt}
-              onChange={(e) => setManualPrompt(e.target.value)}
-              placeholder="Click “Copy prompt for ChatGPT” to generate this."
-              rows="10"
-              style={{
-                width: "100%",
-                marginTop: "12px",
-                padding: "10px 12px",
-                fontSize: "12px",
-                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-                color: colors.text,
-                background: colors.textareaBg,
-                border: `1px solid ${colors.inputBorder}`,
-                borderRadius: "6px",
-                outline: "none",
-                resize: "vertical",
-                minHeight: "180px",
-                lineHeight: "1.45",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
+          )}
         </div>
       </div>
     </>
   );
 }
-
