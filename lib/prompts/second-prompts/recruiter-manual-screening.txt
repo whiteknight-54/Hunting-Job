@@ -3,12 +3,6 @@ You are a senior technical recruiter doing a quick manual screening before the c
 **Job description**
 {{jobDescription}}
 
-**Role title**
-{{roleTitle}}
-
-**Company**
-{{companyName}}
-
 **Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
 Contact, companies, dates, and education from the stored profile; title, summary, skills, and experience bullets from the tailored resume JSON for this application.
 

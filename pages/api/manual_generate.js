@@ -10,6 +10,7 @@ export default async function handler(req, res) {
 
     if (!profileSlug) return jsonError(res, 400, "Profile slug required");
     if (!roleName || !String(roleName).trim()) return jsonError(res, 400, "Role name is required");
+    if (!companyName || !String(companyName).trim()) return jsonError(res, 400, "Company name is required");
     if (!content) return jsonError(res, 400, "Pasted content required");
 
     const { pdfBuffer, fileName } = await runManualGenerate({

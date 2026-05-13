@@ -5,28 +5,10 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { SECOND_PROMPT_CATALOG, SECOND_PROMPT_VARIABLES } from "../lib/second-prompts-registry.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-
-const SECOND_PROMPT_VARIABLES = [
-  "jobDescription",
-  "roleTitle",
-  "companyName",
-  "questions",
-  "profileContext",
-  "profileJson",
-  "resumeOutputJson",
-  "tailoredResumeContext",
-  "tailoredResumeJson",
-];
-
-const CATALOG = [
-  { id: "screening", file: "Screeing_Prompt.txt", fallbackFile: "screening.txt" },
-  { id: "recruiter-screening", file: "Recruiter_Manual_Screeing_Prompt.txt", fallbackFile: "recruiter-manual-screening.txt" },
-  { id: "faq", file: "FAQ_Prompt.txt", fallbackFile: "faq.txt" },
-  { id: "technical-experience", file: "Tech_Extraction_Prompt.txt", fallbackFile: "technical-experience.txt" },
-];
 
 const PLACEHOLDER_RE = /\{\{(\w+)\}\}/g;
 
@@ -47,7 +29,7 @@ let failed = false;
 const primaryDir = path.join(root, "lib", "prompts", "2ndPrompts");
 const fallbackDir = path.join(root, "lib", "prompts", "second-prompts");
 
-for (const entry of CATALOG) {
+for (const entry of SECOND_PROMPT_CATALOG) {
   const primary = readIfExists(path.join(primaryDir, entry.file));
   const fallback = readIfExists(path.join(fallbackDir, entry.fallbackFile));
   const text = (primary && primary.trim() ? primary : fallback) || "";

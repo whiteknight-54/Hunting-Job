@@ -8,12 +8,6 @@ You are helping a job applicant answer employer screening questions, short-form 
 **Job description**
 {{jobDescription}}
 
-**Role title**
-{{roleTitle}}
-
-**Company**
-{{companyName}}
-
 **Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
 Use this as the single source of truth: contact and employment history from the candidate profile; job title, summary, skills, and bullet details from the tailored resume JSON for this role.
 

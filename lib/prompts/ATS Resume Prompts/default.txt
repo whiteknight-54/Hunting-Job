@@ -1,40 +1,25 @@
-ATS optimization expert. Generate resume JSON: {"title":"...","summary":"...","skills":{...},"experience":[...]}
-
-**OUTPUT: ONLY valid JSON, no markdown/explanations. Return ONLY the JSON object, nothing else.**
-**QUALITY: Use the full response budget. Write a substantial summary (5-6 full sentences), complete skills, and detailed experience bullets. Do not truncate or abbreviate.**
-
-**PROFILE:**
-Candidate: {{name}} | {{email}} | {{location}}
-Experience: {{yearsOfExperience}} years
-
-**WORK HISTORY:**
-{{workHistory}}
-
-**EDUCATION:**
-{{education}}
-
-**JOB DESCRIPTION:**
-{{jobDescription}}
+# ATS prompt variant: default
+# Standard INPUT, FIELD GLOSSARY, and OUTPUT blocks are injected by the server.
 
 **INSTRUCTIONS:**
 
-**0. METRICS (CRITICAL — APPLIES TO SUMMARY + EXPERIENCE)**  
-- **Default (every role except the two exceptions below):** Never put exact quantitative impact in the resume text—no percentages, dollar or revenue figures, user/transaction/install counts, team sizes, headcount, SLA percentages stated as numbers, or precise time/cost/duration savings (e.g., “30% faster”, “$2M”, “10k users”, “cut latency by 40ms”). Describe outcomes qualitatively (improved reliability, faster delivery, broader adoption, fewer incidents, cleaner architecture, higher quality) grounded in the provided work history. Do not lift numbers from the JD or invent them.  
-- **Exception — QA / Quality Engineering roles only (infer from JD + title):** You may include specific test, quality, automation, or coverage metrics **only** when they appear in the candidate’s supplied work details or are clearly implied there without invention (e.g., defect trends, pass rates, automation coverage). Never fabricate metrics.  
-- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer roles only (infer from JD + title):** You may include model, evaluation, or serving metrics **only** when they appear in the supplied work details or are clearly tied to that work without invention (e.g., accuracy, latency, recall). Never fabricate metrics.  
+**0. METRICS (CRITICAL — applies to `summary` + `experience[].details`)**
+- **Default (every role except the two exceptions below):** Never put exact quantitative impact in `summary` or `experience[].details` strings—no percentages, dollar or revenue figures, user/transaction/install counts, team sizes, headcount, SLA percentages stated as numbers, or precise time/cost/duration savings (e.g., "30% faster", "$2M", "10k users", "cut latency by 40ms"). Describe outcomes qualitatively (improved reliability, faster delivery, broader adoption, fewer incidents, cleaner architecture, higher quality) grounded in INPUT work history. Do not lift numbers from job context or invent them.
+- **Exception — QA / Quality Engineering roles only (infer from job context + `title`):** You may include specific test, quality, automation, or coverage metrics **only** when they appear in profile `experience[].details` or are clearly implied there without invention (e.g., defect trends, pass rates, automation coverage). Never fabricate metrics.
+- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer roles only (infer from job context + `title`):** You may include model, evaluation, or serving metrics **only** when they appear in profile `experience[].details` or are clearly tied to that work without invention (e.g., accuracy, latency, recall). Never fabricate metrics.
 - If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
 
-**1. DOMAIN KEYWORDS** (10-15 from JD "About Us"): Identity/Security (OAuth2, JWT, SAML, MFA, SSO, SOC 2, GDPR), Payments (PCI-DSS, fraud detection, KYC/AML, tokenization), Healthcare (HIPAA, HL7, FHIR, EHR), Data (data governance, GDPR, PII protection). Use in Summary (3-5), Skills (dedicated category), Experience (2-3 bullets).
+**1. DOMAIN KEYWORDS** (10-15 from job context "About Us"): Identity/Security (OAuth2, JWT, SAML, MFA, SSO, SOC 2, GDPR), Payments (PCI-DSS, fraud detection, KYC/AML, tokenization), Healthcare (HIPAA, HL7, FHIR, EHR), Data (data governance, GDPR, PII protection). Use in `summary` (3-5), `skills` (dedicated category), `experience[].details` (2-3 detail strings per role).
 
 ---
 
-### **2. TITLE**
-- **BASE TITLE:** Use the candidate's MOST RECENT job title from their work history (first entry in experience list)
+### **2. `title` (OUTPUT root field)**
+- **BASE ROLE TITLE:** Use the candidate's most recent role title from INPUT work history (first profile `experience[]` entry's `title`)
 - **CRITICAL RULE - MATCHING LOGIC:** To determine if titles match, normalize both titles by:
   1. Remove seniority indicators: "Senior", "Lead", "Principal", "Staff", "Junior", "Entry-Level" (ignore these words)
   2. Extract core role type: "Full Stack", "Frontend", "Backend", "Software Engineer", "Developer", "Engineer", "Architect", "DevOps", "QA", etc.
   3. Compare core role types - they MATCH if they refer to the same domain/type, even if wording differs slightly
-  
+
 **TITLES MATCH IF:**
 - Both are Full Stack roles: "Senior Full Stack Engineer" = "Full Stack Developer" = "Full Stack Software Engineer" = "Full Stack Engineer" → MATCH
 - Both are Frontend roles: "Senior Frontend Engineer" = "Frontend Developer" = "Frontend Software Engineer" → MATCH
@@ -43,90 +28,67 @@ Experience: {{yearsOfExperience}} years
 - Both are DevOps roles: "Senior DevOps Engineer" = "DevOps Engineer" = "DevOps Specialist" → MATCH
 
 **TITLES DON'T MATCH IF:**
-- Profile is Full Stack, JD is Frontend-only → NO MATCH (add "Frontend Specialist")
-- Profile is Frontend, JD is Backend-only → NO MATCH (add "Backend Specialist")
-- Profile is Backend, JD is Full Stack → NO MATCH (add "Full Stack Experience")
-- Profile is Software Engineer (general), JD is Frontend-specific → NO MATCH (add "Frontend Specialist")
+- Profile base is Full Stack, job context is Frontend-only → NO MATCH (add "Frontend Specialist")
+- Profile base is Frontend, job context is Backend-only → NO MATCH (add "Backend Specialist")
+- Profile base is Backend, job context is Full Stack → NO MATCH (add "Full Stack Experience")
+- Profile base is Software Engineer (general), job context is Frontend-specific → NO MATCH (add "Frontend Specialist")
 
-- **If titles MATCH:** Use format: [Profile's Most Recent Title] | [Key Tech 1] | [Key Tech 2] | [Key Tech 3] | [Key Tech 4] (NO specialization added)
-- **If titles DON'T match:** Use format: [Profile's Most Recent Title] | [JD-Related Specialization] | [Key Tech 1] | [Key Tech 2] | [Key Tech 3] | [Key Tech 4]
+- **If titles MATCH:** OUTPUT `title` format: [Most Recent Role Title] | [Key Tech 1] | [Key Tech 2] | [Key Tech 3] | [Key Tech 4] (NO specialization added)
+- **If titles DON'T match:** OUTPUT `title` format: [Most Recent Role Title] | [Job-Related Specialization] | [Key Tech 1] | [Key Tech 2] | [Key Tech 3] | [Key Tech 4]
 
-- **JD-Related Specialization (ONLY if titles don't match):** Add 1 specialization/role that aligns with the JD focus (e.g., if applying for frontend job with full stack profile: "Frontend Specialist" or "Frontend Lead")
-  - If JD is frontend-focused → "Frontend Specialist" or "Frontend Lead"
-  - If JD is backend-focused → "Backend Specialist" or "Backend Architect"
-  - If JD is Full Stack-focused → "Full Stack Developer" or "Full Stack Experience"
-  - If JD is DevOps-focused → "DevOps Specialist" or "Infrastructure Lead"
-  - If JD is QA-focused → "QA Specialist" or "Quality Assurance Lead"
-  - Match the specialization to the JD's primary focus area
+- **Job-related specialization (ONLY if titles don't match):** Add 1 specialization/role that aligns with job context focus (e.g., if applying for frontend job with full stack profile: "Frontend Specialist" or "Frontend Lead")
+  - If job context is frontend-focused → "Frontend Specialist" or "Frontend Lead"
+  - If job context is backend-focused → "Backend Specialist" or "Backend Architect"
+  - If job context is Full Stack-focused → "Full Stack Developer" or "Full Stack Experience"
+  - If job context is DevOps-focused → "DevOps Specialist" or "Infrastructure Lead"
+  - If job context is QA-focused → "QA Specialist" or "Quality Assurance Lead"
+  - Match the specialization to the job context's primary focus area
 
-- **Tech Stack:** Extract 4-6 most important technologies/tech stack items from JD (prioritize: frameworks, tools, platforms, methodologies)
+- **Tech stack:** Extract 4-6 most important technologies from job context (prioritize: frameworks, tools, platforms, methodologies)
 - Separate all items with " | " (space-pipe-space)
 
-- **Examples:**
-  - Profile: "Senior Full Stack Engineer", JD: "Full Stack Developer" → MATCH → "Senior Full Stack Engineer | React | TypeScript | Next.js | AWS" (NO specialization)
-  - Profile: "Full Stack Software Engineer", JD: "Full Stack Developer" → MATCH → "Full Stack Software Engineer | Java | Python | React.js | GCP" (NO specialization)
-  - Profile: "Senior Frontend Software Engineer", JD: "Frontend Developer" → MATCH → "Senior Frontend Software Engineer | React | TypeScript | Next.js | AWS" (NO specialization)
-  - Profile: "Senior Full Stack Engineer", JD: "Frontend Engineer" → NO MATCH → "Senior Full Stack Engineer | Frontend Specialist | React.js | TypeScript | Next.js | AWS"
-  - Profile: "Senior Software Engineer", JD: "Backend Engineer" → NO MATCH → "Senior Software Engineer | Backend Architect | Node.js | Python | Microservices | Docker"
-  - Profile: "Senior Frontend Engineer", JD: "Full Stack Developer" → NO MATCH → "Senior Frontend Engineer | Full Stack Experience | React.js | Node.js | PostgreSQL | AWS"
+- **Examples (OUTPUT `title` value):**
+  - Profile `experience[0].title`: "Senior Full Stack Engineer", job context: "Full Stack Developer" → MATCH → "Senior Full Stack Engineer | React | TypeScript | Next.js | AWS"
+  - Profile: "Full Stack Software Engineer", job context: "Full Stack Developer" → MATCH → "Full Stack Software Engineer | Java | Python | React.js | GCP"
+  - Profile: "Senior Frontend Software Engineer", job context: "Frontend Developer" → MATCH → "Senior Frontend Software Engineer | React | TypeScript | Next.js | AWS"
+  - Profile: "Senior Full Stack Engineer", job context: "Frontend Engineer" → NO MATCH → "Senior Full Stack Engineer | Frontend Specialist | React.js | TypeScript | Next.js | AWS"
+  - Profile: "Senior Software Engineer", job context: "Backend Engineer" → NO MATCH → "Senior Software Engineer | Backend Architect | Node.js | Python | Microservices | Docker"
+  - Profile: "Senior Frontend Engineer", job context: "Full Stack Developer" → NO MATCH → "Senior Frontend Engineer | Full Stack Experience | React.js | Node.js | PostgreSQL | AWS"
 
 ---
 
-**3. SUMMARY** (REQUIRED: 5-6 full sentences. This is critical—write a proper professional summary.): Line 1: [Title] with {{yearsOfExperience}}+ years in [domain]. Line 2: Expertise in [domain keyword] and [3-4 JD techs with versions]. Line 3: Track record in [domain keyword] and [concrete achievement in qualitative terms per section 0 (METRICS); QA/ML exceptions only]. Line 4: Proficient in [3-4 more JD techs] and [methodology]. Line 5: [Soft skill] professional with Agile/leadership experience. Line 6: Focus on [2-3 JD skill areas] and scalable solutions. Use 8-12 exact JD keywords + 3-5 domain keywords. Each line must be a complete sentence. No fragments or bullet-style phrases.
+**3. `summary` (OUTPUT root field)** (REQUIRED: 5-6 full sentences.): Line 1: [Role title] with {{yearsOfExperience}}+ years in [domain]. Line 2: Expertise in [domain keyword] and [3-4 job-context techs with versions]. Line 3: Track record in [domain keyword] and [concrete achievement in qualitative terms per section 0; QA/ML exceptions only]. Line 4: Proficient in [3-4 more job-context techs] and [methodology]. Line 5: [Soft skill] professional with Agile/leadership experience. Line 6: Focus on [2-3 job-context skill areas] and scalable solutions. Use 8-12 exact job-context keywords + 3-5 domain keywords. Each line must be a complete sentence. No fragments or bullet-style phrases.
 
 ---
 
-**4. SKILLS** (60-80 total, 5-8 categories): Categories by JD focus (Frontend, Backend, Cloud, DevOps, Security). 8-12 skills/category. Capitalize first letter. NO version spam. Group cloud: "AWS (Lambda, S3, EC2)". Weight heavily toward JD keywords, with complementary ecosystem skills filling gaps. Domain category if relevant (FinTech→"Payment & Compliance", Healthcare→"Healthcare Compliance", Security→"Security & Identity", Data→"Data Governance").
+**4. `skills` (OUTPUT root field)** (60-80 total, 5-8 categories): Category keys by job-context focus (Frontend, Backend, Cloud, DevOps, Security). 8-12 skills per category. Capitalize first letter. NO version spam. Group cloud: "AWS (Lambda, S3, EC2)". Weight heavily toward job-context keywords, with complementary ecosystem skills filling gaps. Domain category if relevant (FinTech→"Payment & Compliance", Healthcare→"Healthcare Compliance", Security→"Security & Identity", Data→"Data Governance").
 
 ---
 
-**5. EXPERIENCE** ({{experienceCount}} entries, 6-8 bullets each): The **JOB DESCRIPTION IS PRIMARY**. Every bullet must be mapped to 1-3 high-priority JD requirements while still accurately reflecting the candidate's real work history. 6-8 bullets/job (recent=8, older=5-6). 25-35 words/bullet. 2-4 exact JD keywords/bullet. Follow **section 0 (METRICS)** for all impact language: default roles = qualitative outcomes only; QA and ML Engineer family roles = grounded metrics only when allowed there. Industry context in 2-3 bullets/job. Optimize for **strong ATS keyword alignment** and natural readability (do not claim ATS or match “scores” with numbers in the resume text).
+**5. `experience` (OUTPUT root field)** (exactly {{experienceCount}} objects, 6-8 detail strings each): **Job context is primary.** Every `experience[i].details` string must map to 1-3 high-priority job requirements while reflecting INPUT work history. 6-8 detail strings per role (recent=8, older=5-6). 25-35 words per detail string. 2-4 exact job-context keywords per detail string. Follow **section 0 (METRICS)** for all impact language. Industry context in 2-3 detail strings per role. Optimize for strong ATS keyword alignment and natural readability (do not claim ATS match "scores" with numbers).
 
-**CRITICAL: JD-FIRST, DETAIL-BASED BULLETS** - ALWAYS treat the JD as the primary source for what to highlight, but the candidate's experience details as the source of truth:
-1. **Start from provided Details** - For any job that includes "Details", you MUST derive bullets from those actual accomplishments and responsibilities (do not invent unrelated work).
-2. **Align to JD for ATS** - Enhance and tailor each bullet by adding JD-relevant keywords and mapping to JD responsibilities.
-3. **Maintain authenticity** - Keep the core accomplishments, seniority level, and technologies from the provided details; only refine wording, structure, and keyword usage for ATS optimization.
-4. **If no details provided** - Then (and only then) generate bullets based on the job title, company, dates, and JD requirements, ensuring JD alignment while staying plausible for that role.
+**CRITICAL: job-context-first, profile-details-based**
+1. **Start from profile `experience[].details`** — When INPUT work history includes source bullets, derive OUTPUT `experience[i].details` from those accomplishments (do not invent unrelated work).
+2. **Align to job context for ATS** — Enhance each detail string with job-context keywords and responsibilities.
+3. **Maintain authenticity** — Keep core accomplishments, seniority, and technologies from profile `details`; refine wording and keyword usage only.
+4. **If no profile `details` for a role** — Generate plausible `experience[i].details` from that role's `title`, `company`, `start_date`/`end_date`, and job context.
 
-**CRITICAL: TECHNOLOGY RELEASE DATES** - You MUST verify that every technology/framework/tool mentioned in experience bullets was actually available/released during that job's time period. Check the job dates (start_date - end_date) and ONLY use technologies that existed at that time. Examples:
-- Angular: Released 2016 → CANNOT use for jobs before 2016
-- React: Released 2013 → CANNOT use for jobs before 2013
-- TypeScript: Released 2012 → CANNOT use for jobs before 2012
-- Vue.js: Released 2014 → CANNOT use for jobs before 2014
-- Next.js: Released 2016 → CANNOT use for jobs before 2016
-- Docker: Released 2013 → CANNOT use for jobs before 2013
-- Kubernetes: Released 2014 → CANNOT use for jobs before 2014
-- AWS Lambda: Released 2014 → CANNOT use for jobs before 2014
-- GraphQL: Released 2015 → CANNOT use for jobs before 2015
-- If unsure about a technology's release date, use generic terms or older alternatives that existed at that time (e.g., for pre-2013 frontend: jQuery, Backbone.js, AngularJS 1.x; for pre-2013 backend: PHP, Java, .NET, Ruby on Rails).
+**CRITICAL: TECHNOLOGY RELEASE DATES** — Every technology in `experience[].details` must have existed during that role's `start_date`–`end_date` from INPUT work history. Examples:
+- Angular: Released 2016 → CANNOT use for roles before 2016
+- React: Released 2013 → CANNOT use for roles before 2013
+- TypeScript: Released 2012 → CANNOT use for roles before 2012
+- Vue.js: Released 2014 → CANNOT use for roles before 2014
+- Next.js: Released 2016 → CANNOT use for roles before 2016
+- Docker: Released 2013 → CANNOT use for roles before 2013
+- Kubernetes: Released 2014 → CANNOT use for roles before 2014
+- AWS Lambda: Released 2014 → CANNOT use for roles before 2014
+- GraphQL: Released 2015 → CANNOT use for roles before 2015
+- If unsure, use generic terms or older alternatives (e.g., pre-2013 frontend: jQuery, Backbone.js, AngularJS 1.x; pre-2013 backend: PHP, Java, .NET, Ruby on Rails).
 
-**Bullet:** [Action Verb] + [JD Tech that existed during job period with version mention] + [what you built/delivered] + [impact: qualitative for default roles; QA/ML per section 0 only]. Verbs: Architected, Engineered, Designed, Built, Developed, Implemented, Optimized, Enhanced, Led, Spearheaded, Automated, Deployed. AVOID: "Responsible for", "Worked on".
+**Detail string pattern:** [Action Verb] + [job-context tech valid for role dates] + [what you built/delivered] + [impact per section 0]. Verbs: Architected, Engineered, Designed, Built, Developed, Implemented, Optimized, Enhanced, Led, Spearheaded, Automated, Deployed. AVOID: "Responsible for", "Worked on".
 
 ---
 
-**ATS CHECKLIST:** Use EXACT JD phrases (not synonyms). High-priority keywords 3-4x (Skills+Summary+2-3 bullets). All required/preferred JD skills in Skills. Match tech versions. Natural flow, professional tone, varied verbs, domain keywords integrated.
+**ATS CHECKLIST:** Use EXACT job-context phrases (not synonyms). High-priority keywords 3-4x (`skills` + `summary` + 2-3 `experience[].details` strings). All required/preferred job-context skills in `skills`. Match tech versions. Natural flow, professional tone, varied verbs, domain keywords integrated.
 
-**OUTPUT FORMAT - CRITICAL:**
-You MUST return ONLY valid JSON. No markdown, no explanations, no code blocks, no text before or after the JSON.
-
-The JSON structure must be exactly:
-{
-  "title": "Job Title | Tech1 | Tech2 | Tech3 | Tech4",
-  "summary": "5-6 full sentences. Professional summary paragraph—do not shorten.",
-  "skills": {
-    "Category1": ["Skill1", "Skill2", "Skill3"],
-    "Category2": ["Skill4", "Skill5", "Skill6"]
-  },
-  "experience": [
-    {
-      "title": "Job Title",
-      "details": [
-        "Bullet point 1 (credible outcome; no exact metrics except QA/ML per section 0)",
-        "Bullet point 2",
-        "Bullet point 3"
-      ]
-    }
-  ]
-}
-
-**REMEMBER:** Return ONLY the JSON object. Start with { and end with }. No markdown code blocks, no explanations, no other text.
+**QUALITY:** Use the full response budget. Write a substantial `summary` (5-6 full sentences), complete `skills`, and detailed `experience[].details` arrays. Do not truncate or abbreviate.

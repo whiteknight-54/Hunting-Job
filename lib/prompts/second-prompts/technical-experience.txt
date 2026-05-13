@@ -3,12 +3,6 @@ You are extracting structured technical experience talking points for interviews
 **Job description**
 {{jobDescription}}
 
-**Role title**
-{{roleTitle}}
-
-**Company**
-{{companyName}}
-
 **Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
 {{tailoredResumeContext}}
 

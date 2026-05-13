@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import Head from "next/head";
-import { useManualPage } from "../../lib/manual/useManualPage";
+import { useManualWorkflow } from "../../lib/workflows/manual/useManualWorkflow";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
 import ManualHeader from "../../lib/components/manual/ManualHeader";
 import ManualApplicationForm from "../../lib/components/manual/ManualApplicationForm";
@@ -10,7 +10,7 @@ import ManualScreeningSection from "../../lib/components/manual/ManualScreeningS
 import ManualModals from "../../lib/components/manual/ManualModals";
 
 export default function ManualProfilePage() {
-  const page = useManualPage();
+  const page = useManualWorkflow();
   const { ready, loaded, colors, displayName, showPreviewSection, showQuickCopyPanel, showScreeningSection } = page;
 
   return (

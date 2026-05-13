@@ -3,12 +3,6 @@ You are helping a job applicant reply to recruiter FAQs, email threads, or short
 **Job description (context)**
 {{jobDescription}}
 
-**Role title**
-{{roleTitle}}
-
-**Company**
-{{companyName}}
-
 **Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
 {{tailoredResumeContext}}
 

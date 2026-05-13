@@ -10,8 +10,6 @@ export default async function handler(req, res) {
       profile: profileSlug,
       jd,
       atsPrompt: atsPromptOverride,
-      roleTitle = "",
-      companyName = "",
       questions = "",
     } = req.body || {};
 
@@ -25,8 +23,6 @@ export default async function handler(req, res) {
       profileData,
       jobDescription: jd,
       atsPromptOverride,
-      roleTitle,
-      companyName,
       questions,
     });
 

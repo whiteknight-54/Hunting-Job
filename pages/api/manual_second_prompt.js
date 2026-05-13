@@ -1,4 +1,5 @@
-import { readSecondPromptTemplate, applyTemplateVariables } from "../../lib/second-prompts-registry";
+import { readSecondPromptTemplate } from "../../lib/second-prompts-registry";
+import { applyPromptVariables } from "../../lib/apply-prompt-variables";
 import {
   formatProfileForReview,
   formatTailoredResumeContext,
@@ -16,8 +17,6 @@ export default async function handler(req, res) {
       profile: profileSlug,
       secondPromptId,
       jd,
-      roleTitle,
-      companyName = "",
       questions = "",
       resumeOutputJson = "",
     } = req.body || {};
@@ -25,8 +24,6 @@ export default async function handler(req, res) {
     if (!profileSlug) return jsonError(res, 400, "Profile slug required");
     if (!secondPromptId) return jsonError(res, 400, "secondPromptId required");
     if (!jd || !String(jd).trim()) return jsonError(res, 400, "Job description required");
-    if (!roleTitle || !String(roleTitle).trim()) return jsonError(res, 400, "Role title required");
-    if (!companyName || !String(companyName).trim()) return jsonError(res, 400, "Company name required");
 
     const { data: profileData } = await loadProfileBySlug(profileSlug);
     const template = await readSecondPromptTemplate(String(secondPromptId));
@@ -36,8 +33,6 @@ export default async function handler(req, res) {
 
     const variables = {
       jobDescription: String(jd || ""),
-      roleTitle: String(roleTitle || "").trim(),
-      companyName: String(companyName || "").trim(),
       questions: String(questions || ""),
       profileContext: formatProfileForReview(profileData),
       profileJson: JSON.stringify(profileData, null, 2),
@@ -46,7 +41,7 @@ export default async function handler(req, res) {
       tailoredResumeJson: tailoredResumeToPrettyJson(profileData, resumeContent),
     };
 
-    const prompt = applyTemplateVariables(template, variables);
+    const prompt = applyPromptVariables(template, variables);
     return res.status(200).json({ prompt });
   } catch (err) {
     if (respondProfileLoadError(res, err)) return;
