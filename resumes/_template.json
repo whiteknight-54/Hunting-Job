@@ -1,5 +1,6 @@
 {
   "name": "Your Full Name",
+  "title": "Senior Software Engineer",
   "email": "your.email@example.com",
   "phone": "+1 234 567 8900",
   "location": "City, State",
@@ -7,22 +8,20 @@
   "linkedin": "https://www.linkedin.com/in/yourprofile",
   "website": "https://yourwebsite.com",
   "github": "https://github.com/yourusername",
-  
+  "summary": "Optional short bio used in screening prompts (not required for PDF).",
+  "notes": "Private notes for prompts — preferences, constraints, talking points.",
+
   "experience": [
     {
       "company": "Company Name 1",
+      "title": "Job Title",
       "location": "City, State",
       "start_date": "Jan 2020",
-      "end_date": "Present"
-    },
-    {
-      "company": "Company Name 2",
-      "location": "City, State",
-      "start_date": "Jan 2018",
-      "end_date": "Dec 2019"
+      "end_date": "Present",
+      "details": ["Optional bullet used in profile review and future ATS sources."]
     }
   ],
-  
+
   "education": [
     {
       "degree": "Bachelor of Science in Computer Science",
@@ -30,5 +29,25 @@
       "start_year": "2014",
       "end_year": "2018"
     }
-  ]
+  ],
+
+  "certifications": ["AWS Certified Developer"],
+  "languages": ["English (fluent)", "Spanish (professional)"],
+  "skills": {
+    "Core": ["JavaScript", "TypeScript", "Node.js"]
+  },
+  "projects": [
+    {
+      "name": "Optional project",
+      "description": "One-line summary"
+    }
+  ],
+
+  "screening": {
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "salaryExpectation": "optional",
+    "availability": "e.g. 2 weeks notice",
+    "relocation": "open / remote only",
+    "customAnswers": {}
+  }
 }

@@ -9,7 +9,10 @@ You are extracting structured technical experience talking points for interviews
 **Company**
 {{companyName}}
 
-**Candidate profile (JSON)**
+**Candidate profile (readable summary)**
+{{profileContext}}
+
+**Candidate profile (full JSON)**
 ```json
 {{profileJson}}
 ```

@@ -14,7 +14,10 @@ You are helping a job applicant answer employer screening questions, short-form 
 **Company**
 {{companyName}}
 
-**Candidate profile (JSON)**
+**Candidate profile (readable summary)**
+{{profileContext}}
+
+**Candidate profile (full JSON — includes any custom fields you add)**
 ```json
 {{profileJson}}
 ```

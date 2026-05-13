@@ -2,6 +2,7 @@ import path from "path";
 import { promises as fsPromises } from "fs";
 import { getProfileBySlug } from "../../lib/profile-template-mapping";
 import { readSecondPromptTemplate, applyTemplateVariables } from "../../lib/second-prompts-registry";
+import { formatProfileForReview } from "../../lib/profile-format";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
@@ -43,6 +44,7 @@ export default async function handler(req, res) {
       companyName: String(companyName || "").trim(),
       questions: String(questions || ""),
       profileJson: JSON.stringify(profileData, null, 2),
+      profileContext: formatProfileForReview(profileData),
       resumeOutputJson: resumeBlock,
     };
 

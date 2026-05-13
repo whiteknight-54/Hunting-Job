@@ -9,7 +9,10 @@ You are a senior technical recruiter doing a quick manual screening before the c
 **Company**
 {{companyName}}
 
-**Candidate profile (JSON)**
+**Candidate profile (readable summary)**
+{{profileContext}}
+
+**Candidate profile (full JSON)**
 ```json
 {{profileJson}}
 ```

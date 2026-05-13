@@ -9,7 +9,10 @@ You are helping a job applicant reply to recruiter FAQs, email threads, or short
 **Company**
 {{companyName}}
 
-**Candidate profile (JSON)**
+**Candidate profile (readable summary)**
+{{profileContext}}
+
+**Candidate profile (full JSON)**
 ```json
 {{profileJson}}
 ```
