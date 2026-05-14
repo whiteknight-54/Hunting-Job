@@ -1,14 +1,9 @@
 {
   "title": "Senior Software Engineer | React | TypeScript | Node.js | AWS",
   "summary": "Senior engineer with 8+ years building scalable web platforms. Expertise aligns with the target role and job description keywords.",
-  "skills": {
-    "Frontend": ["React.js", "TypeScript", "Next.js"],
-    "Backend": ["Node.js", "PostgreSQL", "GraphQL"],
-    "Cloud": ["AWS", "Docker", "Kubernetes"]
-  },
+  "skills": {  },
   "experience": [
     {
-      "title": "Senior Software Engineer",
       "details": [
         "Architected microservices platform with high availability and performance.",
         "Led cloud migration improving deployment velocity and reliability.",
