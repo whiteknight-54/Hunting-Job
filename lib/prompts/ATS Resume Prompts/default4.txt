@@ -15,8 +15,8 @@ Reflects realistic, credible experience grounded in INPUT work history
 
 0. METRICS (CRITICAL — `summary` + `experience[].details`)
 - **Default (every role except the two exceptions below):** Never use exact quantitative impact in `summary` or `experience[].details` strings—no percentages, revenue or dollar figures, user/transaction/install counts, headcount, SLA numbers, or precise time/cost/duration savings. Describe outcomes qualitatively and credibly, grounded in INPUT work history. Do not copy numeric claims from job context. Never invent numbers.
-- **Exception — QA / Quality Engineering (infer from job context + `title`):** Test, quality, automation, or coverage metrics allowed **only** when grounded in profile `experience[].details` or clearly implied there without invention.
-- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from job context + `title`):** Model, evaluation, or serving metrics allowed **only** when grounded in profile `experience[].details` or clearly tied to that work without invention.
+- **Exception — QA / Quality Engineering (infer from job context + `title`):** Test, quality, automation, or coverage metrics allowed **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention.
+- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from job context + `title`):** Model, evaluation, or serving metrics allowed **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention.
 - If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
 
 1. ROLE & DOMAIN DETECTION (CRITICAL)
@@ -75,7 +75,7 @@ Product → Jira, roadmap planning, user research
 3. `title` (OUTPUT root field)
 
 Use EXACT:
-`{{resumeTitle}}` (profile headline from INPUT)
+`{{recentRoleTitle}}` (most recent role title from INPUT work history)
 
 Do NOT modify.
 
@@ -85,7 +85,7 @@ Write EXACTLY 6 lines.
 
 Format:
 
-Line 1: `{{resumeTitle}}` with {{yearsOfExperience}} years in [domain]
+Line 1: `{{recentRoleTitle}}` with {{yearsOfExperience}} years in [domain]
 Line 2–6:
 
 Include 8–12 exact job-context keywords naturally

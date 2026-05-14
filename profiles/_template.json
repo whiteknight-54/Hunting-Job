@@ -1,15 +1,15 @@
-{
-  "name": "Your Full Name",
-  "title": "Senior Software Engineer",
+{  
+  "name": "Your Full Name",  
   "email": "your.email@example.com",
+  "workEmail": "your.work.email@example.com",
   "phone": "+1 234 567 8900",
   "location": "City, State",
+  "address": "123 Main Street, City, State, Country",
   "postalCode": "12345",
   "linkedin": "https://www.linkedin.com/in/yourprofile",
   "website": "https://yourwebsite.com",
+  "portfolio": "https://yourportfolio.com",
   "github": "https://github.com/yourusername",
-  "summary": "Optional short bio used in screening prompts (not required for PDF).",
-  "notes": "Private notes for prompts — preferences, constraints, talking points.",
 
   "experience": [
     {
@@ -17,8 +17,7 @@
       "title": "Job Title",
       "location": "City, State",
       "start_date": "Jan 2020",
-      "end_date": "Present",
-      "details": ["Optional bullet used in profile review and future ATS sources."]
+      "end_date": "Present"
     }
   ],
 
@@ -31,19 +30,10 @@
     }
   ],
 
-  "certifications": ["AWS Certified Developer"],
-  "languages": ["English (fluent)", "Spanish (professional)"],
-  "skills": {
-    "Core": ["JavaScript", "TypeScript", "Node.js"]
-  },
-  "projects": [
-    {
-      "name": "Optional project",
-      "description": "One-line summary"
-    }
-  ],
-
   "screening": {
+    "languages": ["English (fluent)", "Spanish (professional)"],
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "certifications": ["AWS Certified Developer"],
     "workAuthorization": "e.g. US citizen / requires sponsorship",
     "salaryExpectation": "optional",
     "availability": "e.g. 2 weeks notice",

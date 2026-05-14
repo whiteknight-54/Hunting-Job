@@ -5,8 +5,8 @@
 
 **0. METRICS (CRITICAL — applies to `summary` + `experience[].details`)**
 - **Default (every role except the two exceptions below):** Never put exact quantitative impact in `summary` or `experience[].details` strings—no percentages, dollar or revenue figures, user/transaction/install counts, team sizes, headcount, SLA percentages stated as numbers, or precise time/cost/duration savings (e.g., "30% faster", "$2M", "10k users", "cut latency by 40ms"). Describe outcomes qualitatively (improved reliability, faster delivery, broader adoption, fewer incidents, cleaner architecture, higher quality) grounded in INPUT work history. Do not lift numbers from job context or invent them.
-- **Exception — QA / Quality Engineering roles only (infer from job context + `title`):** You may include specific test, quality, automation, or coverage metrics **only** when they appear in profile `experience[].details` or are clearly implied there without invention (e.g., defect trends, pass rates, automation coverage). Never fabricate metrics.
-- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer roles only (infer from job context + `title`):** You may include model, evaluation, or serving metrics **only** when they appear in profile `experience[].details` or are clearly tied to that work without invention (e.g., accuracy, latency, recall). Never fabricate metrics.
+- **Exception — QA / Quality Engineering roles only (infer from job context + `title`):** You may include specific test, quality, automation, or coverage metrics **only** when grounded in profile `screening.notes` or that role's INPUT metadata (`title`, `company`, dates) without invention (e.g., defect trends, pass rates, automation coverage). Never fabricate metrics.
+- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer roles only (infer from job context + `title`):** You may include model, evaluation, or serving metrics **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention (e.g., accuracy, latency, recall). Never fabricate metrics.
 - If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
 
 **1. DOMAIN KEYWORDS** (10-15 from job context "About Us"): Identity/Security (OAuth2, JWT, SAML, MFA, SSO, SOC 2, GDPR), Payments (PCI-DSS, fraud detection, KYC/AML, tokenization), Healthcare (HIPAA, HL7, FHIR, EHR), Data (data governance, GDPR, PII protection). Use in `summary` (3-5), `skills` (dedicated category), `experience[].details` (2-3 detail strings per role).
@@ -67,11 +67,11 @@
 
 **5. `experience` (OUTPUT root field)** (exactly {{experienceCount}} objects, 6-8 detail strings each): **Job context is primary.** Every `experience[i].details` string must map to 1-3 high-priority job requirements while reflecting INPUT work history. 6-8 detail strings per role (recent=8, older=5-6). 25-35 words per detail string. 2-4 exact job-context keywords per detail string. Follow **section 0 (METRICS)** for all impact language. Industry context in 2-3 detail strings per role. Optimize for strong ATS keyword alignment and natural readability (do not claim ATS match "scores" with numbers).
 
-**CRITICAL: job-context-first, profile-details-based**
-1. **Start from profile `experience[].details`** — When INPUT work history includes source bullets, derive OUTPUT `experience[i].details` from those accomplishments (do not invent unrelated work).
-2. **Align to job context for ATS** — Enhance each detail string with job-context keywords and responsibilities.
-3. **Maintain authenticity** — Keep core accomplishments, seniority, and technologies from profile `details`; refine wording and keyword usage only.
-4. **If no profile `details` for a role** — Generate plausible `experience[i].details` from that role's `title`, `company`, `start_date`/`end_date`, and job context.
+**CRITICAL: job-context-first, profile-metadata-based**
+1. **Anchor to INPUT work history** — Each OUTPUT `experience[i]` maps to the same-index profile job (`company`, `title`, `location`, dates). Do not invent employers or timelines.
+2. **Align to job context for ATS** — Write `experience[i].details` to reflect plausible accomplishments for that role metadata plus job-context keywords and responsibilities.
+3. **Maintain authenticity** — Match seniority and domain implied by profile `title` and dates; refine wording for the target role without unrelated fiction.
+4. **Use screening context when helpful** — Profile `screening.notes` / `screening.certifications` may inform tone or domain facts; never copy private notes verbatim into OUTPUT.
 
 **CRITICAL: TECHNOLOGY RELEASE DATES** — Every technology in `experience[].details` must have existed during that role's `start_date`–`end_date` from INPUT work history. Examples:
 - Angular: Released 2016 → CANNOT use for roles before 2016

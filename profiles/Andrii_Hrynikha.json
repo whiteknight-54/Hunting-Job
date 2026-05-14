@@ -1,13 +1,10 @@
 {
   "name": "Andrii Hrynikha",
-  "title": "Senior Software Engineer",
   "email": "andrii.hrynikha.04@outlook.com",
   "phone": "+48 457415866",
   "location": "Katowice, Woj, Slaskie, Polska",
   "postalCode": "55-140",
   "linkedin": "https://www.linkedin.com/in/andrii-hrynikha-3539183b8/",
-  "github": "",
-  "website": "",
   "experience": [
     {
       "company": "BrightOps",
@@ -51,5 +48,15 @@
       "start_year": "2010",
       "end_year": "2014"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

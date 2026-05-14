@@ -1,13 +1,9 @@
 {
   "name": "Boris Lazar Varbanov",
   "email": "lazarvarbanov4@gmail.com",
-  "phone": "",
   "location": "Ruse City, Bulgaria",
   "postalCode": "7000",
   "linkedin": "http://www.linkedin.com/in/boris-lazar-varbanov-738546375",
-  "github": "",
-  "website": "",
-  
   "experience": [
     {
       "company": "Kiggla",
@@ -45,6 +41,15 @@
       "start_year": "September 2014",
       "end_year": "August 2018"
     }
-  ]
-
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

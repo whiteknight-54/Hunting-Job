@@ -1,12 +1,8 @@
 {
   "name": "Santiago Reyes",
   "email": "santiawork20@gmail.com",
-  "phone": "",
   "location": "Davao City, Davao del Sur",
   "postalCode": "8000",
-  "linkedin": "",
-  "github": "",
-  "website": "",
   "experience": [
     {
       "company": "PuzzleHR",
@@ -44,5 +40,15 @@
       "start_year": "2013",
       "end_year": "2017"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

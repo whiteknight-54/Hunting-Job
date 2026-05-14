@@ -6,8 +6,6 @@
   "postalCode": "97780",
   "linkedin": "https://www.linkedin.com/in/rafael-miranda-79a773397",
   "github": "https://github.com/rafael-miranda999",
-  "website": "",
-  
   "experience": [
     {
       "company": "Kiggla",
@@ -31,7 +29,6 @@
       "end_date": "May 2018"
     }
   ],
-  
   "education": [
     {
       "degree": "Bachelor's Degree in Computer Science",
@@ -39,5 +36,15 @@
       "start_year": "2011",
       "end_year": "2015"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

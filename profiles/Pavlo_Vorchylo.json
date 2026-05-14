@@ -1,13 +1,8 @@
 {
   "name": "PAVLO VORCHYLO",
   "email": "pavlo2923@outlook.com",
-  "phone": "",
   "location": "Poznan, Wielkopolskie, Poland",
-  "postalCode": "",
   "linkedin": "https://www.linkedin.com/in/pavlo-vorchylo-474ba3396/",
-  "github": "",
-  "website": "",
-  
   "experience": [
     {
       "company": "Kiggla",
@@ -38,7 +33,6 @@
       "end_date": "April 2019"
     }
   ],
-  
   "education": [
     {
       "degree": "Bachelor's degree, Computer Science",
@@ -46,6 +40,15 @@
       "start_year": "2011",
       "end_year": "2015"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }
-

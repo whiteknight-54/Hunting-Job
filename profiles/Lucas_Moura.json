@@ -1,13 +1,9 @@
 {
   "name": "Lucas Moura",
   "email": "lucas.moura.03@outlook.com",
-  "phone": "",
   "location": "Greater Natal, Brazil",
   "postalCode": "59080-360",
   "linkedin": "https://www.linkedin.com/in/lucas-a-moura-3767473b5/",
-  "github": "",
-  "website": "",
-  
   "experience": [
     {
       "company": "BrightOps",
@@ -38,7 +34,6 @@
       "end_date": "Oct 2019"
     }
   ],
-  
   "education": [
     {
       "degree": "Bachelor's Degree in Computer Science",
@@ -46,6 +41,15 @@
       "start_year": "2013",
       "end_year": "2017"
     }
-  ]
-
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

@@ -60,10 +60,10 @@ Use qualitative outcomes only:
 Exceptions:
 
 QA / Quality Engineering:
-- quality metrics allowed ONLY if grounded in profile `experience[].details`
+- quality metrics allowed ONLY if grounded in profile `screening.notes` or that role's INPUT metadata
 
 ML / AI Engineer / Applied Scientist:
-- model metrics allowed ONLY if grounded in profile `experience[].details`
+- model metrics allowed ONLY if grounded in profile `screening.notes` or that role's INPUT metadata
 
 Never invent metrics.
 
@@ -252,7 +252,7 @@ Not realistic:
 ====================================================
 
 Use EXACTLY:
-`{{resumeTitle}}` (profile headline from INPUT)
+`{{recentRoleTitle}}` (most recent role title from INPUT work history)
 
 Do not modify.
 

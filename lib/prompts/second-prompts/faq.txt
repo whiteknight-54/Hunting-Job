@@ -3,21 +3,8 @@ You are helping a job applicant reply to recruiter FAQs, email threads, or short
 **Job description (context)**
 {{jobDescription}}
 
-**Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
+**Tailored resume (single source of truth — profile base merged with Step 1 JSON)**
 {{tailoredResumeContext}}
-
-**Tailored resume (merged JSON)**
-```json
-{{tailoredResumeJson}}
-```
-
-**Reference — base profile only**
-{{profileContext}}
-
-**Reference — raw tailored resume JSON**
-```json
-{{resumeOutputJson}}
-```
 
 **Thread, FAQ items, or draft prompt from the user**
 {{questions}}

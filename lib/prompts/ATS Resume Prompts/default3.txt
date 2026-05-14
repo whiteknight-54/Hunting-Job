@@ -9,8 +9,8 @@ INSTRUCTIONS:
 
 0. METRICS (CRITICAL — `summary` + `experience[].details`)
 - **Default (every role except the two exceptions below):** Never use exact quantitative impact in `summary` or `experience[].details` strings—no percentages, revenue or dollar figures, user/transaction/install counts, headcount, SLA numbers, or precise time/cost/duration savings. Use qualitative, credible outcomes tied to INPUT work history. Do not copy numeric claims from job context. Never invent numbers.
-- **Exception — QA / Quality Engineering (infer from job context + `title`):** Test, quality, automation, or coverage metrics allowed **only** when present in profile `experience[].details` or clearly implied there without invention.
-- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from job context + `title`):** Model, evaluation, or serving metrics allowed **only** when present in profile `experience[].details` or clearly tied to that work without invention.
+- **Exception — QA / Quality Engineering (infer from job context + `title`):** Test, quality, automation, or coverage metrics allowed **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention.
+- **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from job context + `title`):** Model, evaluation, or serving metrics allowed **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention.
 - If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
 
 1. KEYWORD EXTRACTION
@@ -36,7 +36,7 @@ If unclear → default to Fullstack balance.
 ---
 
 3. `summary` (OUTPUT root field — 6 lines EXACT)
-- Line 1: `{{resumeTitle}}` with {{yearsOfExperience}} years in [inferred domain]
+- Line 1: `{{recentRoleTitle}}` with {{yearsOfExperience}} years in [inferred domain]
 - Include 8–12 job-context keywords naturally
 - Focus on impact, systems, and specialization (based on detected role)
 - Avoid repetition

@@ -5,9 +5,6 @@
   "location": "Barcelona, Catalonia, Spain",
   "postalCode": "08850",
   "linkedin": "https://www.linkedin.com/in/jose-carrasco-martin-62aa67392/",
-  "github": "",
-  "website": "",
-  
   "experience": [
     {
       "company": "Kiggla",
@@ -38,7 +35,6 @@
       "end_date": "Jul 2020"
     }
   ],
-  
   "education": [
     {
       "degree": "Bachelor’s Degree in Computer Science",
@@ -46,6 +42,15 @@
       "start_year": "2013",
       "end_year": "2017"
     }
-  ]
-
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

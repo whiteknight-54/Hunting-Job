@@ -1,13 +1,8 @@
 {
   "name": "Maciej Chmiel",
-  "title": "Senior QA Engineer",
   "email": "maciej.chmiel01@outlook.com",
-  "phone": "",
   "location": "Lodz, Lódzkie, Poland",
   "postalCode": "91-496",
-  "linkedin": "",
-  "github": "",
-  "website": "",
   "experience": [
     {
       "company": "PuzzleHR",
@@ -38,5 +33,15 @@
       "start_year": "2012",
       "end_year": "2016"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "Legacy profile headline: Senior QA Engineer",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

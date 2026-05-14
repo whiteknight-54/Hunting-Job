@@ -1,13 +1,10 @@
 {
   "name": "Filip Malinowski",
-  "title": "Senior AI/ML Engineer",
   "email": "f.malinowski01@outlook.com",
   "phone": "+48 573583740",
   "location": "Wroclaw, Poland",
   "postalCode": "53-654",
   "linkedin": "https://www.linkedin.com/in/filip-malinowski-69b5043b2/",
-  "github": "",
-  "website": "",
   "experience": [
     {
       "company": "PuzzleHR",
@@ -45,5 +42,15 @@
       "start_year": "2012",
       "end_year": "2016"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

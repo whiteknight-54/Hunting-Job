@@ -3,26 +3,13 @@ You are extracting structured technical experience talking points for interviews
 **Job description**
 {{jobDescription}}
 
-**Tailored resume (PRIMARY — parsed merge of profile base + ChatGPT resume output)**
+**Tailored resume (single source of truth — profile base merged with Step 1 JSON)**
 {{tailoredResumeContext}}
-
-**Tailored resume (merged JSON)**
-```json
-{{tailoredResumeJson}}
-```
-
-**Reference — base profile only**
-{{profileContext}}
-
-**Reference — raw tailored resume JSON**
-```json
-{{resumeOutputJson}}
-```
 
 **Optional focus or questions**
 {{questions}}
 
 **Task**
-1. Summarize the candidate’s technical stack as implied by the tailored resume (grouped: languages, frameworks, cloud, data, leadership).
+1. Summarize the candidate's technical stack as implied by the tailored resume (grouped: languages, frameworks, cloud, data, leadership).
 2. Produce 8–12 STAR-style bullet prompts (Situation/Task/Action/Result) grounded in their roles — use qualitative outcomes unless the source material already includes specific metrics.
-3. List 5 JD keywords they should emphasize verbally in a screening call.
+3. List 5 job-description keywords they should emphasize verbally in a screening call.

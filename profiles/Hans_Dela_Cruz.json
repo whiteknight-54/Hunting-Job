@@ -1,12 +1,8 @@
 {
   "name": "Hans Dela Cruz",
   "email": "Hans0work@protonmail.com",
-  "phone": "",
   "location": "Mandaluyong City, Metro Manila, PH",
   "postalCode": "1550",
-  "linkedin": "",
-  "github": "",
-  "website": "",
   "experience": [
     {
       "company": "Kiggla",
@@ -44,5 +40,15 @@
       "start_year": "2014",
       "end_year": "2018"
     }
-  ]
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }

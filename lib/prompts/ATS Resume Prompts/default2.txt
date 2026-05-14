@@ -10,8 +10,8 @@ Create a tailored resume JSON with strong ATS keyword alignment and natural, cre
 
 ## **0. METRICS (CRITICAL — `summary` + `experience[].details`)**
 * **Default (every role except the two exceptions below):** Never use exact quantitative impact in `summary` or `experience[].details` strings—no percentages, revenue or dollar figures, user/transaction/install counts, headcount, SLA numbers, or precise time/cost/duration savings. Describe outcomes qualitatively, grounded in INPUT work history. Do not copy numeric claims from job context. Never invent numbers.
-* **Exception — QA / Quality Engineering (infer from job context + `title`):** Test, quality, automation, or coverage metrics allowed **only** when present in profile `experience[].details` or clearly implied there without invention.
-* **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from job context + `title`):** Model, evaluation, or serving metrics allowed **only** when present in profile `experience[].details` or clearly tied to that work without invention.
+* **Exception — QA / Quality Engineering (infer from job context + `title`):** Test, quality, automation, or coverage metrics allowed **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention.
+* **Exception — ML Engineer / AI Engineer / Applied Scientist / Machine Learning Engineer (infer from job context + `title`):** Model, evaluation, or serving metrics allowed **only** when grounded in profile `screening.notes` or that role's INPUT metadata without invention.
 * If unsure whether the role is QA or ML-focused, treat as default: no exact metrics.
 * Do not state ATS match "scores" or percentages inside tailored resume JSON string values.
 
@@ -75,7 +75,7 @@ Examples:
 
 ## **3. `title` (OUTPUT root field)**
 
-* Use EXACT value: `{{resumeTitle}}` (profile headline from INPUT)
+* Use EXACT value: `{{recentRoleTitle}}` (most recent role title from INPUT work history)
 * Do NOT modify
 
 ---
@@ -84,7 +84,7 @@ Examples:
 
 6 lines EXACT:
 
-`{{resumeTitle}}` with {{yearsOfExperience}} years in [domain]
+`{{recentRoleTitle}}` with {{yearsOfExperience}} years in [domain]
 2 other strong `summary` sentences aligned to job context
 
 Rules:

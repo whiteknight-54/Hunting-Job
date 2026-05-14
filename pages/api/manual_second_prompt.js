@@ -1,9 +1,7 @@
 import { readSecondPromptTemplate } from "../../lib/second-prompts-registry";
 import { applyPromptVariables } from "../../lib/apply-prompt-variables";
 import {
-  formatProfileForReview,
   formatTailoredResumeContext,
-  tailoredResumeToPrettyJson,
 } from "../../lib/profile-format";
 import { tryParseTailoredResume } from "../../lib/tailored-resume/index.js";
 import { loadProfileBySlug, respondProfileLoadError } from "../../lib/load-profile";
@@ -34,11 +32,7 @@ export default async function handler(req, res) {
     const variables = {
       jobDescription: String(jd || ""),
       questions: String(questions || ""),
-      profileContext: formatProfileForReview(profileData),
-      profileJson: JSON.stringify(profileData, null, 2),
-      resumeOutputJson: resumeRaw || "{}",
       tailoredResumeContext: formatTailoredResumeContext(profileData, resumeContent),
-      tailoredResumeJson: tailoredResumeToPrettyJson(profileData, resumeContent),
     };
 
     const prompt = applyPromptVariables(template, variables);

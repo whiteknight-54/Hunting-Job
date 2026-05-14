@@ -6,10 +6,8 @@
   "postalCode": "88305-670",
   "linkedin": "https://www.linkedin.com/in/bmcamara/",
   "github": "https://github.com/nubrao",
-  "website": "",
-  
   "experience": [
-     {
+    {
       "company": "MadeiraMadeira",
       "title": "Software Engineer",
       "location": "Curitiba, Parana, Brazil",
@@ -36,7 +34,7 @@
       "location": "Campo Mourao, Parana, Brazil",
       "start_date": "Jul 2016",
       "end_date": "Feb 2019"
-    },    
+    },
     {
       "company": "Qnet Telecom",
       "title": "Telecom Analyst",
@@ -45,7 +43,6 @@
       "end_date": "Jun 2016"
     }
   ],
-  
   "education": [
     {
       "degree": "Bachelor's degree, Computer Science",
@@ -53,6 +50,15 @@
       "start_year": "2016",
       "end_year": "2019"
     }
-  ]
-
+  ],
+  "screening": {
+    "languages": [],
+    "notes": "",
+    "certifications": [],
+    "workAuthorization": "",
+    "salaryExpectation": "",
+    "availability": "",
+    "relocation": "",
+    "customAnswers": {}
+  }
 }
