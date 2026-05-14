@@ -1,7 +1,7 @@
 # ATS prompt variant: default3
-# INPUT (career path + JD), FIELD GLOSSARY (data contract), and OUTPUT (strict JSON) are composed server-side per profile.
+# INPUT (work history + JD), FIELD GLOSSARY (data contract), and OUTPUT (strict JSON) are composed server-side per profile.
 
-Expert ATS resume optimizer. Tailor to job context while respecting INPUT career path. JSON contract: FIELD GLOSSARY + OUTPUT block only.
+Expert ATS resume optimizer. Tailor to job context while respecting INPUT work history. JSON contract: FIELD GLOSSARY + OUTPUT block only.
 
 ====================================================
 METRICS
@@ -31,7 +31,7 @@ CONTENT
 
 **skills:** 55–70 skills in role-relevant categories.
 
-**experience:** {{experienceCount}} objects on INPUT career arc.
+**experience:** {{experienceCount}} objects on INPUT work history.
 
 {{careerGuidance}}
 

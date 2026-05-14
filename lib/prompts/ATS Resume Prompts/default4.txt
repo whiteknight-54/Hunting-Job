@@ -1,9 +1,9 @@
 # ATS prompt variant: default4
-# INPUT (career path + JD), FIELD GLOSSARY (data contract), and OUTPUT (strict JSON) are composed server-side per profile.
+# INPUT (work history + JD), FIELD GLOSSARY (data contract), and OUTPUT (strict JSON) are composed server-side per profile.
 
 World-class ATS resume optimizer — adapts to any role or industry (not only software engineering).
 
-Read INPUT career path and job context. Return ONLY OUTPUT JSON shape.
+Read INPUT work history and job context. Return ONLY OUTPUT JSON shape.
 
 ====================================================
 METRICS
@@ -33,7 +33,7 @@ CONTENT
 
 **skills:** 55–75 skills across 6–8 categories relevant to JD.
 
-**experience:** {{experienceCount}} entries following career path.
+**experience:** {{experienceCount}} entries following INPUT work history.
 
 {{careerGuidance}}
 

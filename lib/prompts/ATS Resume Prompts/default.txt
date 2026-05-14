@@ -1,9 +1,9 @@
 # ATS prompt variant: default
-# INPUT (career path + JD), FIELD GLOSSARY (data contract), and OUTPUT (strict JSON) are composed server-side per profile.
+# INPUT (work history + JD), FIELD GLOSSARY (data contract), and OUTPUT (strict JSON) are composed server-side per profile.
 
 **INSTRUCTIONS**
 
-Read INPUT (work history, career path, job context). Obey FIELD GLOSSARY and OUTPUT for JSON shape. Return ONLY valid JSON per OUTPUT block.
+Read INPUT (work history, job context). Obey FIELD GLOSSARY and OUTPUT for JSON shape. Return ONLY valid JSON per OUTPUT block.
 
 ====================================================
 METRICS (summary + experience[].details)
