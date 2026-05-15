@@ -12,6 +12,7 @@ Input may be:
 - LinkedIn copy
 - plain text
 - mixed or noisy documents
+- old json file
 
 Important:
 - Extract only information that is visible or clearly provided.
