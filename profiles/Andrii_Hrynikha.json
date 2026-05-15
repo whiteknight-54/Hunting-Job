@@ -1,10 +1,16 @@
 {
   "name": "Andrii Hrynikha",
+  "title": "Senior Software Engineer",
   "email": "andrii.hrynikha.04@outlook.com",
+  "workEmail": "",
   "phone": "+48 457415866",
   "location": "Katowice, Woj, Slaskie, Polska",
+  "address": "",
   "postalCode": "55-140",
   "linkedin": "https://www.linkedin.com/in/andrii-hrynikha-3539183b8/",
+  "website": "",
+  "portfolio": "",
+  "github": "",
   "experience": [
     {
       "company": "BrightOps",
@@ -50,13 +56,25 @@
     }
   ],
   "screening": {
-    "languages": [],
-    "notes": "",
-    "certifications": [],
-    "workAuthorization": "",
-    "salaryExpectation": "",
-    "availability": "",
-    "relocation": "",
-    "customAnswers": {}
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "birth": "e.g. 1990-01-01",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [
+      "e.g. AWS Certified Developer"
+    ],
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": "open / remote only",
+    "customAnswers": {
+      "question1": "answer1",
+      "question2": "answer2"
+    }
   }
 }

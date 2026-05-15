@@ -1,5 +1,5 @@
-import { loadProfileByFileId, respondProfileLoadError } from "../../../lib/load-profile";
-import { jsonError, methodNotAllowed, serverError } from "../../../lib/api-response";
+import { loadProfileByFileId, respondProfileLoadError } from "../../../lib/core/profile.js";
+import { jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return methodNotAllowed(res, "GET");

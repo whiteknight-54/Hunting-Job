@@ -1,7 +1,10 @@
 {
   "title": "Senior Software Engineer | React | TypeScript | Node.js | AWS",
   "summary": "Senior engineer with 8+ years building scalable web platforms. Expertise aligns with the target role and job description keywords.",
-  "skills": {  },
+  "skills": { 
+    "Category1": ["Skill1", "Skill2"],  
+    "Category2": ["Skill3", "Skill4"]  
+  },
   "experience": [
     {
       "details": [

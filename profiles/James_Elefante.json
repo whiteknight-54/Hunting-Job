@@ -1,10 +1,16 @@
 {
   "name": "James Elefante",
+  "title": "Generative AI & ML Engineer | Senior Data Scientist",
   "email": "jim090820@outlook.com",
+  "workEmail": "",
   "phone": "+1 (814) 273-9043‬‬‬‬‬‬‬‬‬",
   "location": "Holbrook, New York, USA",
+  "address": "",
   "postalCode": "11741",
   "linkedin": "https://www.linkedin.com/in/jim-elefante-19641386/",
+  "website": "",
+  "portfolio": "",
+  "github": "",
   "experience": [
     {
       "company": "BrightOps",
@@ -51,13 +57,25 @@
     }
   ],
   "screening": {
-    "languages": [],
-    "notes": "Legacy profile headline: Generative AI & ML Engineer | Senior Data Scientist",
-    "certifications": [],
-    "workAuthorization": "",
-    "salaryExpectation": "",
-    "availability": "",
-    "relocation": "",
-    "customAnswers": {}
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "birth": "e.g. 1990-01-01",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [
+      "e.g. AWS Certified Developer"
+    ],
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": "open / remote only",
+    "customAnswers": {
+      "question1": "answer1",
+      "question2": "answer2"
+    }
   }
 }

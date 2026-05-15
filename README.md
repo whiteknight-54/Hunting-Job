@@ -1,13 +1,13 @@
-# Hunting-Job — Resume Generator
+# Hunting-Job — Job Apply Assistant
 
-Next.js app for generating ATS-tailored resume PDFs from file-based candidate profiles. Two workflows share the same profile data and PDF templates:
+Next.js app for ATS-tailored resume PDFs and apply prompts. Two workflows share the same profiles, prompts, and PDF templates:
 
 | Workflow | Route | AI keys required? |
 |----------|-------|-------------------|
-| **Auto** | `/{slug}` | Yes (OpenAI or Claude on the server) |
-| **Manual** | `/manual/{slug}` | No (copy prompts into ChatGPT, paste JSON back) |
+| **Auto** | `/auto/{slug}` | Yes (OpenAI or Anthropic) |
+| **Manual** | `/manual/{slug}` | No — copy prompts into ChatGPT, paste JSON back |
 
-No authentication, no database — profiles live in `profiles/*.json`, and all server logic runs through Next.js API routes.
+No authentication, no database. Profiles live in `profiles/*.json`. Server logic runs through Next.js API routes only.
 
 ---
 
@@ -18,22 +18,21 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000), enter a profile slug (e.g. `jf`), and choose **auto** or **manual** from the profile page.
+Open [http://localhost:3000](http://localhost:3000), enter a profile slug (e.g. `p1`), then use **auto** or **manual**.
+
+`/{slug}` redirects to `/manual/{slug}`.
 
 ### Environment variables (auto workflow)
 
-Create `.env.local` in the project root:
+Create `.env.local`:
 
 ```env
-# At least one provider for POST /api/generate
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Optional — quick-copy “Google Drive” link on profile pages
+# Optional — Google Drive quick-copy link on profile pages
 GDRIVE_FOLDER_ID=
 ```
-
-Manual workflow does not call these keys; only the auto PDF endpoint does.
 
 ### Scripts
 
@@ -43,56 +42,47 @@ Manual workflow does not call these keys; only the auto PDF endpoint does.
 | `npm run build` | Production build |
 | `npm start` | Run production build |
 | `npm test` | Unit tests (`lib/**/*.test.js`) |
-| `npm run validate:prompts` | Check second-prompt `{{placeholders}}` |
+| `npm run validate:prompts` | Check `{{placeholders}}` in prompt `.txt` files |
 
 ---
 
-## User workflows
+## Workflows
 
-### Auto (`/{slug}`)
+### Auto (`/auto/{slug}`)
 
-Simplified one-click flow when API keys are configured.
+1. Enter **job description**, **role name**, optional **company name**.
+2. Click **Generate Resume PDF**.
 
-1. Open `/{slug}` (e.g. `/jf` for João Franco).
-2. Enter **job description**, **role name**, optional **company name**.
-3. Click **Generate Resume PDF**.
-
-Server pipeline:
+Pipeline:
 
 ```
-profile JSON + JD
-  → ATS prompt (lib/build-ats-prompt.js)
-  → OpenAI / Claude (lib/ai-service.js)
-  → tailored resume JSON (lib/tailored-resume)
-  → merge with profile
-  → PDF download
+profiles/*.json + JD
+  → raw ATS prompt (lib/prompts/ATS Resume Prompts/*.txt)
+  → OpenAI / Anthropic (lib/core/ai.js)
+  → tailored JSON (lib/core/resume.js)
+  → index merge with profile.experience[]
+  → PDF (lib/pdf-templates/)
 ```
-
-Link **Manual apply →** switches to the full manual flow.
 
 ### Manual (`/manual/{slug}`)
-
-Full apply workflow without server-side AI.
 
 **Step 1 — ATS prompt**
 
 1. Fill role, company, job description, optional application questions.
-2. Click **Copy ATS prompt** (`POST /api/manual_prompt`).
+2. **Copy ATS prompt** → `POST /api/manual/prompt`
 3. Paste into ChatGPT; request **JSON only**.
-4. Paste the response into **Paste ChatGPT resume JSON**.
+4. Paste response into **Paste ChatGPT tailored resume JSON**.
 
 **Step 2 — PDF**
 
-1. Live template preview updates when JSON is valid (`POST /api/manual_preview`).
+1. Live preview when JSON is valid → `POST /api/manual/preview`
 2. Choose template if needed.
-3. Click **Download resume PDF** (`POST /api/manual_generate`).
+3. **Download resume PDF** → `POST /api/manual/generate`
 
 **Step 3 — Second prompts**
 
-1. Pick prompt type (screening, FAQ, recruiter check, technical extraction).
-2. **Build & copy** (`POST /api/manual_second_prompt`) for employer questions.
-
-Link **← Auto** returns to the auto page.
+1. Pick prompt type (screening, FAQ, etc.).
+2. **Build & copy** → `POST /api/manual/manual_second_prompt`
 
 ---
 
@@ -100,167 +90,135 @@ Link **← Auto** returns to the auto page.
 
 ### Profile (`profiles/*.json`)
 
-Base candidate record: contact, employers, dates, education, optional screening defaults, custom keys.
+Contact, `experience[]` (company, title, dates, location), education, optional `screening` block.
 
 - Template: `profiles/_template.json`
-- Loaded by slug via `lib/profile-template-mapping.js` → `lib/load-profile.js`
+- Slug mapping: `lib/profile-template-mapping.js`
+- Loaded via `lib/core/profile.js`
 
-### Tailored resume (AI / ChatGPT output)
+### Tailored resume (ChatGPT / AI output)
 
-Role-specific JSON merged on top of the profile for PDF and second prompts.
-
-- Schema & validation: `lib/tailored-resume/`
-- Example: `profiles/_tailored-resume-template.json`
-
-Required shape:
+Example: `profiles/_tailored-resume-template.json`
 
 ```json
 {
   "title": "Senior Engineer | React | TypeScript",
   "summary": "Paragraph tailored to the job...",
-  "skills": {
-    "Frontend": ["React", "TypeScript"]
-  },
+  "skills": { "Frontend": ["React", "TypeScript"] },
   "experience": [
-    {
-      "title": "Senior Software Engineer",
-      "details": ["Bullet one.", "Bullet two."]
-    }
+    { "details": ["Bullet one.", "Bullet two."] }
   ]
 }
 ```
 
-Rules enforced before PDF generation:
+Validation (`lib/core/resume.js`):
 
 - `skills`: object with at least one non-empty category array.
-- `experience`: non-empty array; each entry needs non-empty `details` strings.
-- Do **not** put `company`, `location`, or dates in experience output (profile owns those).
-- On PDF generate, `experience` length should match the profile’s work history.
+- `experience`: same length as profile jobs; each entry has non-empty `details`.
+- Do **not** put company, location, or dates in tailored experience (profile owns those).
 
-Merge behaviour (`mergeProfileWithTailoredResume`): profile supplies contact and employer metadata; tailored JSON supplies headline, summary, skills, and bullet text per job index.
+**Merge:** profile supplies contact + employer metadata; tailored JSON supplies `title`, `summary`, `skills`, and `experience[i].details` by index.
 
 ---
 
 ## Adding a profile
 
-1. Copy `profiles/_template.json` → `profiles/Your_Name.json` and fill it in.
-2. Add a slug entry in `lib/profile-template-mapping.js`:
+1. Copy `profiles/_template.json` → `profiles/Your_Name.json`.
+2. Add a slug in `lib/profile-template-mapping.js`:
 
 ```js
-"xx": {
+"p1": {
   profileFile: "Your_Name",
-  template: "Resume-Classic-Charcoal",  // default PDF template id
-  prompt: "default"                       // ATS prompt basename (see lib/prompts/ATS Resume Prompts/)
+  template: "Resume-Classic-Charcoal",
+  prompt: "ats-resum-prompt-1"
 }
 ```
 
-3. Open `http://localhost:3000/xx` or `/manual/xx`.
+3. Open `/auto/p1` or `/manual/p1`.
 
 ---
 
 ## Project structure
 
 ```
-Hunting-Job/
-├── profiles/                      # Candidate base JSON (source of truth)
-│   ├── _template.json
-│   └── _tailored-resume-template.json
-│
-├── pages/
-│   ├── index.js                   # Slug entry
-│   ├── [profile].js               # Auto workflow UI
-│   ├── manual/[profile].js        # Manual workflow UI
-│   ├── preview.js                 # Template gallery
-│   └── api/                       # HTTP adapters (thin)
-│       ├── generate.js            # Auto PDF
-│       ├── manual_prompt.js
-│       ├── manual_generate.js
-│       ├── manual_preview.js
-│       ├── manual_second_prompt.js
-│       ├── profiles/[id].js
-│       └── ...
-│
-├── lib/
-│   ├── tailored-resume/           # AI output: parse → normalize → validate → merge → PDF data
-│   ├── services/                  # auto-generate-service, manual-generate-service
-│   ├── workflows/                 # useAutoWorkflow, useManualWorkflow, constants
-│   ├── shared/                    # useProfileSession, timer, styles, quick-copy
-│   ├── load-profile.js
-│   ├── profile-template-mapping.js
-│   ├── build-ats-prompt.js
-│   ├── ai-service.js
-│   ├── pdf-templates/             # React-PDF templates
-│   ├── prompts/
-│   │   ├── ATS Resume Prompts/    # default.txt, default2–4, final.txt
-│   │   └── second-prompts/        # screening, faq, etc.
-│   └── components/
-│       ├── auto/
-│       ├── manual/
-│       └── shared/
-│
-├── scripts/validate-prompt-vars.mjs
-├── .gitlab-ci.yml                 # test + validate:prompts + build
-└── package.json
+profiles/                          # candidate JSON
+lib/
+  core/                            # pure logic (import from here)
+    profile.js                     # load profiles
+    prompts.js                     # read/fill raw .txt prompts
+    resume.js                      # parse, validate, merge for PDF
+    ai.js                          # OpenAI / Anthropic (auto only)
+    pdf.js                         # template resolve + render
+    api-response.js                # HTTP helpers
+    paths.js
+  services/
+    ats-prompt.js                  # build filled ATS prompt
+    auto-generate-service.js
+    manual-generate-service.js
+  prompts/
+    ATS Resume Prompts/*.txt       # ← edit ATS prompts here
+    second-prompts/*.txt           # ← edit second prompts here
+  pdf-templates/                   # react-pdf layouts
+  components/                      # UI
+  workflows/                       # React hooks (auto / manual)
+  profile-template-mapping.js      # slug → file, template, default prompt
+pages/
+  api/                             # thin HTTP handlers
+  auto/[profile].js
+  manual/[profile].js
+  index.js
+  [profile].js                     # redirect → manual
+  preview.js
+scripts/
+  validate-prompts.js
 ```
-
-Legacy re-exports (`lib/resume-json-parser.js`, `lib/merge-profile-resume.js`, etc.) point at `lib/tailored-resume/` for backward compatibility. Prefer importing from `lib/tailored-resume/index.js` in new code.
 
 ---
 
 ## API routes
 
-| Method | Path | Workflow | Purpose |
-|--------|------|----------|---------|
-| `GET` | `/api/profiles` | — | List profile files |
-| `GET` | `/api/profiles/{basename}` | Both | Load profile JSON |
-| `POST` | `/api/generate` | Auto | AI → PDF |
-| `POST` | `/api/manual_prompt` | Manual | Build ATS prompt |
-| `POST` | `/api/manual_generate` | Manual | Pasted JSON → PDF |
-| `POST` | `/api/manual_preview` | Manual | Live/sample PDF preview |
-| `POST` | `/api/manual_second_prompt` | Manual | Screening / FAQ prompts |
-| `GET` | `/api/templates` | Both | List PDF templates |
-| `GET` | `/api/ats-prompts` | Manual | List ATS prompt ids |
-| `GET` | `/api/second-prompts` | Manual | List second-prompt types |
-| `GET` | `/api/config` | Both | Client config (e.g. Drive folder id) |
-| `GET` | `/api/preview` | — | Generic template preview |
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/api/profiles/{basename}` | Load profile JSON |
+| `GET` | `/api/templates` | List PDF templates |
+| `GET` | `/api/ats-prompts` | List ATS prompt ids |
+| `GET` | `/api/second-prompts` | List second-prompt ids |
+| `GET` | `/api/config` | Client config (e.g. Drive folder id) |
+| `GET` | `/api/preview?template=` | Generic template preview |
+| `POST` | `/api/manual/prompt` | Build ATS prompt |
+| `POST` | `/api/manual/preview` | Live/sample PDF preview |
+| `POST` | `/api/manual/generate` | Pasted JSON → PDF |
+| `POST` | `/api/manual/manual_second_prompt` | Screening / FAQ prompts |
+| `POST` | `/api/auto/generate` | AI → PDF |
 
-Error responses use `{ error, message? }` from `lib/api-response.js`. Invalid tailored resume JSON returns **400** with validation detail.
+Errors: `{ error, message? }` from `lib/core/api-response.js`. Invalid tailored JSON → **400**.
+
+---
+
+## Customising prompts (main maintenance surface)
+
+After setup, you mostly edit `.txt` files — no code changes unless you add new placeholders.
+
+| Type | Location | Per-slug override |
+|------|----------|---------------------|
+| ATS | `lib/prompts/ATS Resume Prompts/*.txt` | `prompt` in mapping; UI dropdown on manual page |
+| Second | `lib/prompts/second-prompts/*.txt` | UI dropdown |
+
+**ATS placeholders:** `{{name}}`, `{{experience}}`, `{{jobDescription}}`, `{{questions}}`, `{{roleName}}`, `{{companyName}}`
+
+**Second placeholders:** `{{jobDescription}}`, `{{questions}}`, `{{tailoredResumeContext}}`
+
+Output JSON schema for ATS prompts lives **inside the `.txt` file** (not appended by code).
+
+Run `npm run validate:prompts` after editing prompts.
 
 ---
 
 ## PDF templates
 
-Registered in `lib/pdf-templates/`. Mapping default per slug is the `template` field in `profile-template-mapping.js`.
+Registered in `lib/pdf-templates/`. Default per slug: `template` field in `profile-template-mapping.js`.
 
-Available template ids include: `Resume-Classic-Charcoal`, `Resume-Modern-Green`, `Resume-Tech-Teal`, `Resume-Corporate-Slate`, `Resume-Creative-Burgundy`, `Resume-Executive-Navy`, `Resume-Consultant-Steel`, `Resume-Bold-Emerald`, `Resume-Academic-Purple`, `Resume-Vision-Sage`, `Resume-Vision-Coral`, `Resume-Vision-Midnight`, and `Resume` (fallback).
-
-Preview all templates at `/preview`.
-
----
-
-## Customising prompts
-
-| Prompt type | Location | Override |
-|-------------|----------|----------|
-| ATS (step 1) | `lib/prompts/ATS Resume Prompts/*.txt` | Per-slug `prompt` in mapping; UI dropdown on manual page |
-| Second (step 3) | `lib/prompts/second-prompts/*.txt` | Optional `lib/prompts/2ndPrompts/` (falls back if empty) |
-
-ATS prompts receive profile variables via `lib/resume-prompt-variables.js`. Every filled ATS prompt also appends the strict JSON schema from `lib/tailored-resume/schema.js`.
-
-Run `npm run validate:prompts` after editing second-prompt templates.
-
----
-
-## CI
-
-GitLab CI (`.gitlab-ci.yml`) on merge requests and default branch:
-
-1. `npm ci`
-2. `npm test`
-3. `npm run validate:prompts`
-4. `npm run build`
-
-Node **20.x** (see `package.json` `engines`).
+Preview all at `/preview`.
 
 ---
 
@@ -270,6 +228,8 @@ Node **20.x** (see `package.json` `engines`).
 - **React 18**
 - **@react-pdf/renderer** — PDF generation
 - **OpenAI** / **Anthropic** — auto workflow only
+
+Node **20+** (`package.json` `engines`).
 
 ---
 

@@ -1,0 +1,449 @@
+You are a world-class ATS and recruiter-focused resume optimization expert.
+Generate a senior/staft-level, highly credible, ATS-optimized resume in JSON format.
+
+The resume must pass BOTH:
+
+* ATS keyword screening systems
+* Human recruiter/manual review for Senior/Lead-level positions
+
+The resume must feel written for a real experienced engineer, not keyword-generated.
+
+============= About Profile ==============
+Name : {{name}}
+Work history (keep same job count and order in output):
+{{experience}}
+Education (only reference)
+{{education}}
+
+============ Job Description =============
+{{jobDescription}}
+
+=============    Output     ==============
+OUTPUT — tailored resume JSON only (no markdown):
+{
+"title": " Title | Tech1 | Tech2 | Tech3",
+"summary": "",
+"skills": {
+"Category1": ["Skill1", "Skill2"],
+"Category2": ["Skill3", "Skill4"]
+},
+"experience": [
+{
+"details": [
+"Bullet1",
+"Bullet2",
+"Bullet3"
+]
+}
+]
+}
+
+Rules:
+
+* One `experience` entry per my job, same order.
+* Each entry has `details` only — no company, location, or dates in output.
+* `skills` must have at least one non-empty category array.
+
+Here, Remember my simple history and job description, Output valid JSON only with this shape.
+
+============  Instructions ===============
+
+0. CORE OBJECTIVE
+
+Create a highly tailored senior-level resume that:
+
+* strongly aligns with the Job Description
+* remains realistic and historically believable
+* reflects long-term engineering depth
+* demonstrates progressive seniority growth
+* balances ATS optimization with recruiter readability
+* avoids keyword stuffing and AI-generated sounding prose
+* feels like a real experienced engineer wrote it
+
+The final resume must optimize for interview probability, not just ATS parsing.
+
+---
+
+1. ATS + KEYWORD OPTIMIZATION
+
+Extract and naturally distribute:
+
+* 12–18 EXACT keywords/phrases from the Job Description
+* 10–15 domain or industry keywords inferred from company/product context
+* 25–40 complementary ecosystem technologies relevant to the role
+
+Examples:
+
+* Frontend → React Query, Zustand, Storybook
+* Backend → Redis, RabbitMQ, GraphQL
+* DevOps → Terraform, Prometheus, Helm
+* Data → Spark, Airflow, dbt
+* AI/ML → LangChain, MLflow, Hugging Face
+
+Use exact JD wording naturally across:
+
+* summary
+* skills
+* experience bullets
+
+Never stuff keywords unnaturally.
+
+---
+
+2. TITLE
+
+Use candidate’s MOST RECENT role title as base.
+
+Format:
+"[Most Recent Title] | [Tech1] | [Tech2] | [Tech3]"
+
+If JD specialization differs from profile focus:
+Add ONE specialization naturally.
+
+Examples:
+
+* Frontend Specialist
+* Backend Specialist
+* Full Stack Experience
+* DevOps Specialist
+* AI Platform Engineer
+
+Never overstuff title.
+Max Title - 5 counts
+
+---
+
+3. SUMMARY
+
+Write 5–8 substantial professional sentences.
+
+Requirements:
+
+* recruiter-readable first, ATS-friendly second
+* include 8–12 important JD keywords naturally
+* reflect system ownership and engineering maturity
+* mention scalable architecture or production systems
+* include collaboration and technical leadership
+* align with inferred domain and seniority
+* sound confident but realistic
+
+Avoid:
+
+* buzzword spam
+* generic phrases
+* repetitive structures
+* unrealistic claims
+
+---
+
+4. SKILLS
+
+Requirements:
+
+* 55–80 total skills
+* 6–8 categories
+* no duplicates
+* no soft skills
+* only real technologies, tools, platforms, frameworks, protocols, databases, infrastructure, or methodologies
+
+Categories should adapt to role automatically:
+
+* Frontend
+* Backend
+* Cloud & Infrastructure
+* Databases
+* DevOps & Tools
+* Testing & Quality
+* Security & Identity
+* AI / Data / ML
+* Mobile
+* Analytics
+* Platform Engineering
+* Programming Language
+
+Skill balance:
+
+* ~40% exact JD alignment
+* ~60% complementary ecosystem depth
+
+Preserve realistic long-term stack continuity.
+
+Examples of technologies that should realistically persist across multiple roles when plausible:
+
+* Git
+* Docker
+* SQL
+* APIs
+* CI/CD
+* Linux
+* AWS
+* Testing frameworks
+
+Avoid unrealistic historical overuse of niche technologies.
+---
+The resume must reflect believable long-term experience depth across technologies.
+
+Do NOT treat all skills equally.
+
+Infer realistic years-of-experience weighting automatically from:
+
+job chronology
+historical stack adoption
+role progression
+technology release timeline
+repeated usage across roles
+
+Core technologies should appear consistently across multiple roles when historically plausible.
+
+Examples of technologies that commonly persist across long-term engineering careers:
+
+JavaScript
+TypeScript
+Python
+Java
+SQL
+React
+Node.js
+Git
+Docker
+Linux
+REST APIs
+CI/CD
+AWS
+
+A senior engineer should demonstrate stack continuity and ecosystem familiarity over time.
+
+Recent or niche technologies should appear only in recent roles when historically realistic.
+
+Examples:
+
+LLM orchestration
+LangChain
+Vector databases
+Kubernetes
+GraphQL
+Next.js
+Terraform
+
+Do NOT unrealistically spread modern technologies across all historical positions.
+
+The resume should show:
+
+evolving technical maturity
+gradual architecture ownership
+expanding infrastructure exposure
+increasing system complexity
+realistic tool adoption over time
+
+Older roles should emphasize:
+
+implementation
+feature delivery
+foundational engineering
+
+Recent senior roles should emphasize:
+
+architecture
+scalability
+platform ownership
+mentoring
+reliability
+cross-functional leadership
+
+Avoid:
+
+identical tech stacks in every role
+unrealistic seniority from early positions
+modern tooling in legacy-era jobs
+artificial keyword flooding
+
+The final resume must feel like a believable engineering career progression over many years.
+
+
+---
+
+5. EXPERIENCE
+
+Generate realistic senior-level bullets strongly aligned to the Job Description while preserving believable career history.
+
+Rules:
+
+* Most recent role → 7–8 bullets
+* Mid roles → 5–7 bullets
+* Oldest roles → 4–5 bullets
+
+Each bullet:
+
+* 22–35 words
+* starts with strong action verb
+* includes 1–3 relevant JD keywords naturally
+* includes complementary ecosystem tooling
+* sounds realistic and production-oriented
+* demonstrates ownership or contribution
+* avoids repetitive sentence structure
+
+Allowed action verbs:
+
+* Architected
+* Engineered
+* Designed
+* Built
+* Developed
+* Implemented
+* Optimized
+* Automated
+* Led
+* Spearheaded
+* Enhanced
+* Modernized
+* Integrated
+* Deployed
+
+Avoid:
+
+* “Responsible for”
+* “Worked on”
+
+---
+
+6. REALISM + TECHNOLOGY TIMELINE VALIDATION
+
+CRITICAL:
+Never mention technologies before they existed.
+
+Technology usage MUST match historical release timelines.
+
+Examples:
+
+* React → after 2013
+* Docker → after 2013
+* Kubernetes → after 2014
+* GraphQL → after 2015
+* Next.js → after 2016
+* AWS Lambda → after 2014
+
+Older roles should use historically accurate stacks:
+
+* jQuery
+* AngularJS
+* Backbone.js
+* PHP
+* Java
+* .NET
+* Ruby on Rails
+
+Never place modern AI/LLM tooling across entire historical careers unrealistically.
+
+---
+
+7. METRICS POLICY (CRITICAL)
+
+METRICS POLICY (CRITICAL)
+
+Default rule:
+Do NOT invent quantitative metrics.
+
+Avoid:
+
+percentages
+revenue numbers
+user counts
+latency numbers
+transaction volumes
+SLA values
+fabricated performance gains
+fabricated business KPIs
+invented operational statistics
+
+Allowed:
+
+realistic qualitative impact statements
+engineering efficiency improvements
+delivery workflow improvements
+development lifecycle efficiency gains
+deployment speed improvements
+build/release optimization
+debugging and incident-response efficiency improvements
+production stability improvements
+time-efficiency statements related to development or operational workflows when written naturally and credibly
+
+Examples of ALLOWED phrasing:
+
+reduced deployment time
+shortened debugging cycles
+accelerated release workflows
+improved CI/CD efficiency
+streamlined production support processes
+faster feature delivery cadence
+improved build performance
+reduced manual operational overhead
+
+Use qualitative impact instead:
+
+improved maintainability
+enhanced scalability
+increased reliability
+streamlined deployment workflows
+reduced operational friction
+improved delivery consistency
+strengthened system stability
+
+EXCEPTION:
+QA / ML / AI roles may include metrics ONLY if grounded in supplied profile details or clearly implied.
+Never fabricate numbers.
+
+---
+
+8. ROLE + DOMAIN ADAPTATION
+
+Automatically infer:
+
+* role type
+* industry/domain
+* architecture complexity
+* seniority expectations
+* engineering focus
+
+Then adapt language, systems, tooling, and responsibilities accordingly.
+
+Examples:
+
+* FinTech → compliance, transactions, auditability
+* Healthcare → HIPAA, FHIR, patient systems
+* SaaS → multi-tenant systems, scalability
+* AI → evaluation pipelines, prompt engineering
+* Data → ETL, warehousing, orchestration
+
+---
+
+9. ANTI-REPETITION RULES
+
+Avoid:
+
+* repeated bullet structures
+* repetitive verbs
+* templated wording
+* keyword flooding
+* robotic phrasing
+
+Every role should feel distinct and progressively senior.
+
+---
+
+10. FINAL VALIDATION
+
+Before returning output:
+
+* ensure VALID JSON only
+* no markdown
+* no explanations
+* no trailing commas
+* no duplicate skills
+* realistic chronology
+* realistic technologies
+* natural recruiter readability
+* strong ATS keyword distribution
+* proper experience ordering
+* no hallucinated tools outside timeline
+
+Return ONLY the JSON object.

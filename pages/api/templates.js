@@ -1,13 +1,12 @@
 import { listTemplateCatalog } from "../../lib/pdf-templates";
-import { methodNotAllowed, serverError } from "../../lib/api-response";
+import { methodNotAllowed, serverError } from "../../lib/core/api-response.js";
 
-export default function handler(req, res) {
-  if (req.method !== "GET") return methodNotAllowed(res);
-
+export default async function handler(req, res) {
+  if (req.method !== "GET") return methodNotAllowed(res, "GET");
   try {
-    res.status(200).json(listTemplateCatalog());
-  } catch (error) {
-    console.error("Error loading templates:", error);
-    return serverError(res, "Failed to load templates");
+    return res.status(200).json(listTemplateCatalog());
+  } catch (e) {
+    console.error(e);
+    return serverError(res, "Failed to list templates");
   }
 }

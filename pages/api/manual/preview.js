@@ -1,0 +1,62 @@
+import {
+  assertTailoredResume,
+  isTailoredResumeError,
+  mergeForPdf,
+  parseTailoredJson,
+} from "../../../lib/core/resume.js";
+import { getPreviewMockDataForProfile } from "../../../lib/preview-mock-data.js";
+import { renderPdfToBuffer, resolvePdfTemplate } from "../../../lib/core/pdf.js";
+import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
+import { badRequest, jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") return methodNotAllowed(res);
+
+  try {
+    const { profile: profileSlug, template, content } = req.body || {};
+
+    if (!profileSlug) return jsonError(res, 400, "Profile slug required");
+
+    const { data: profileData } = await loadProfileBySlug(profileSlug);
+
+    const { templateName, TemplateComponent } = resolvePdfTemplate(profileSlug, template);
+    if (!TemplateComponent) {
+      return jsonError(res, 404, "Template not found", `Template "${templateName}" not found`);
+    }
+
+    const trimmedContent = String(content || "").trim();
+    let tailoredResume = null;
+    let usingLiveData = false;
+
+    if (trimmedContent) {
+      try {
+        tailoredResume = assertTailoredResume(
+          parseTailoredJson(content),
+          (profileData.experience || []).length
+        );
+        usingLiveData = true;
+      } catch (err) {
+        if (isTailoredResumeError(err)) {
+          const detail = err.issues?.length ? err.issues.slice(0, 5).join("; ") : err.message;
+          return badRequest(res, "Invalid tailored resume JSON", detail);
+        }
+        throw err;
+      }
+    }
+
+    const templateData = usingLiveData
+      ? mergeForPdf(profileData, tailoredResume)
+      : getPreviewMockDataForProfile(profileData);
+
+    const pdfBuffer = await renderPdfToBuffer(TemplateComponent, templateData);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `inline; filename="preview-${templateName}.pdf"`);
+    res.setHeader("X-Preview-Mode", usingLiveData ? "live" : "sample");
+    return res.status(200).end(pdfBuffer);
+  } catch (err) {
+    if (respondProfileLoadError(res, err)) return;
+    console.error("Manual preview error:", err);
+    return serverError(res, "Preview generation failed", err?.message || "Unknown error");
+  }
+}

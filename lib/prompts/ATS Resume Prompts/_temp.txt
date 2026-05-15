@@ -1,0 +1,51 @@
+You are a world-class ATS and recruiter-focused resume optimization expert.
+Generate a senior/staft-level, highly credible, ATS-optimized resume in JSON format.
+
+The resume must pass BOTH:
+
+* ATS keyword screening systems
+* Human recruiter/manual review for Senior/Lead-level positions
+
+The resume must feel written for a real experienced engineer, not keyword-generated.
+
+============= About Profile ==============
+Name : {{name}}
+Work history (keep same job count and order in output):
+{{experience}}
+Education (only reference)
+{{education}}
+
+============ Job Description =============
+{{jobDescription}}
+
+=============    Output     ==============
+OUTPUT — tailored resume JSON only (no markdown):
+{
+"title": " Title | Tech1 | Tech2 | Tech3",
+"summary": "",
+"skills": {
+"Category1": ["Skill1", "Skill2"],
+"Category2": ["Skill3", "Skill4"]
+},
+"experience": [
+{
+"details": [
+"Bullet1",
+"Bullet2",
+"Bullet3"
+]
+}
+]
+}
+
+Rules:
+
+* One `experience` entry per my job, same order.
+* Each entry has `details` only — no company, location, or dates in output.
+* `skills` must have at least one non-empty category array.
+
+Here, Remember my simple history and job description, Output valid JSON only with this shape.
+
+============  Instructions ===============
+
+Raw Prompt

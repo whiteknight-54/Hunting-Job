@@ -3,9 +3,7 @@ You are a senior technical recruiter doing a quick manual screening before the c
 **Job description**
 {{jobDescription}}
 
-**Tailored resume (single source of truth — profile base merged with Step 1 JSON)**
-Contact, companies, dates, and education come from the profile; `title`, `summary`, `skills`, and `experience[].details` come from the tailored resume JSON for this role.
-
+**About Me**
 {{tailoredResumeContext}}
 
 **Optional notes / employer questions**
@@ -16,3 +14,5 @@ Contact, companies, dates, and education come from the profile; `title`, `summar
 2. List gaps or risks a recruiter might flag (honest, constructive).
 3. Suggest 3–5 concrete edits to improve clarity or credibility (without inventing experience).
 4. Give a short go / no-go / "edit first" recommendation for submitting as-is.
+5. Extract all tech stack and tools experience years. markdown style (No|Stack or Tools|Years|Notes)
+6. Show me final score.

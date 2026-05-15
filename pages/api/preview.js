@@ -1,8 +1,6 @@
-import path from "path";
-import { promises as fsPromises } from "fs";
 import { getTemplate } from "../../lib/pdf-templates";
 import { getPreviewMockData } from "../../lib/preview-mock-data";
-import { renderPdfToBuffer } from "../../lib/render-pdf-buffer";
+import { renderPdfToBuffer } from "../../lib/core/pdf.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

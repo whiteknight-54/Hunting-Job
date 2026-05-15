@@ -1,9 +1,16 @@
 {
   "name": "Boris Lazar Varbanov",
+  "title": "Senior Software Engineer",
   "email": "lazarvarbanov4@gmail.com",
+  "workEmail": "",
+  "phone": "",
   "location": "Ruse City, Bulgaria",
+  "address": "",
   "postalCode": "7000",
   "linkedin": "http://www.linkedin.com/in/boris-lazar-varbanov-738546375",
+  "website": "",
+  "portfolio": "",
+  "github": "",
   "experience": [
     {
       "company": "Kiggla",
@@ -43,13 +50,25 @@
     }
   ],
   "screening": {
-    "languages": [],
-    "notes": "",
-    "certifications": [],
-    "workAuthorization": "",
-    "salaryExpectation": "",
-    "availability": "",
-    "relocation": "",
-    "customAnswers": {}
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "birth": "e.g. 1990-01-01",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [
+      "e.g. AWS Certified Developer"
+    ],
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": "open / remote only",
+    "customAnswers": {
+      "question1": "answer1",
+      "question2": "answer2"
+    }
   }
 }

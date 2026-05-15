@@ -1,0 +1,66 @@
+{
+  "name": "Artur LIS",
+  "email": "artur.lis01@outlook.com",
+  "workEmail": "",
+  "phone": "+48 573583159",
+  "location": "Gniezno, Wielkopolskie, Poland",
+  "address": "",
+  "postalCode": "62-200",
+  "linkedin": "https://www.linkedin.com/in/artur-lis-3375063b2/",
+  "website": "",
+  "portfolio": "",
+  "github": "",
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Senior AI Engineer",
+      "location": "FL, US",
+      "start_date": "June 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "Accenture",
+      "title": "AI/ML Engineer",
+      "location": "",
+      "start_date": "Feb 2020",
+      "end_date": "May 2025"
+    },
+    {
+      "company": "Fetcherr",
+      "title": "Software Engineer(Backend)",
+      "location": "Israel",
+      "start_date": "Sep 2016",
+      "end_date": "Jan 2020"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's Degree in Information Technology",
+      "school": "European University",
+      "start_year": "2012",
+      "end_year": "2016"
+    }
+  ],
+  "screening": {
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "birth": "e.g. 1990-01-01",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [
+      "e.g. AWS Certified Developer"
+    ],
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": "open / remote only",
+    "customAnswers": {
+      "question1": "answer1",
+      "question2": "answer2"
+    }
+  }
+}

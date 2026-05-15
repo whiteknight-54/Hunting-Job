@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getThemeColors } from "../lib/theme-tokens";
+import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 
 export default function PreviewPage() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function PreviewPage() {
         minHeight: "100vh",
         background: colors.bg,
         color: colors.text,
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif",
+        fontFamily: APP_FONT_FAMILY,
         padding: "12px",
         transition: "background 0.3s ease, color 0.3s ease"
       }}>

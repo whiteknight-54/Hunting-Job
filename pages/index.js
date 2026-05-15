@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { getThemeColors } from "../lib/theme-tokens";
+import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 
 export default function Home() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function Home() {
         minHeight: "100vh",
         background: colors.bg,
         color: colors.text,
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif",
+        fontFamily: APP_FONT_FAMILY,
         padding: "12px",
         transition: "background 0.3s ease, color 0.3s ease"
       }}>
@@ -144,7 +145,6 @@ export default function Home() {
                     width: "100%",
                     padding: "clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px)",
                     fontSize: "clamp(14px, 3.5vw, 16px)",
-                    fontFamily: "inherit",
                     color: colors.text,
                     background: colors.inputBg,
                     border: `1px solid ${colors.inputBorder}`,

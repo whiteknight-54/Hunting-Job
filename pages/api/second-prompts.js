@@ -1,7 +1,13 @@
-import { SECOND_PROMPT_CATALOG } from "../../lib/second-prompts-registry";
-import { methodNotAllowed } from "../../lib/api-response";
+import { listSecondPromptTemplateIds } from "../../lib/core/prompts.js";
+import { methodNotAllowed, serverError } from "../../lib/core/api-response.js";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "GET") return methodNotAllowed(res);
-  res.status(200).json({ prompts: SECOND_PROMPT_CATALOG });
+  try {
+    const prompts = await listSecondPromptTemplateIds();
+    res.status(200).json({ prompts });
+  } catch (e) {
+    console.error(e);
+    return serverError(res, "Failed to list second prompts");
+  }
 }

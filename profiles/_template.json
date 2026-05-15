@@ -31,13 +31,21 @@
   ],
 
   "screening": {
-    "languages": ["English (fluent)", "Spanish (professional)"],
     "notes": "Private notes for prompts — preferences, constraints, talking points.",
-    "certifications": ["AWS Certified Developer"],
+    "birth":"e.g. 1990-01-01",
+    "languages": ["English (fluent) | B2/C1 level" ],
+    "certifications": ["e.g. AWS Certified Developer"],
     "workAuthorization": "e.g. US citizen / requires sponsorship",
-    "salaryExpectation": "optional",
-    "availability": "e.g. 2 weeks notice",
+    "veteran":"I am not a protected veteran",
+    "disability":"Don't have any disability",
+    "gender":"male",
+    "race":"white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
     "relocation": "open / remote only",
-    "customAnswers": {}
+    "customAnswers": {
+      "question1": "answer1", 
+      "question2": "answer2"
+    }
   }
 }

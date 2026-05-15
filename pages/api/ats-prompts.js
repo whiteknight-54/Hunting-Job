@@ -1,5 +1,5 @@
-import { listAtsPromptTemplateIds } from "../../lib/ats-prompts";
-import { methodNotAllowed, serverError } from "../../lib/api-response";
+import { listAtsPromptTemplateIds } from "../../lib/core/prompts.js";
+import { methodNotAllowed, serverError } from "../../lib/core/api-response.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return methodNotAllowed(res);

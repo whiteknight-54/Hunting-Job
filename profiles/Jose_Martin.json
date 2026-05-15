@@ -1,10 +1,16 @@
 {
   "name": "Jose Martin",
+  "title": "Senior Software Engineer",
   "email": "jcmdesign2023@gmail.com",
+  "workEmail": "",
   "phone": "+34 729243634",
   "location": "Barcelona, Catalonia, Spain",
+  "address": "",
   "postalCode": "08850",
   "linkedin": "https://www.linkedin.com/in/jose-carrasco-martin-62aa67392/",
+  "website": "",
+  "portfolio": "",
+  "github": "",
   "experience": [
     {
       "company": "Kiggla",
@@ -44,13 +50,25 @@
     }
   ],
   "screening": {
-    "languages": [],
-    "notes": "",
-    "certifications": [],
-    "workAuthorization": "",
-    "salaryExpectation": "",
-    "availability": "",
-    "relocation": "",
-    "customAnswers": {}
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "birth": "e.g. 1990-01-01",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [
+      "e.g. AWS Certified Developer"
+    ],
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": "open / remote only",
+    "customAnswers": {
+      "question1": "answer1",
+      "question2": "answer2"
+    }
   }
 }
