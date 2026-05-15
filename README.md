@@ -32,6 +32,10 @@ ANTHROPIC_API_KEY=sk-ant-...
 
 # Optional — Google Drive quick-copy link on profile pages
 GDRIVE_FOLDER_ID=
+
+# Optional — GitHub profiles folder (tree URL); used by Review profile → Migrate on GitHub
+# Example: https://github.com/whiteknight-54/Hunting-Job/tree/manual_focus_prod/profiles
+GITHUB_PROFILES_URL=
 ```
 
 ### Scripts
