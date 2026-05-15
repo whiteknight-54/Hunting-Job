@@ -11,59 +11,58 @@
     "portfolio": "",
     "github": "",
     "experience": [
-    {
-    "company": "Cargo Express Freight",
-    "title": "Senior DevOps/Cloud Engineer",
-    "location": "United States",
-    "start_date": "2024-02",
-    "end_date": "Present"
-    },
-    {
-    "company": "Lenovo",
-    "title": "DevSecOps Engineer",
-    "location": "United States",
-    "start_date": "2020-04",
-    "end_date": "2024-01"
-    },
-    {
-    "company": "ELITEX",
-    "title": "DevOps Engineer",
-    "location": "Ukraine",
-    "start_date": "2017-09",
-    "end_date": "2020-03"
-    },
-    {
-    "company": "IT Svit",
-    "title": "Junior DevOps Engineer",
-    "location": "Ukraine",
-    "start_date": "2016-10",
-    "end_date": "2017-08"
-    }
+        {
+            "company": "Cargo Express Freight",
+            "title": "Senior DevOps/Cloud Engineer",
+            "location": "United States",
+            "start_date": "2024-02",
+            "end_date": "Present"
+        },
+        {
+            "company": "Lenovo",
+            "title": "DevSecOps Engineer",
+            "location": "United States",
+            "start_date": "2020-04",
+            "end_date": "2024-01"
+        },
+        {
+            "company": "ELITEX",
+            "title": "DevOps Engineer",
+            "location": "Ukraine",
+            "start_date": "2017-09",
+            "end_date": "2020-03"
+        },
+        {
+            "company": "IT Svit",
+            "title": "Junior DevOps Engineer",
+            "location": "Ukraine",
+            "start_date": "2016-10",
+            "end_date": "2017-08"
+        }
     ],
     "education": [
-    {
-    "degree": "Bachelor's Degree in Computer Science",
-    "school": "National Aviation University",
-    "start_year": "2012",
-    "end_year": "2016"
-    }
+        {
+            "degree": "Bachelor's Degree in Computer Science",
+            "school": "National Aviation University",
+            "start_year": "2012",
+            "end_year": "2016"
+        }
     ],
     "screening": {
-    "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Poland or European Union. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
-    "birth": "1994/05/04",
-    "languages": [
-    " English (fluent) | B2/C1 level "
-    ],
-    "certifications": [],
-    "workAuthorization": "Poland citizen",
-    "veteran": "I am protected veteran",
-    "disability": "I don't have any disability",
-    "gender": "male",
-    "race": "",
-    "salaryExpectation": "$62,000 USD annually, $5,600 USD monthly, $35 USD hourly, $280 USD daily | €55,000 EUR annually, €4,800 EUR monthly, €30 EUR hourly, €240 EUR daily | negotiable",
-    "availability": "Immediately | ASAP",
-    "relocation": "remote only",
-    "customAnswers": {}
+        "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Poland or European Union. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
+        "birth": "1994/05/04",
+        "languages": [
+            " English (fluent) | B2/C1 level "
+        ],
+        "certifications": [],
+        "workAuthorization": "Poland citizen",
+        "veteran": "I am protected veteran",
+        "disability": "I don't have any disability",
+        "gender": "male",
+        "race": "",
+        "salaryExpectation": "$62,000 USD annually, $5,600 USD monthly, $35 USD hourly, $280 USD daily | €55,000 EUR annually, €4,800 EUR monthly, €30 EUR hourly, €240 EUR daily | negotiable",
+        "availability": "Immediately | ASAP",
+        "relocation": "remote only",
+        "customAnswers": {}
     }
-    }
-    
+}

@@ -1,13 +1,12 @@
 {
   "name": "Andrii Hrynikha",
-  "title": "Senior Software Engineer",
-  "email": "andrii.hrynikha.04@outlook.com",
+  "email": "andrii.h08@outlook.com",
   "workEmail": "",
   "phone": "+48 457415866",
   "location": "Katowice, Woj, Slaskie, Polska",
   "address": "",
   "postalCode": "55-140",
-  "linkedin": "https://www.linkedin.com/in/andrii-hrynikha-3539183b8/",
+  "linkedin": "https://www.linkedin.com/in/andrii-w-hrynikha-1a87233ba/",
   "website": "",
   "portfolio": "",
   "github": "",
@@ -56,25 +55,20 @@
     }
   ],
   "screening": {
-    "notes": "Private notes for prompts — preferences, constraints, talking points.",
-    "birth": "e.g. 1990-01-01",
+    "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Poland or European Union. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
+    "birth": "",
     "languages": [
       "English (fluent) | B2/C1 level"
     ],
-    "certifications": [
-      "e.g. AWS Certified Developer"
-    ],
-    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "certifications": [],
+    "workAuthorization": "Poland citizen /No requires sponsorship",
     "veteran": "I am not a protected veteran",
     "disability": "Don't have any disability",
     "gender": "male",
     "race": "white",
-    "salaryExpectation": "negotiable",
-    "availability": "e.g. 2 days notice",
+    "salaryExpectation": "$80,000 USD annually, $6,700 USD monthly, $45 USD hourly, $360 USD daily | €70,000 EUR annually, €5,600 EUR monthly, €40 EUR hourly, €320 EUR daily | zł 290,000 PLN annually, zł 25,000 PLN monthly, zł 160 PLN hourly, zł 1,300 PLN daily | negotiable",
+    "availability": "Immediately | ASAP",
     "relocation": "open / remote only",
-    "customAnswers": {
-      "question1": "answer1",
-      "question2": "answer2"
-    }
+    "customAnswers": {}
   }
 }

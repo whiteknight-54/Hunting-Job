@@ -1,11 +1,10 @@
 {
   "name": "Noel Talastas",
-  "title": "Senior. Software Engineer",
   "email": "n.talastas55@outlook.com",
   "workEmail": "",
   "phone": "+63 945 532 1632",
   "location": "Cebu City, Cebu, Philippines",
-  "address": "",
+  "address": "86 F. Cabahug St.",
   "postalCode": "6000",
   "linkedin": "linkedin.com/in/noel-talastas-1a27273a4",
   "website": "",
@@ -50,25 +49,20 @@
     }
   ],
   "screening": {
-    "notes": "Private notes for prompts — preferences, constraints, talking points.",
-    "birth": "e.g. 1990-01-01",
+    "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Philippines. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
+    "birth": "1995/11/17",
     "languages": [
       "English (fluent) | B2/C1 level"
     ],
-    "certifications": [
-      "e.g. AWS Certified Developer"
-    ],
-    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "certifications": [],
+    "workAuthorization": "Philippines citizen /No requires sponsorship",
     "veteran": "I am not a protected veteran",
     "disability": "Don't have any disability",
     "gender": "male",
     "race": "white",
-    "salaryExpectation": "negotiable",
-    "availability": "e.g. 2 days notice",
+    "salaryExpectation": "$3,000 USD monthly, $20 USD hourly | ₱ 150,000 PHP monthly | negotiable",
+    "availability": "Immediately | ASAP",
     "relocation": "open / remote only",
-    "customAnswers": {
-      "question1": "answer1",
-      "question2": "answer2"
-    }
+    "customAnswers": {}
   }
 }

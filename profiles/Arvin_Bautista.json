@@ -1,6 +1,5 @@
 {
   "name": "Arvin Bautista",
-  "title": "Senior Software Engineer",
   "email": "arvin.b7@outlook.com",
   "workEmail": "",
   "phone": "63 (932) 435 2038",
@@ -43,25 +42,20 @@
     }
   ],
   "screening": {
-    "notes": "Private notes for prompts — preferences, constraints, talking points.",
-    "birth": "e.g. 1990-01-01",
+    "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Philippines. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
+    "birth": "",
     "languages": [
       "English (fluent) | B2/C1 level"
     ],
-    "certifications": [
-      "e.g. AWS Certified Developer"
-    ],
-    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "certifications": [],
+    "workAuthorization": "Philippines citizen /No requires sponsorship",
     "veteran": "I am not a protected veteran",
     "disability": "Don't have any disability",
     "gender": "male",
     "race": "white",
-    "salaryExpectation": "negotiable",
+    "salaryExpectation": "$35,000 USD annually, $3,000 USD monthly, $20 USD hourly | ₱ 1,800,000 PHP annually, ₱ 150,000 PHP monthly | negotiable",
     "availability": "e.g. 2 days notice",
     "relocation": "open / remote only",
-    "customAnswers": {
-      "question1": "answer1",
-      "question2": "answer2"
-    }
+    "customAnswers": {}
   }
 }

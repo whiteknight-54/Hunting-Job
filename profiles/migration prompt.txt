@@ -31,8 +31,8 @@ Important:
 standard value
     "notes" : "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at <Brazil or Latin America>. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.", // (here swap profile's country and region e.g profile's location or country is Poland, use this Poland and European Union instead of <Brazil and Latin America>)
     "languages": [" English (fluent) | B2/C1 level "]
-    "workAuthorization": <Profile's Country citizen> //( you can guess from location when location is mentioned)
-    "veteran": "I am not protected veteran"
+    "workAuthorization": <Profile's Country citizen> / No requires sponsorship //( you can guess from location when location is mentioned)
+    "veteran": "I am not a protected veteran"
     "disability": "I don't have any disability"
     "gender": "male | man"
     "salaryExpectation": ""$66,000 USD annually, $5,500 USD monthly, $35 USD hourly, $280 USD daily | negotiable"
