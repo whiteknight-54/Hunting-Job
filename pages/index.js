@@ -4,7 +4,7 @@ import Head from "next/head";
 import { getThemeColors } from "../lib/theme-tokens";
 import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 import { messageForAuthError } from "../lib/shared/auth-error-messages";
-import { SITE_ICON_PATH, SITE_TITLE } from "../lib/site-meta";
+import { LOGIN_HEADLINE, SITE_LOGO_PATH, SITE_TITLE } from "../lib/site-meta";
 import { useSlackSession } from "../lib/shared/useSlackSession";
 import SlackLoginButton from "../lib/components/shared/SlackLoginButton";
 import SlackAccountMenu from "../lib/components/shared/SlackAccountMenu";
@@ -126,31 +126,45 @@ export default function Home() {
                 marginBottom: 8,
               }}
             >
-              <img
-                src={SITE_ICON_PATH}
-                alt=""
+<img
+                src={SITE_LOGO_PATH}
+                alt="BOC-E"
                 width={48}
                 height={48}
                 style={{
-                  width: "clamp(40px, 10vw, 48px)",
-                  height: "clamp(40px, 10vw, 48px)",
+                  width: "clamp(44px, 11vw, 48px)",
+                  height: "clamp(44px, 11vw, 48px)",
                   borderRadius: 10,
-                  objectFit: "cover",
+                  objectFit: "contain",
                   flexShrink: 0,
-                  border: `1px solid ${colors.cardBorder}`,
                 }}
               />
+              
               <h1
                 style={{
-                  fontSize: "clamp(22px, 5vw, 28px)",
+                  fontSize: "clamp(20px, 4.5vw, 26px)",
                   fontWeight: 700,
                   margin: 0,
                   letterSpacing: "-0.02em",
-                  lineHeight: 1.2,
+                  lineHeight: 1.25,
+                  textAlign: "left",
                 }}
               >
-                {SITE_TITLE}
+                {LOGIN_HEADLINE}
               </h1>
+              <img
+                src={SITE_LOGO_PATH}
+                alt="BOC-E"
+                width={48}
+                height={48}
+                style={{
+                  width: "clamp(44px, 11vw, 48px)",
+                  height: "clamp(44px, 11vw, 48px)",
+                  borderRadius: 10,
+                  objectFit: "contain",
+                  flexShrink: 0,
+                }}
+              />
             </div>
             <p
               style={{

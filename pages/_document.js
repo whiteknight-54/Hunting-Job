@@ -5,7 +5,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href={SITE_ICON_PATH} type="image/jpeg" />
+        <link rel="icon" href={SITE_ICON_PATH} type="image/png" />
         <link rel="apple-touch-icon" href={SITE_ICON_PATH} />
         <meta name="application-name" content={SITE_TITLE} />
       </Head>
