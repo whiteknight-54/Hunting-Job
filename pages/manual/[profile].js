@@ -1,4 +1,3 @@
-import { lazy, Suspense } from "react";
 import Head from "next/head";
 import { useManualWorkflow } from "../../lib/workflows/manual/useManualWorkflow";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";

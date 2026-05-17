@@ -3,6 +3,7 @@ import { getAiConfig, normalizeAiSelection } from "../../../lib/core/ai-config.j
 import { respondProfileLoadError } from "../../../lib/core/profile.js";
 import { runAutoGenerate } from "../../../lib/services/auto-generate-service.js";
 import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js";
+import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
     if (!jd) return jsonError(res, 400, "Job description required");
     if (!roleName || !String(roleName).trim()) return jsonError(res, 400, "Role name is required");
 
-    const { pdfStream, fileName, aiUsage, atsPromptUsed } = await runAutoGenerate({
+    const { pdfBuffer, fileName, aiUsage, atsPromptUsed } = await runAutoGenerate({
       profileSlug,
       jd,
       template,
@@ -42,12 +43,6 @@ export default async function handler(req, res) {
     });
 
     const modelLabel = String(model || "").trim() || `${provider} (default)`;
-    void sendSlackPdfSuccessReport({
-      fileName,
-      aiAgent: modelLabel,
-      promptId: atsPromptUsed,
-      jd,
-    });
 
     if (aiUsage?.promptTokens != null) res.setHeader("X-AI-Prompt-Tokens", String(aiUsage.promptTokens));
     if (aiUsage?.completionTokens != null) res.setHeader("X-AI-Completion-Tokens", String(aiUsage.completionTokens));
@@ -56,12 +51,20 @@ export default async function handler(req, res) {
       res.setHeader("X-AI-Estimated-USD", String(aiUsage.estimatedUsd));
     }
 
+    const driveUpload = await uploadGeneratedPdfToDrive({ buffer: pdfBuffer, fileName });
+    applyDriveUploadHeaders(res, driveUpload);
+
+    void sendSlackPdfSuccessReport({
+      fileName,
+      aiAgent: modelLabel,
+      promptId: atsPromptUsed,
+      jd,
+      driveUpload,
+    });
+
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-    for await (const chunk of pdfStream) {
-      res.write(chunk);
-    }
-    return res.end();
+    return res.status(200).end(pdfBuffer);
   } catch (err) {
     if (respondProfileLoadError(res, err)) return;
     if (res.headersSent) return;

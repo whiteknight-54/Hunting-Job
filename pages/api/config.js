@@ -1,4 +1,5 @@
 import { getAiConfig, AI_MODEL_OPTIONS } from "../../lib/core/ai-config.js";
+import { isGoogleDriveUploadConfigured } from "../../lib/core/google-drive.js";
 
 /**
  * GET /api/config
@@ -13,6 +14,7 @@ export default function handler(req, res) {
   const ai = { ...getAiConfig(), models: AI_MODEL_OPTIONS };
   return res.status(200).json({
     gdriveFolderId: folderId,
+    driveUploadEnabled: isGoogleDriveUploadConfigured(),
     githubProfilesUrl,
     ai,
   });

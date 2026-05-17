@@ -30,8 +30,10 @@ Create `.env.local`:
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
 
-# Optional — Google Drive quick-copy link on profile pages
+# Optional — Google Drive folder (quick-copy link + PDF upload when all three are set)
 GDRIVE_FOLDER_ID=
+GOOGLE_CLIENT_EMAIL=
+GOOGLE_PRIVATE_KEY=
 
 # Optional — GitHub profiles folder (tree URL); used by Review profile → Migrate on GitHub
 # Example: https://github.com/whiteknight-54/Hunting-Job/tree/manual_focus_prod/profiles
