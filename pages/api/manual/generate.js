@@ -21,6 +21,7 @@ export default async function handler(req, res) {
     if (!body.companyName) return jsonError(res, 400, "Company name is required");
     if (!body.content.trim()) return jsonError(res, 400, "Pasted content required");
 
+    const pdfStarted = Date.now();
     const { pdfBuffer, fileName } = await runManualGenerate({
       profileSlug: body.profileSlug,
       template: body.template,
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
       showPhone: body.showPhone,
       showLinkedin: body.showLinkedin,
     });
+    res.setHeader("X-Pdf-Generate-Ms", String(Date.now() - pdfStarted));
 
     const promptForSlack = String(atsPrompt ?? "").trim() || getPromptForProfile(body.profileSlug);
 

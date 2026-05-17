@@ -27,6 +27,7 @@ export default async function handler(req, res) {
     if (!jd) return jsonError(res, 400, "Job description required");
     if (!pdfBody.roleName) return jsonError(res, 400, "Role name is required");
 
+    const pdfStarted = Date.now();
     const { pdfBuffer, fileName, aiUsage, atsPromptUsed } = await runAutoGenerate({
       profileSlug: pdfBody.profileSlug,
       jd,
@@ -40,6 +41,7 @@ export default async function handler(req, res) {
       showPhone: pdfBody.showPhone,
       showLinkedin: pdfBody.showLinkedin,
     });
+    res.setHeader("X-Pdf-Generate-Ms", String(Date.now() - pdfStarted));
 
     const modelLabel = String(model || "").trim() || `${provider} (default)`;
 
