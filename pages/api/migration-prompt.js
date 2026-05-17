@@ -1,5 +1,6 @@
 import { readMigrationPromptContent } from "../../lib/core/migration-prompt.js";
 import { guardApi } from "../../lib/core/guard-api.js";
+import { setStaticListCacheHeaders } from "../../lib/core/http-cache.js";
 
 /**
  * GET /api/migration-prompt
@@ -12,6 +13,7 @@ export default async function handler(req, res) {
   if (!(await guardApi(req, res))) return;
   try {
     const content = await readMigrationPromptContent();
+    setStaticListCacheHeaders(res);
     return res.status(200).json({ content });
   } catch (err) {
     console.error("Migration prompt read error:", err);

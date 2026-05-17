@@ -4,7 +4,8 @@ import {
   isSlackAuthConfigured,
   isSlackAuthEnforced,
 } from "./lib/core/slack-auth-config.js";
-import { getSessionSecret, SESSION_COOKIE, verifySessionToken } from "./lib/core/session-cookie.js";
+import { getSessionSecret, SESSION_COOKIE } from "./lib/core/session-cookie.js";
+import { verifySessionCached } from "./lib/core/verify-session-cached.js";
 
 const AUTH_PREFIX = "/api/auth/";
 
@@ -29,8 +30,8 @@ export async function middleware(request) {
     pathname.startsWith(AUTH_PREFIX) ||
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico" ||
-    pathname === "/favicon.png" ||
-    pathname === "/logo.png"
+    pathname === "/favicon.webp" ||
+    pathname === "/logo.webp"
   ) {
     return NextResponse.next();
   }
@@ -49,7 +50,7 @@ export async function middleware(request) {
   }
 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
-  const session = await verifySessionToken(token, secret);
+  const session = await verifySessionCached(token, secret);
   const expectedTeam = getSlackTeamId();
 
   if (!session || session.teamId !== expectedTeam) {
@@ -65,5 +66,6 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|favicon.png|logo.png).*)"],
+  // Pages only — /api/* uses guardApi (avoids double HMAC verify per API call).
+  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|favicon.webp|logo.webp).*)"],
 };

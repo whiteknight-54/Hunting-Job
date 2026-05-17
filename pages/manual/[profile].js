@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useManualWorkflow } from "../../lib/workflows/manual/useManualWorkflow";
 import { PROFILE_PAGE_MAX_WIDTH_PX } from "../../lib/workflows/constants";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
+import ProfilePageSkeleton from "../../lib/components/shared/ProfilePageSkeleton";
 import { APP_FONT_FAMILY } from "../../lib/shared/fonts";
 import { SITE_TITLE } from "../../lib/site-meta";
 import ManualHeader from "../../lib/components/manual/ManualHeader";
@@ -33,7 +34,7 @@ export default function ManualProfilePage() {
   } = page;
 
   return (
-    <ProfileLoadingGate ready={ready} loaded={loaded} colors={colors}>
+    <ProfileLoadingGate ready={ready} colors={colors}>
       <Head>
         <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -55,9 +56,15 @@ export default function ManualProfilePage() {
           {authError && (
             <div style={{ ...bannerError, marginBottom: 12 }}>{authError}</div>
           )}
-          <ManualApplicationForm {...page} />
-          {(showAtsPromptPreview || showPdfPreview) && <ManualPreviewSection {...page} />}
-          {showScreeningSection && <ManualScreeningSection {...page} />}
+          {!loaded ? (
+            <ProfilePageSkeleton colors={colors} />
+          ) : (
+            <>
+              <ManualApplicationForm {...page} />
+              {(showAtsPromptPreview || showPdfPreview) && <ManualPreviewSection {...page} />}
+              {showScreeningSection && <ManualScreeningSection {...page} />}
+            </>
+          )}
         </div>
       </div>
 

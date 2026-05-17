@@ -1,12 +1,13 @@
 import { Html, Head, Main, NextScript } from "next/document";
-import { SITE_FAVICON_PATH, SITE_LOGO_PATH, SITE_TITLE } from "../lib/site-meta";
+import { SITE_FAVICON_MIME, SITE_FAVICON_PATH, SITE_TITLE } from "../lib/site-meta";
+import { brandDocumentHeadLinks } from "../lib/components/shared/BrandHeadLinks";
 
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href={SITE_FAVICON_PATH} type="image/png" />
-        <link rel="apple-touch-icon" href={SITE_LOGO_PATH} />
+        <link rel="preload" href={SITE_FAVICON_PATH} as="image" type={SITE_FAVICON_MIME} />
+        {brandDocumentHeadLinks()}
         <meta name="application-name" content={SITE_TITLE} />
       </Head>
       <body>

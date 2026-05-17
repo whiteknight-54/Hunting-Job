@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useAutoWorkflow } from "../../lib/workflows/auto/useAutoWorkflow";
 import { PROFILE_PAGE_MAX_WIDTH_PX } from "../../lib/workflows/constants";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
+import ProfilePageSkeleton from "../../lib/components/shared/ProfilePageSkeleton";
 import { APP_FONT_FAMILY } from "../../lib/shared/fonts";
 import { SITE_TITLE } from "../../lib/site-meta";
 import AutoHeader from "../../lib/components/auto/AutoHeader";
@@ -15,7 +16,7 @@ export default function AutoProfilePage() {
   const { ready, loaded, colors, displayName, authError, bannerError } = page;
 
   return (
-    <ProfileLoadingGate ready={ready} loaded={loaded} colors={colors}>
+    <ProfileLoadingGate ready={ready} colors={colors}>
       <Head>
         <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -37,7 +38,7 @@ export default function AutoProfilePage() {
           {authError && (
             <div style={{ ...bannerError, marginBottom: 12 }}>{authError}</div>
           )}
-          <AutoGenerateForm {...page} />
+          {!loaded ? <ProfilePageSkeleton colors={colors} /> : <AutoGenerateForm {...page} />}
         </div>
       </div>
 

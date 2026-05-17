@@ -4,10 +4,13 @@ import Head from "next/head";
 import { getThemeColors } from "../lib/theme-tokens";
 import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 import { messageForAuthError } from "../lib/shared/auth-error-messages";
-import { LOGIN_HEADLINE, SITE_LOGO_PATH, SITE_TITLE } from "../lib/site-meta";
+import { LOGIN_HEADLINE, SITE_TITLE } from "../lib/site-meta";
 import { useSlackSession } from "../lib/shared/useSlackSession";
+import { scheduleProfilePrefetch, cancelProfilePrefetch } from "../lib/shared/prefetch-profile-route";
+import { LoginLogoPreload } from "../lib/components/shared/BrandHeadLinks";
+import SiteLogo from "../lib/components/shared/SiteLogo";
 import SlackLoginButton from "../lib/components/shared/SlackLoginButton";
-import SlackAccountMenu from "../lib/components/shared/SlackAccountMenu";
+import SlackAccountMenu from "../lib/components/shared/LazySlackAccountMenu";
 
 function parseReturnTo(query) {
   const raw = query?.returnTo;
@@ -43,6 +46,15 @@ export default function Home() {
     }
   }, [router.isReady, slackAuthenticated, router.query.returnTo, router]);
 
+  useEffect(() => {
+    if (!slackAuthenticated || !profileSlug.trim()) {
+      cancelProfilePrefetch();
+      return;
+    }
+    scheduleProfilePrefetch(router, profileSlug);
+    return () => cancelProfilePrefetch();
+  }, [slackAuthenticated, profileSlug, router]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!slackAuthenticated) return;
@@ -69,6 +81,7 @@ export default function Home() {
 
   return (
     <>
+      <LoginLogoPreload />
       <Head>
         <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -126,20 +139,7 @@ export default function Home() {
                 marginBottom: 8,
               }}
             >
-<img
-                src={SITE_LOGO_PATH}
-                alt="BOC-E"
-                width={48}
-                height={48}
-                style={{
-                  width: "clamp(44px, 11vw, 48px)",
-                  height: "clamp(44px, 11vw, 48px)",
-                  borderRadius: 10,
-                  objectFit: "contain",
-                  flexShrink: 0,
-                }}
-              />
-              
+              <SiteLogo priority />
               <h1
                 style={{
                   fontSize: "clamp(20px, 4.5vw, 26px)",
@@ -152,19 +152,6 @@ export default function Home() {
               >
                 {LOGIN_HEADLINE}
               </h1>
-              <img
-                src={SITE_LOGO_PATH}
-                alt="BOC-E"
-                width={48}
-                height={48}
-                style={{
-                  width: "clamp(44px, 11vw, 48px)",
-                  height: "clamp(44px, 11vw, 48px)",
-                  borderRadius: 10,
-                  objectFit: "contain",
-                  flexShrink: 0,
-                }}
-              />
             </div>
             <p
               style={{
@@ -194,25 +181,27 @@ export default function Home() {
               </div>
             )}
 
-            {!slackSessionLoaded ? (
-              <p style={{ textAlign: "center", color: colors.textMuted, fontSize: 14 }}>Checking session…</p>
-            ) : !slackAuthenticated ? (
-              <div style={{ marginBottom: 28 }}>
+            <div style={{ marginBottom: 28, minHeight: 44 }}>
+              {!slackSessionLoaded ? (
+                <p style={{ textAlign: "center", color: colors.textMuted, fontSize: 14, margin: 0 }}>
+                  Checking session…
+                </p>
+              ) : !slackAuthenticated ? (
                 <SlackLoginButton fullWidth onClick={() => signInWithSlack(returnTo)} />
-              </div>
-            ) : (
-              <p
-                style={{
-                  margin: "0 0 20px",
-                  fontSize: 13,
-                  color: colors.successText,
-                  textAlign: "center",
-                  fontWeight: 600,
-                }}
-              >
-                Signed in as {slackUser?.name || "Slack user"}
-              </p>
-            )}
+              ) : (
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 13,
+                    color: colors.successText,
+                    textAlign: "center",
+                    fontWeight: 600,
+                  }}
+                >
+                  Signed in as {slackUser?.name || "Slack user"}
+                </p>
+              )}
+            </div>
 
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>

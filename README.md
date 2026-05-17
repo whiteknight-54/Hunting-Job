@@ -54,11 +54,18 @@ Open [http://localhost:3000](http://localhost:3000), sign in with Slack (if conf
 
 ## Authentication
 
-When Slack OAuth env vars are set, `middleware.js` requires a signed session cookie (`hj_session`) for all routes except:
+When Slack OAuth env vars are set, protection uses a signed session cookie (`hj_session`):
+
+| Layer | What it guards |
+|-------|----------------|
+| **`middleware.js`** | **App pages** only (`/manual/…`, `/auto/…`, `/preview`, `/{slug}` redirect, etc.) — not `/api/*` |
+| **`guardApi`** | **All API routes** except `/api/auth/*` — returns **401** if unsigned |
+
+Public without a session:
 
 - `/` (login landing)
 - `/api/auth/*` (OAuth start, callback, session, logout)
-- Next.js static assets
+- Static assets (`/_next/*`, `/favicon.webp`, `/logo.webp`)
 
 Users sign in on the home page; after login, `returnTo` deep-links (e.g. `/manual/jf`) work automatically.
 
@@ -234,12 +241,14 @@ Validation (`lib/core/resume.js`):
 2. Add a slug in `lib/profile-template-mapping.js`:
 
 ```js
-"jf": {
+jf: {
   profileFile: "Joao_Franco",
   template: "Resume-Classic-Charcoal",
-  prompt: "ats-resum-prompt-1"
-}
+  prompt: "prompt-1", // basename of lib/prompts/ATS Resume Prompts/prompt-1.txt (no .txt suffix)
+},
 ```
+
+Use `profileFile` (preferred). Legacy entries may still use `resume`; both resolve to `profiles/{basename}.json`.
 
 3. Open `/manual/jf` or `/auto/jf`.
 
@@ -255,7 +264,8 @@ lib/
     pdf.js, pdf-filename.js
     google-drive.js                # Drive OAuth upload
     slack-auth.js, slack-auth-config.js
-    session-cookie.js, guard-api.js, require-slack-session.js
+    session-cookie.js, verify-session-cached.js, guard-api.js, require-slack-session.js
+    server-cache.js, http-cache.js
     api-response.js, paths.js
   services/
     ats-prompt.js
@@ -283,7 +293,7 @@ pages/
     manual/                        # prompt, preview, generate, second prompts
     auto/generate.js
     config.js, profiles/[id].js, templates.js, …
-middleware.js                      # Slack session gate
+middleware.js                      # Slack session gate (pages only)
 scripts/
   validate-prompts.js
 ```
@@ -347,10 +357,30 @@ Preview all layouts at `/preview`.
 
 ## Performance notes (Vercel)
 
+**Client**
+
+- Login and profile pages render immediately; profile JSON + config load in parallel (`useProfileSession`).
+- Debounced prefetch of `/manual/{slug}` + profile API while typing a profile id on the home page.
+- `sessionStorage` caches config, catalogs, and profile JSON (`lib/shared/client-cache.js` — bump `APP_DATA_VERSION` on deploy when response shapes change).
+- Manual page lazy-loads preview, screening, and modals; `SlackAccountMenu` loads only when signed in.
+
+**CDN / HTTP**
+
 - **Template list API** (`/api/templates`) uses `lib/pdf-templates/catalog.js` only — no react-pdf import.
+- **List + config GET** set `Cache-Control` (`lib/core/http-cache.js`); profile GET uses `private` browser cache.
 - **PDF generate/preview** loads one template at a time via dynamic `import()` in `lib/pdf-templates/load-template.js`.
-- **List + config GET** responses set `Cache-Control`; the browser caches config and catalog lists in `sessionStorage` (`lib/shared/client-cache.js`, bump `APP_DATA_VERSION` on deploy when those shapes change).
-- **Manual page** lazy-loads preview, screening, and modals; PDF mini-preview loads only when the preview panel is enabled.
+
+**Server (warm lambda — per instance, not global)**
+
+- `lib/core/server-cache.js` — in-memory profile JSON and prompt file reads (TTL minutes–hours).
+- `lib/core/verify-session-cached.js` — short-lived cache for valid Slack session HMAC checks.
+- Resolved PDF template components stay loaded in `load-template.js` for repeat PDFs on the same instance.
+- Middleware skips `/api/*` so APIs are not double-authenticated (pages still use middleware).
+
+**Heavy CPU (expected)**
+
+- Auto PDF (`POST /api/auto/generate`) — external AI + react-pdf.
+- Manual PDF / preview — react-pdf render.
 
 ---
 

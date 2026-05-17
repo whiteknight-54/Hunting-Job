@@ -1,5 +1,6 @@
 import { isSlackAuthEnforced } from "../../../lib/core/slack-auth-config.js";
-import { SESSION_COOKIE, getSessionSecret, verifySessionToken } from "../../../lib/core/session-cookie.js";
+import { SESSION_COOKIE, getSessionSecret } from "../../../lib/core/session-cookie.js";
+import { verifySessionCached } from "../../../lib/core/verify-session-cached.js";
 import { methodNotAllowed } from "../../../lib/core/api-response.js";
 
 function readSessionCookie(req) {
@@ -16,7 +17,7 @@ export default async function handler(req, res) {
   }
 
   const secret = getSessionSecret();
-  const session = await verifySessionToken(readSessionCookie(req), secret);
+  const session = await verifySessionCached(readSessionCookie(req), secret);
 
   const expectedTeam = (process.env.SLACK_TEAM_ID || "").trim();
   if (!session || (expectedTeam && session.teamId !== expectedTeam)) {
