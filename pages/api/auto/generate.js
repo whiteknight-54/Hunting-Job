@@ -4,9 +4,12 @@ import { respondProfileLoadError } from "../../../lib/core/profile.js";
 import { runAutoGenerate } from "../../../lib/services/auto-generate-service.js";
 import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js";
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
+import { guardApi } from "../../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
+  const session = await guardApi(req, res);
+  if (!session) return;
 
   try {
     const envAi = getAiConfig();
@@ -60,6 +63,7 @@ export default async function handler(req, res) {
       promptId: atsPromptUsed,
       jd,
       driveUpload,
+      userName: session.authDisabled ? null : session.name,
     });
 
     res.setHeader("Content-Type", "application/pdf");

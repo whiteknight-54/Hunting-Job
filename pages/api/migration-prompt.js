@@ -1,4 +1,5 @@
 import { readMigrationPromptContent } from "../../lib/core/migration-prompt.js";
+import { guardApi } from "../../lib/core/guard-api.js";
 
 /**
  * GET /api/migration-prompt
@@ -8,6 +9,7 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
+  if (!(await guardApi(req, res))) return;
   try {
     const content = await readMigrationPromptContent();
     return res.status(200).json({ content });

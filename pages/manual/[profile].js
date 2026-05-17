@@ -10,7 +10,17 @@ import ManualModals from "../../lib/components/manual/ManualModals";
 
 export default function ManualProfilePage() {
   const page = useManualWorkflow();
-  const { ready, loaded, colors, displayName, showAtsPromptPreview, showPdfPreview, showScreeningSection } = page;
+  const {
+    ready,
+    loaded,
+    colors,
+    displayName,
+    showAtsPromptPreview,
+    showPdfPreview,
+    showScreeningSection,
+    authError,
+    bannerError,
+  } = page;
 
   return (
     <ProfileLoadingGate ready={ready} loaded={loaded} colors={colors}>
@@ -32,6 +42,9 @@ export default function ManualProfilePage() {
       >
         <div style={{ maxWidth: "min(1200px, 100%)", margin: "0 auto", width: "100%" }}>
           <ManualHeader {...page} />
+          {authError && (
+            <div style={{ ...bannerError, marginBottom: 12 }}>{authError}</div>
+          )}
           <ManualApplicationForm {...page} />
           {(showAtsPromptPreview || showPdfPreview) && <ManualPreviewSection {...page} />}
           {showScreeningSection && <ManualScreeningSection {...page} />}

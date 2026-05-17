@@ -8,7 +8,7 @@ import AutoModals from "../../lib/components/auto/AutoModals";
 
 export default function AutoProfilePage() {
   const page = useAutoWorkflow();
-  const { ready, loaded, colors, theme, displayName, profileSlug } = page;
+  const { ready, loaded, colors, displayName, authError, bannerError } = page;
 
   return (
     <ProfileLoadingGate ready={ready} loaded={loaded} colors={colors}>
@@ -30,6 +30,9 @@ export default function AutoProfilePage() {
       >
         <div style={{ maxWidth: "min(960px, 100%)", margin: "0 auto", width: "100%" }}>
           <AutoHeader {...page} />
+          {authError && (
+            <div style={{ ...bannerError, marginBottom: 12 }}>{authError}</div>
+          )}
           <AutoGenerateForm {...page} />
         </div>
       </div>

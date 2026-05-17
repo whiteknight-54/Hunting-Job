@@ -8,9 +8,11 @@ import { getPreviewMockDataForProfile } from "../../../lib/preview-mock-data.js"
 import { renderPdfToBuffer, resolvePdfTemplate } from "../../../lib/core/pdf.js";
 import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
 import { badRequest, jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
+import { guardApi } from "../../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
+  if (!(await guardApi(req, res))) return;
 
   try {
     const { profile: profileSlug, template, content } = req.body || {};

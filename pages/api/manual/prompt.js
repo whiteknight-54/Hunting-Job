@@ -1,9 +1,11 @@
 import { buildAtsPromptForProfile } from "../../../lib/services/ats-prompt.js";
 import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
 import { jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
+import { guardApi } from "../../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
+  if (!(await guardApi(req, res))) return;
 
   try {
     const {

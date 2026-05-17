@@ -1,181 +1,222 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { getThemeColors } from "../lib/theme-tokens";
 import { APP_FONT_FAMILY } from "../lib/shared/fonts";
+import { messageForAuthError } from "../lib/shared/auth-error-messages";
+import { useSlackSession } from "../lib/shared/useSlackSession";
+import SlackLoginButton from "../lib/components/shared/SlackLoginButton";
+import SlackAccountMenu from "../lib/components/shared/SlackAccountMenu";
+
+function parseReturnTo(query) {
+  const raw = query?.returnTo;
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof value === "string" && value.startsWith("/") && !value.startsWith("//")) return value;
+  return null;
+}
 
 export default function Home() {
   const router = useRouter();
   const [profileSlug, setProfileSlug] = useState("");
   const [theme, setTheme] = useState("dark");
+  const [authError, setAuthError] = useState(null);
+  const { slackUser, slackSessionLoaded, slackAuthenticated, signInWithSlack, signOutSlack } = useSlackSession();
 
-  // Load theme from localStorage on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
-    setTheme(savedTheme);
+    startTransition(() => setTheme(savedTheme));
   }, []);
 
-  // Navigate to profile page
+  useEffect(() => {
+    const code = router.query.auth_error;
+    if (!code) return;
+    const key = Array.isArray(code) ? code[0] : code;
+    setAuthError(messageForAuthError(key));
+  }, [router.query.auth_error]);
+
+  useEffect(() => {
+    if (!router.isReady || !slackAuthenticated) return;
+    const returnTo = parseReturnTo(router.query);
+    if (returnTo && returnTo !== "/") {
+      router.replace(returnTo);
+    }
+  }, [router.isReady, slackAuthenticated, router.query.returnTo, router]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (profileSlug.trim()) {
-      const slug = profileSlug.trim();
-      router.push(`/${slug}`);
-    }
+    if (!slackAuthenticated) return;
+    if (profileSlug.trim()) router.push(`/${profileSlug.trim()}`);
   };
 
-  // Toggle theme
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    localStorage.setItem("theme", next);
   };
 
   const colors = getThemeColors(theme);
+  const returnTo = parseReturnTo(router.query) || "/";
+  const iconBtn = (active = false) => ({
+    padding: "6px 10px",
+    fontSize: 13,
+    background: active ? colors.copyBg : "transparent",
+    border: `1px solid ${colors.cardBorder}`,
+    borderRadius: 6,
+    color: colors.text,
+    cursor: "pointer",
+  });
 
   return (
     <>
       <Head>
-        <title>Resume Generator</title>
+        <title>Tailor Resume App in BOC-E</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="description" content="AI-powered resume generator for ATS-optimized resumes" />
+        <meta name="description" content="ATS-tailored resumes for BOC-E — sign in with Slack" />
       </Head>
 
-      <div style={{
-        minHeight: "100vh",
-        background: colors.bg,
-        color: colors.text,
-        fontFamily: APP_FONT_FAMILY,
-        padding: "12px",
-        transition: "background 0.3s ease, color 0.3s ease"
-      }}>
-        <div style={{
-          maxWidth: "800px",
-          margin: "0 auto",
-          padding: "clamp(16px, 4vw, 32px) clamp(12px, 3vw, 20px)"
-        }}>
-          <div style={{
-            width: "100%",
-            background: colors.cardBg,
-            borderRadius: "12px",
-            border: `1px solid ${colors.cardBorder}`,
-            padding: "clamp(20px, 5vw, 40px)",
-            transition: "all 0.2s ease"
-          }}>
-            {/* Header */}
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "clamp(20px, 4vw, 32px)",
-              flexWrap: "wrap",
-              gap: "12px"
-            }}>
-              <h1 style={{
-                fontSize: "clamp(20px, 5vw, 28px)",
-                fontWeight: "600",
-                color: colors.text,
-                margin: 0
-              }}>
-                Resume Generator
-              </h1>
-              <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
-                <button
-                  onClick={() => router.push("/preview")}
-                  style={{
-                    padding: "6px 12px",
-                    fontSize: "clamp(12px, 2.5vw, 14px)",
-                    background: "transparent",
-                    border: `1px solid ${colors.cardBorder}`,
-                    borderRadius: "6px",
-                    color: colors.text,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    whiteSpace: "nowrap"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = colors.inputBg;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  📄 Preview
-                </button>
-                <button
-                  onClick={toggleTheme}
-                  style={{
-                    padding: "6px 12px",
-                    fontSize: "clamp(12px, 2.5vw, 14px)",
-                    background: "transparent",
-                    border: `1px solid ${colors.cardBorder}`,
-                    borderRadius: "6px",
-                    color: colors.text,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  {theme === "dark" ? "☀️" : "🌙"}
-                </button>
-              </div>
-            </div>
+      <div
+        style={{
+          minHeight: "100vh",
+          background: colors.bg,
+          color: colors.text,
+          fontFamily: APP_FONT_FAMILY,
+          padding: "clamp(12px, 3vw, 20px)",
+        }}
+      >
+        <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: "clamp(24px, 8vh, 64px)" }}>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8, marginBottom: 24 }}
+          >
+            {slackAuthenticated && (
+              <SlackAccountMenu
+                colors={colors}
+                theme={theme}
+                slackUser={slackUser}
+                onSignOut={signOutSlack}
+                iconBtn={iconBtn}
+              />
+            )}
+            <button type="button" onClick={toggleTheme} aria-label="Toggle theme" style={iconBtn()}>
+              {theme === "dark" ? "☀" : "☾"}
+            </button>
+          </div>
 
-            {/* Profile Slug Input */}
-            <form onSubmit={handleSubmit} style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px"
-            }}>
+          <div
+            style={{
+              background: colors.cardBg,
+              borderRadius: 16,
+              border: `1px solid ${colors.cardBorder}`,
+              padding: "clamp(28px, 6vw, 40px)",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "clamp(22px, 5vw, 28px)",
+                fontWeight: 700,
+                margin: "0 0 8px",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.2,
+                textAlign: "center",
+              }}
+            >
+              Tailor Resume App in BOC-E
+            </h1>
+            <p
+              style={{
+                margin: "0 0 28px",
+                fontSize: 14,
+                lineHeight: 1.5,
+                color: colors.textSecondary,
+                textAlign: "center",
+              }}
+            >
+              Sign in with your BOC-E Slack account, then open a candidate profile.
+            </p>
+
+            {authError && (
+              <div
+                style={{
+                  marginBottom: 20,
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  color: colors.errorText,
+                  background: colors.errorBg,
+                  border: `1px solid ${colors.errorText}`,
+                }}
+              >
+                {authError}
+              </div>
+            )}
+
+            {!slackSessionLoaded ? (
+              <p style={{ textAlign: "center", color: colors.textMuted, fontSize: 14 }}>Checking session…</p>
+            ) : !slackAuthenticated ? (
+              <div style={{ marginBottom: 28 }}>
+                <SlackLoginButton fullWidth onClick={() => signInWithSlack(returnTo)} />
+              </div>
+            ) : (
+              <p
+                style={{
+                  margin: "0 0 20px",
+                  fontSize: 13,
+                  color: colors.successText,
+                  textAlign: "center",
+                  fontWeight: 600,
+                }}
+              >
+                Signed in as {slackUser?.name || "Slack user"}
+              </p>
+            )}
+
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>
-                <label style={{
-                  display: "block",
-                  fontSize: "clamp(13px, 3vw, 15px)",
-                  fontWeight: "400",
-                  color: colors.textSecondary,
-                  marginBottom: "8px"
-                }}>
-                  Enter Profile ID
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: colors.textSecondary,
+                    marginBottom: 8,
+                  }}
+                >
+                  Profile ID
                 </label>
                 <input
                   type="text"
                   value={profileSlug}
                   onChange={(e) => setProfileSlug(e.target.value)}
+                  disabled={!slackAuthenticated}
+                  placeholder={slackAuthenticated ? "e.g. jf" : "Sign in with Slack first"}
                   style={{
                     width: "100%",
-                    padding: "clamp(12px, 3vw, 14px) clamp(12px, 3vw, 16px)",
-                    fontSize: "clamp(14px, 3.5vw, 16px)",
+                    padding: "12px 14px",
+                    fontSize: 16,
                     color: colors.text,
                     background: colors.inputBg,
                     border: `1px solid ${colors.inputBorder}`,
-                    borderRadius: "8px",
+                    borderRadius: 8,
                     outline: "none",
-                    transition: "all 0.2s ease",
-                    boxSizing: "border-box"
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = colors.buttonBg;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = colors.inputBorder;
+                    boxSizing: "border-box",
+                    opacity: slackAuthenticated ? 1 : 0.65,
                   }}
                 />
               </div>
 
               <button
                 type="submit"
-                disabled={!profileSlug.trim()}
+                disabled={!slackAuthenticated || !profileSlug.trim()}
                 style={{
                   width: "100%",
-                  padding: "clamp(12px, 3vw, 14px) clamp(16px, 4vw, 24px)",
-                  fontSize: "clamp(14px, 3.5vw, 16px)",
-                  fontWeight: "500",
+                  padding: "12px 20px",
+                  fontSize: 15,
+                  fontWeight: 600,
                   color: colors.buttonText,
-                  background: profileSlug.trim() ? colors.buttonBg : colors.buttonDisabled,
+                  background:
+                    slackAuthenticated && profileSlug.trim() ? colors.buttonBg : colors.buttonDisabled,
                   border: "none",
-                  borderRadius: "8px",
-                  cursor: profileSlug.trim() ? "pointer" : "not-allowed",
-                  transition: "all 0.2s ease"
+                  borderRadius: 8,
+                  cursor: slackAuthenticated && profileSlug.trim() ? "pointer" : "not-allowed",
                 }}
               >
                 Go to Profile

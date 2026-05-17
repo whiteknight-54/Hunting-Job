@@ -1,8 +1,10 @@
 import { loadProfileByFileId, respondProfileLoadError } from "../../../lib/core/profile.js";
 import { jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
+import { guardApi } from "../../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return methodNotAllowed(res, "GET");
+  if (!(await guardApi(req, res))) return;
 
   try {
     const { id } = req.query;

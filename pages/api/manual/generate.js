@@ -4,9 +4,12 @@ import { badRequest, jsonError, methodNotAllowed, serverError } from "../../../l
 import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js";
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 import { getPromptForProfile } from "../../../lib/profile-template-mapping.js";
+import { guardApi } from "../../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
+  const session = await guardApi(req, res);
+  if (!session) return;
 
   try {
     const { profile: profileSlug, template, roleName, companyName = null, content, jd, atsPrompt } = req.body || {};
@@ -35,6 +38,7 @@ export default async function handler(req, res) {
       promptId: promptForSlack,
       jd: jd != null ? String(jd) : "",
       driveUpload,
+      userName: session.authDisabled ? null : session.name,
     });
 
     res.setHeader("Content-Type", "application/pdf");

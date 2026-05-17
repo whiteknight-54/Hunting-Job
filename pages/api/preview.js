@@ -1,11 +1,13 @@
 import { getTemplate } from "../../lib/pdf-templates";
 import { getPreviewMockData } from "../../lib/preview-mock-data";
 import { renderPdfToBuffer } from "../../lib/core/pdf.js";
+import { guardApi } from "../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).send("Method not allowed");
   }
+  if (!(await guardApi(req, res))) return;
 
   try {
     const { template } = req.query;
