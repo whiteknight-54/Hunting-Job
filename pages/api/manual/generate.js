@@ -5,6 +5,7 @@ import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 import { getPromptForProfile } from "../../../lib/profile-template-mapping.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
+import { parsePdfContactFlags } from "../../../lib/shared/pdf-contact-prefs.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
@@ -19,12 +20,15 @@ export default async function handler(req, res) {
     if (!companyName || !String(companyName).trim()) return jsonError(res, 400, "Company name is required");
     if (!content) return jsonError(res, 400, "Pasted content required");
 
+    const contactFlags = parsePdfContactFlags(req.body);
+
     const { pdfBuffer, fileName } = await runManualGenerate({
       profileSlug,
       template,
       roleName,
       companyName,
       content,
+      ...contactFlags,
     });
 
     const promptForSlack = String(atsPrompt ?? "").trim() || getPromptForProfile(profileSlug);

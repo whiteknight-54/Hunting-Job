@@ -187,7 +187,7 @@ export default function Home() {
                   value={profileSlug}
                   onChange={(e) => setProfileSlug(e.target.value)}
                   disabled={!slackAuthenticated}
-                  placeholder={slackAuthenticated ? "e.g. jf" : "Sign in with Slack first"}
+                  placeholder={slackAuthenticated ? "input profile id" : "Sign in with Slack first"}
                   style={{
                     width: "100%",
                     padding: "12px 14px",

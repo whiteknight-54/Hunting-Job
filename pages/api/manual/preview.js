@@ -9,6 +9,7 @@ import { renderPdfToBuffer, resolvePdfTemplate } from "../../../lib/core/pdf.js"
 import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
 import { badRequest, jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
+import { parsePdfContactFlags } from "../../../lib/shared/pdf-contact-prefs.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
@@ -46,9 +47,11 @@ export default async function handler(req, res) {
       }
     }
 
+    const contactFlags = parsePdfContactFlags(req.body);
+
     const templateData = usingLiveData
-      ? mergeForPdf(profileData, tailoredResume)
-      : getPreviewMockDataForProfile(profileData);
+      ? mergeForPdf(profileData, tailoredResume, contactFlags)
+      : getPreviewMockDataForProfile(profileData, contactFlags);
 
     const pdfBuffer = await renderPdfToBuffer(TemplateComponent, templateData);
 

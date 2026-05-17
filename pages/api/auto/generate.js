@@ -5,6 +5,7 @@ import { runAutoGenerate } from "../../../lib/services/auto-generate-service.js"
 import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js";
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
+import { parsePdfContactFlags } from "../../../lib/shared/pdf-contact-prefs.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
@@ -33,6 +34,8 @@ export default async function handler(req, res) {
     if (!jd) return jsonError(res, 400, "Job description required");
     if (!roleName || !String(roleName).trim()) return jsonError(res, 400, "Role name is required");
 
+    const contactFlags = parsePdfContactFlags(body);
+
     const { pdfBuffer, fileName, aiUsage, atsPromptUsed } = await runAutoGenerate({
       profileSlug,
       jd,
@@ -43,6 +46,7 @@ export default async function handler(req, res) {
       companyName,
       atsPrompt,
       questions,
+      ...contactFlags,
     });
 
     const modelLabel = String(model || "").trim() || `${provider} (default)`;
