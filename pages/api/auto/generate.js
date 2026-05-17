@@ -5,7 +5,7 @@ import { runAutoGenerate } from "../../../lib/services/auto-generate-service.js"
 import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js";
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
-import { parsePdfContactFlags } from "../../../lib/shared/pdf-contact-prefs.js";
+import { parsePdfGenerateBody } from "../../../lib/shared/pdf-generate-body.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
@@ -14,39 +14,31 @@ export default async function handler(req, res) {
 
   try {
     const envAi = getAiConfig();
-    const body = req.body || {};
-    const {
-      profile: profileSlug,
-      jd,
-      template,
-      roleName,
-      companyName = null,
-      atsPrompt,
-      questions = null,
-    } = body;
+    const raw = req.body || {};
+    const pdfBody = parsePdfGenerateBody(raw);
+    const { jd, atsPrompt, questions = null } = raw;
 
     const { provider, model } = normalizeAiSelection(
-      body.provider ?? envAi.provider,
-      body.model ?? envAi.model
+      raw.provider ?? envAi.provider,
+      raw.model ?? envAi.model
     );
 
-    if (!profileSlug) return jsonError(res, 400, "Profile slug required");
+    if (!pdfBody.profileSlug) return jsonError(res, 400, "Profile slug required");
     if (!jd) return jsonError(res, 400, "Job description required");
-    if (!roleName || !String(roleName).trim()) return jsonError(res, 400, "Role name is required");
-
-    const contactFlags = parsePdfContactFlags(body);
+    if (!pdfBody.roleName) return jsonError(res, 400, "Role name is required");
 
     const { pdfBuffer, fileName, aiUsage, atsPromptUsed } = await runAutoGenerate({
-      profileSlug,
+      profileSlug: pdfBody.profileSlug,
       jd,
-      template,
+      template: pdfBody.template,
       provider,
       model,
-      roleName,
-      companyName,
+      roleName: pdfBody.roleName,
+      companyName: pdfBody.companyName || null,
       atsPrompt,
       questions,
-      ...contactFlags,
+      showPhone: pdfBody.showPhone,
+      showLinkedin: pdfBody.showLinkedin,
     });
 
     const modelLabel = String(model || "").trim() || `${provider} (default)`;

@@ -9,32 +9,32 @@ import { renderPdfToBuffer, resolvePdfTemplate } from "../../../lib/core/pdf.js"
 import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
 import { badRequest, jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
-import { parsePdfContactFlags } from "../../../lib/shared/pdf-contact-prefs.js";
+import { parsePdfPreviewBody } from "../../../lib/shared/pdf-generate-body.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
   if (!(await guardApi(req, res))) return;
 
   try {
-    const { profile: profileSlug, template, content } = req.body || {};
+    const body = parsePdfPreviewBody(req.body);
 
-    if (!profileSlug) return jsonError(res, 400, "Profile slug required");
+    if (!body.profileSlug) return jsonError(res, 400, "Profile slug required");
 
-    const { data: profileData } = await loadProfileBySlug(profileSlug);
+    const { data: profileData } = await loadProfileBySlug(body.profileSlug);
 
-    const { templateName, TemplateComponent } = resolvePdfTemplate(profileSlug, template);
+    const { templateName, TemplateComponent } = await resolvePdfTemplate(body.profileSlug, body.template);
     if (!TemplateComponent) {
       return jsonError(res, 404, "Template not found", `Template "${templateName}" not found`);
     }
 
-    const trimmedContent = String(content || "").trim();
+    const trimmedContent = String(body.content || "").trim();
     let tailoredResume = null;
     let usingLiveData = false;
 
     if (trimmedContent) {
       try {
         tailoredResume = assertTailoredResume(
-          parseTailoredJson(content),
+          parseTailoredJson(body.content),
           (profileData.experience || []).length
         );
         usingLiveData = true;
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       }
     }
 
-    const contactFlags = parsePdfContactFlags(req.body);
+    const contactFlags = { showPhone: body.showPhone, showLinkedin: body.showLinkedin };
 
     const templateData = usingLiveData
       ? mergeForPdf(profileData, tailoredResume, contactFlags)

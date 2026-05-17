@@ -1,6 +1,5 @@
-import { getTemplate } from "../../lib/pdf-templates";
 import { getPreviewMockData } from "../../lib/preview-mock-data";
-import { renderPdfToBuffer } from "../../lib/core/pdf.js";
+import { renderPdfToBuffer, resolveTemplateComponent } from "../../lib/core/pdf.js";
 import { guardApi } from "../../lib/core/guard-api.js";
 
 export default async function handler(req, res) {
@@ -17,10 +16,14 @@ export default async function handler(req, res) {
     }
 
     const templateName = template || "Resume";
-    const TemplateComponent = getTemplate(templateName);
-
-    if (!TemplateComponent) {
-      return res.status(404).send(`Template "${templateName}" not found`);
+    let TemplateComponent;
+    try {
+      ({ component: TemplateComponent } = await resolveTemplateComponent(null, templateName));
+    } catch (err) {
+      if (err?.statusCode === 404) {
+        return res.status(404).send(`Template "${templateName}" not found`);
+      }
+      throw err;
     }
 
     const mockupData = getPreviewMockData();

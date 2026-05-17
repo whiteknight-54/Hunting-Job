@@ -1,12 +1,21 @@
 import Head from "next/head";
 import { useManualWorkflow } from "../../lib/workflows/manual/useManualWorkflow";
+import { PROFILE_PAGE_MAX_WIDTH_PX } from "../../lib/workflows/constants";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
 import { APP_FONT_FAMILY } from "../../lib/shared/fonts";
 import ManualHeader from "../../lib/components/manual/ManualHeader";
 import ManualApplicationForm from "../../lib/components/manual/ManualApplicationForm";
-import ManualPreviewSection from "../../lib/components/manual/ManualPreviewSection";
-import ManualScreeningSection from "../../lib/components/manual/ManualScreeningSection";
-import ManualModals from "../../lib/components/manual/ManualModals";
+import dynamic from "next/dynamic";
+
+const ManualPreviewSection = dynamic(
+  () => import("../../lib/components/manual/ManualPreviewSection"),
+  { ssr: false }
+);
+const ManualScreeningSection = dynamic(
+  () => import("../../lib/components/manual/ManualScreeningSection"),
+  { ssr: false }
+);
+const ManualModals = dynamic(() => import("../../lib/components/manual/ManualModals"), { ssr: false });
 
 export default function ManualProfilePage() {
   const page = useManualWorkflow();
@@ -40,7 +49,7 @@ export default function ManualProfilePage() {
           transition: "background 0.2s ease, color 0.2s ease",
         }}
       >
-        <div style={{ maxWidth: "min(1200px, 100%)", margin: "0 auto", width: "100%" }}>
+        <div style={{ maxWidth: `min(${PROFILE_PAGE_MAX_WIDTH_PX}px, 100%)`, margin: "0 auto", width: "100%" }}>
           <ManualHeader {...page} />
           {authError && (
             <div style={{ ...bannerError, marginBottom: 12 }}>{authError}</div>

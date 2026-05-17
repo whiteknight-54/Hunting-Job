@@ -345,6 +345,15 @@ Preview all layouts at `/preview`.
 
 ---
 
+## Performance notes (Vercel)
+
+- **Template list API** (`/api/templates`) uses `lib/pdf-templates/catalog.js` only — no react-pdf import.
+- **PDF generate/preview** loads one template at a time via dynamic `import()` in `lib/pdf-templates/load-template.js`.
+- **List + config GET** responses set `Cache-Control`; the browser caches config and catalog lists in `sessionStorage` (`lib/shared/client-cache.js`, bump `APP_DATA_VERSION` on deploy when those shapes change).
+- **Manual page** lazy-loads preview, screening, and modals; PDF mini-preview loads only when the preview panel is enabled.
+
+---
+
 ## Tech stack
 
 - **Next.js 14** — Pages Router, API routes, middleware

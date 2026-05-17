@@ -1,10 +1,13 @@
 import Head from "next/head";
 import { useAutoWorkflow } from "../../lib/workflows/auto/useAutoWorkflow";
+import { PROFILE_PAGE_MAX_WIDTH_PX } from "../../lib/workflows/constants";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
 import { APP_FONT_FAMILY } from "../../lib/shared/fonts";
 import AutoHeader from "../../lib/components/auto/AutoHeader";
 import AutoGenerateForm from "../../lib/components/auto/AutoGenerateForm";
-import AutoModals from "../../lib/components/auto/AutoModals";
+import dynamic from "next/dynamic";
+
+const AutoModals = dynamic(() => import("../../lib/components/auto/AutoModals"), { ssr: false });
 
 export default function AutoProfilePage() {
   const page = useAutoWorkflow();
@@ -28,7 +31,7 @@ export default function AutoProfilePage() {
           transition: "background 0.2s ease, color 0.2s ease",
         }}
       >
-        <div style={{ maxWidth: "min(960px, 100%)", margin: "0 auto", width: "100%" }}>
+        <div style={{ maxWidth: `min(${PROFILE_PAGE_MAX_WIDTH_PX}px, 100%)`, margin: "0 auto", width: "100%" }}>
           <AutoHeader {...page} />
           {authError && (
             <div style={{ ...bannerError, marginBottom: 12 }}>{authError}</div>

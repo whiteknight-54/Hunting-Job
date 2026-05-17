@@ -1,6 +1,7 @@
 import { getAiConfig, AI_MODEL_OPTIONS } from "../../lib/core/ai-config.js";
 import { isGoogleDriveUploadConfigured } from "../../lib/core/google-drive.js";
 import { guardApi } from "../../lib/core/guard-api.js";
+import { setConfigCacheHeaders } from "../../lib/core/http-cache.js";
 
 /**
  * GET /api/config
@@ -14,6 +15,7 @@ export default async function handler(req, res) {
   const folderId = (process.env.GDRIVE_FOLDER_ID || "").trim() || null;
   const githubProfilesUrl = (process.env.GITHUB_PROFILES_URL || "").trim() || null;
   const ai = { ...getAiConfig(), models: AI_MODEL_OPTIONS };
+  setConfigCacheHeaders(res);
   return res.status(200).json({
     gdriveFolderId: folderId,
     driveUploadEnabled: isGoogleDriveUploadConfigured(),

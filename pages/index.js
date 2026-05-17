@@ -85,8 +85,18 @@ export default function Home() {
       >
         <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: "clamp(24px, 8vh, 64px)" }}>
           <div
-            style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8, marginBottom: 24 }}
+            style={{
+              display: "flex",
+              justifyContent: slackAuthenticated ? "space-between" : "flex-end",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 24,
+              width: "100%",
+            }}
           >
+            <button type="button" onClick={toggleTheme} aria-label="Toggle theme" style={iconBtn()}>
+              {theme === "dark" ? "☀" : "☾"}
+            </button>
             {slackAuthenticated && (
               <SlackAccountMenu
                 colors={colors}
@@ -96,9 +106,6 @@ export default function Home() {
                 iconBtn={iconBtn}
               />
             )}
-            <button type="button" onClick={toggleTheme} aria-label="Toggle theme" style={iconBtn()}>
-              {theme === "dark" ? "☀" : "☾"}
-            </button>
           </div>
 
           <div

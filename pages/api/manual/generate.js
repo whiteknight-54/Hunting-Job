@@ -5,7 +5,7 @@ import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 import { getPromptForProfile } from "../../../lib/profile-template-mapping.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
-import { parsePdfContactFlags } from "../../../lib/shared/pdf-contact-prefs.js";
+import { parsePdfGenerateBody } from "../../../lib/shared/pdf-generate-body.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return methodNotAllowed(res);
@@ -13,25 +13,25 @@ export default async function handler(req, res) {
   if (!session) return;
 
   try {
-    const { profile: profileSlug, template, roleName, companyName = null, content, jd, atsPrompt } = req.body || {};
+    const { jd, atsPrompt } = req.body || {};
+    const body = parsePdfGenerateBody(req.body);
 
-    if (!profileSlug) return jsonError(res, 400, "Profile slug required");
-    if (!roleName || !String(roleName).trim()) return jsonError(res, 400, "Role name is required");
-    if (!companyName || !String(companyName).trim()) return jsonError(res, 400, "Company name is required");
-    if (!content) return jsonError(res, 400, "Pasted content required");
-
-    const contactFlags = parsePdfContactFlags(req.body);
+    if (!body.profileSlug) return jsonError(res, 400, "Profile slug required");
+    if (!body.roleName) return jsonError(res, 400, "Role name is required");
+    if (!body.companyName) return jsonError(res, 400, "Company name is required");
+    if (!body.content.trim()) return jsonError(res, 400, "Pasted content required");
 
     const { pdfBuffer, fileName } = await runManualGenerate({
-      profileSlug,
-      template,
-      roleName,
-      companyName,
-      content,
-      ...contactFlags,
+      profileSlug: body.profileSlug,
+      template: body.template,
+      roleName: body.roleName,
+      companyName: body.companyName,
+      content: body.content,
+      showPhone: body.showPhone,
+      showLinkedin: body.showLinkedin,
     });
 
-    const promptForSlack = String(atsPrompt ?? "").trim() || getPromptForProfile(profileSlug);
+    const promptForSlack = String(atsPrompt ?? "").trim() || getPromptForProfile(body.profileSlug);
 
     const driveUpload = await uploadGeneratedPdfToDrive({ buffer: pdfBuffer, fileName });
     applyDriveUploadHeaders(res, driveUpload);
