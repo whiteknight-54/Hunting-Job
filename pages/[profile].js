@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { SITE_TITLE } from "../lib/site-meta";
 
 /** `/p1` → `/manual/p1` (default workflow). */
 export default function ProfileRedirectPage() {
@@ -14,7 +15,7 @@ export default function ProfileRedirectPage() {
 
   return (
     <Head>
-      <title>Redirecting…</title>
+      <title>{SITE_TITLE}</title>
     </Head>
   );
 }

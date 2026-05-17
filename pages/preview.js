@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getThemeColors } from "../lib/theme-tokens";
+import { SITE_TITLE } from "../lib/site-meta";
 import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 
 export default function PreviewPage() {
@@ -58,7 +59,7 @@ export default function PreviewPage() {
   return (
     <>
       <Head>
-        <title>Resume Template Preview</title>
+        <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="description" content="Preview all available resume templates with sample data" />
       </Head>

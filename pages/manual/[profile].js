@@ -3,6 +3,7 @@ import { useManualWorkflow } from "../../lib/workflows/manual/useManualWorkflow"
 import { PROFILE_PAGE_MAX_WIDTH_PX } from "../../lib/workflows/constants";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
 import { APP_FONT_FAMILY } from "../../lib/shared/fonts";
+import { SITE_TITLE } from "../../lib/site-meta";
 import ManualHeader from "../../lib/components/manual/ManualHeader";
 import ManualApplicationForm from "../../lib/components/manual/ManualApplicationForm";
 import dynamic from "next/dynamic";
@@ -34,7 +35,7 @@ export default function ManualProfilePage() {
   return (
     <ProfileLoadingGate ready={ready} loaded={loaded} colors={colors}>
       <Head>
-        <title>Manual Job Apply — {displayName}</title>
+        <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="description" content={`Manual resume and prompts for ${displayName}`} />
       </Head>

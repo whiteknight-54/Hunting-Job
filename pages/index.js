@@ -4,6 +4,7 @@ import Head from "next/head";
 import { getThemeColors } from "../lib/theme-tokens";
 import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 import { messageForAuthError } from "../lib/shared/auth-error-messages";
+import { SITE_TITLE } from "../lib/site-meta";
 import { useSlackSession } from "../lib/shared/useSlackSession";
 import SlackLoginButton from "../lib/components/shared/SlackLoginButton";
 import SlackAccountMenu from "../lib/components/shared/SlackAccountMenu";
@@ -69,7 +70,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Tailor Resume App in BOC-E</title>
+        <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="description" content="ATS-tailored resumes for BOC-E — sign in with Slack" />
       </Head>

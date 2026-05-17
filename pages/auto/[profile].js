@@ -3,6 +3,7 @@ import { useAutoWorkflow } from "../../lib/workflows/auto/useAutoWorkflow";
 import { PROFILE_PAGE_MAX_WIDTH_PX } from "../../lib/workflows/constants";
 import ProfileLoadingGate from "../../lib/components/shared/ProfileLoadingGate";
 import { APP_FONT_FAMILY } from "../../lib/shared/fonts";
+import { SITE_TITLE } from "../../lib/site-meta";
 import AutoHeader from "../../lib/components/auto/AutoHeader";
 import AutoGenerateForm from "../../lib/components/auto/AutoGenerateForm";
 import dynamic from "next/dynamic";
@@ -16,7 +17,7 @@ export default function AutoProfilePage() {
   return (
     <ProfileLoadingGate ready={ready} loaded={loaded} colors={colors}>
       <Head>
-        <title>Auto Apply — {displayName}</title>
+        <title>{SITE_TITLE}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="description" content={`AI resume generation for ${displayName}`} />
       </Head>
