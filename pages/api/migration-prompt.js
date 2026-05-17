@@ -4,7 +4,7 @@ import { setStaticListCacheHeaders } from "../../lib/core/http-cache.js";
 
 /**
  * GET /api/migration-prompt
- * Returns profiles/migration prompt.txt for clipboard copy in profile review.
+ * Returns public/data/migration-prompt.txt for clipboard copy in profile review.
  */
 export default async function handler(req, res) {
   if (req.method !== "GET") {

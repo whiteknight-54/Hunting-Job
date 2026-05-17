@@ -1,71 +1,79 @@
-import { NextResponse } from "next/server";
-import {
-  getSlackTeamId,
-  isSlackAuthConfigured,
-  isSlackAuthEnforced,
-} from "./lib/core/slack-auth-config.js";
-import { getSessionSecret, SESSION_COOKIE } from "./lib/core/session-cookie.js";
-import { verifySessionCached } from "./lib/core/verify-session-cached.js";
-
-const AUTH_PREFIX = "/api/auth/";
-
-function redirectToLoginPage(request, returnTo) {
-  const home = new URL("/", request.url);
-  if (returnTo && returnTo !== "/") {
-    home.searchParams.set("returnTo", returnTo);
-  }
-  return NextResponse.redirect(home);
-}
-
-export async function middleware(request) {
-  if (!isSlackAuthEnforced()) {
-    return NextResponse.next();
-  }
-
-  const { pathname } = request.nextUrl;
-
-  if (
-    pathname === "/" ||
-    pathname === "/api/auth/session" ||
-    pathname.startsWith(AUTH_PREFIX) ||
-    pathname.startsWith("/_next") ||
-    pathname === "/favicon.ico" ||
-    pathname === "/favicon.webp" ||
-    pathname === "/logo.webp"
-  ) {
-    return NextResponse.next();
-  }
-
-  if (!isSlackAuthConfigured()) {
-    return new NextResponse("Slack sign-in is misconfigured. Set SLACK_CLIENT_ID, SLACK_CLIENT_SECRET, and SLACK_TEAM_ID.", {
-      status: 503,
-    });
-  }
-
-  const secret = getSessionSecret();
-  if (!secret) {
-    return new NextResponse("Slack session secret missing. Set SLACK_CLIENT_SECRET or SLACK_SESSION_SECRET.", {
-      status: 503,
-    });
-  }
-
-  const token = request.cookies.get(SESSION_COOKIE)?.value;
-  const session = await verifySessionCached(token, secret);
-  const expectedTeam = getSlackTeamId();
-
-  if (!session || session.teamId !== expectedTeam) {
-    const returnTo = pathname + request.nextUrl.search;
-    const res = redirectToLoginPage(request, returnTo);
-    if (session && session.teamId !== expectedTeam) {
-      res.cookies.delete(SESSION_COOKIE);
-    }
-    return res;
-  }
-
-  return NextResponse.next();
-}
-
-export const config = {
-  // Pages only — /api/* uses guardApi (avoids double HMAC verify per API call).
-  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|favicon.webp|logo.webp).*)"],
-};
+import { NextResponse } from "next/server";
+import {
+  getSlackTeamId,
+  isSlackAuthConfigured,
+  isSlackAuthEnforced,
+} from "./lib/core/slack-auth-config.js";
+import { getSessionSecret, SESSION_COOKIE } from "./lib/core/session-cookie.js";
+import { verifySessionCached } from "./lib/core/verify-session-cached.js";
+
+const AUTH_PREFIX = "/api/auth/";
+
+function redirectToLoginPage(request, returnTo) {
+  const home = new URL("/", request.url);
+  if (returnTo && returnTo !== "/") {
+    home.searchParams.set("returnTo", returnTo);
+  }
+  return NextResponse.redirect(home);
+}
+
+export async function middleware(request) {
+  const { pathname } = request.nextUrl;
+
+  /** Candidate JSON + prompts live under public/data but must not be fetched directly. */
+  if (pathname.startsWith("/data/")) {
+    return new NextResponse(null, { status: 404 });
+  }
+
+  if (!isSlackAuthEnforced()) {
+    return NextResponse.next();
+  }
+
+  if (
+    pathname === "/" ||
+    pathname === "/api/auth/session" ||
+    pathname.startsWith(AUTH_PREFIX) ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/brand/") ||
+    pathname.startsWith("/icons/") ||
+    pathname === "/favicon.ico"
+  ) {
+    return NextResponse.next();
+  }
+
+  if (!isSlackAuthConfigured()) {
+    return new NextResponse("Slack sign-in is misconfigured. Set SLACK_CLIENT_ID, SLACK_CLIENT_SECRET, and SLACK_TEAM_ID.", {
+      status: 503,
+    });
+  }
+
+  const secret = getSessionSecret();
+  if (!secret) {
+    return new NextResponse("Slack session secret missing. Set SLACK_CLIENT_SECRET or SLACK_SESSION_SECRET.", {
+      status: 503,
+    });
+  }
+
+  const token = request.cookies.get(SESSION_COOKIE)?.value;
+  const session = await verifySessionCached(token, secret);
+  const expectedTeam = getSlackTeamId();
+
+  if (!session || session.teamId !== expectedTeam) {
+    const returnTo = pathname + request.nextUrl.search;
+    const res = redirectToLoginPage(request, returnTo);
+    if (session && session.teamId !== expectedTeam) {
+      res.cookies.delete(SESSION_COOKIE);
+    }
+    return res;
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    "/data/:path*",
+    "/((?!api/|_next/static|_next/image|brand/|icons/).*)",
+  ],
+};
+

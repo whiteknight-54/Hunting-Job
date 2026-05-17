@@ -1,5 +1,5 @@
 /**
- * Align profiles/*.json with profiles/_template.json:
+ * Align public/data/profiles/*.json with _template.json:
  * - missing contact keys (workEmail, address, portfolio) → ""
  * - screening merged with template defaults (existing values win)
  * - named candidate files (First_Last.json, not profile-*, temp): root `title`
@@ -14,7 +14,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
-const PROFILES_DIR = path.join(ROOT, "profiles");
+const PROFILES_DIR = path.join(ROOT, "public", "data", "profiles");
 const TEMPLATE_PATH = path.join(PROFILES_DIR, "_template.json");
 
 const SKIP = new Set(["_template.json", "_tailored-resume-template.json"]);

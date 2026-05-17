@@ -3,8 +3,8 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
-const ATS_DIR = path.join(ROOT, "lib", "prompts", "ATS Resume Prompts");
-const SECOND_DIR = path.join(ROOT, "lib", "prompts", "second-prompts");
+const ATS_DIR = path.join(ROOT, "public", "data", "prompts", "ats");
+const SECOND_DIR = path.join(ROOT, "public", "data", "prompts", "second");
 
 const ATS_PLACEHOLDERS = [
   "name",
@@ -28,46 +28,37 @@ function extractPlaceholders(template) {
 
 async function readTxtFiles(dir) {
   const entries = await fs.readdir(dir);
-  const files = [];
-  for (const name of entries) {
-    if (!name.endsWith(".txt") || name.startsWith("_")) continue;
-    const content = await fs.readFile(path.join(dir, name), "utf8");
-    files.push({ name, content });
+  const files = entries.filter((f) => f.endsWith(".txt") && !f.startsWith("_"));
+  const out = [];
+  for (const file of files) {
+    const content = await fs.readFile(path.join(dir, file), "utf8");
+    out.push({ id: path.basename(file, ".txt"), content });
   }
-  return files;
+  return out;
 }
 
-function checkFiles(label, files, allowed) {
-  const allowedSet = new Set(allowed);
+async function checkDir(dir, allowed, label) {
+  const prompts = await readTxtFiles(dir);
   let ok = true;
-  for (const { name, content } of files) {
+  for (const { id, content } of prompts) {
     const found = extractPlaceholders(content);
-    const unknown = found.filter((p) => !allowedSet.has(p));
+    const unknown = found.filter((p) => !allowed.includes(p));
     if (unknown.length) {
+      console.error(`${label} ${id}: unknown placeholders: ${unknown.join(", ")}`);
       ok = false;
-      console.error(`[${label}] ${name}: unknown placeholders: ${unknown.join(", ")}`);
-      console.error(`  allowed: ${allowed.join(", ")}`);
     }
   }
   return ok;
 }
 
 async function main() {
-  const [atsFiles, secondFiles] = await Promise.all([
-    readTxtFiles(ATS_DIR),
-    readTxtFiles(SECOND_DIR),
-  ]);
-
-  const atsOk = checkFiles("ATS", atsFiles, ATS_PLACEHOLDERS);
-  const secondOk = checkFiles("second", secondFiles, SECOND_PLACEHOLDERS);
-
+  const atsOk = await checkDir(ATS_DIR, ATS_PLACEHOLDERS, "ATS");
+  const secondOk = await checkDir(SECOND_DIR, SECOND_PLACEHOLDERS, "Second");
   if (!atsOk || !secondOk) process.exit(1);
-  console.log(
-    `OK — ${atsFiles.length} ATS prompt(s), ${secondFiles.length} second prompt(s)`
-  );
+  console.log("All prompt placeholders OK.");
 }
 
-main().catch((err) => {
-  console.error(err);
+main().catch((e) => {
+  console.error(e);
   process.exit(1);
 });

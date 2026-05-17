@@ -5,19 +5,19 @@ const nextConfig = {
     config.resolve.alias.canvas = false;
     return config;
   },
-  async headers() {
+  async redirects() {
     return [
-      {
-        source: "/logo.webp",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
-      {
-        source: "/favicon.webp",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
+      { source: "/logo.webp", destination: "/brand/logo.webp", permanent: true },
+      { source: "/favicon.webp", destination: "/brand/favicon.webp", permanent: true },
     ];
   },
-  // Ensure middleware (Edge) sees Slack auth env from .env.local
+  async headers() {
+    const immutable = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
+    return [
+      { source: "/brand/:file*", headers: immutable },
+      { source: "/icons/:file*", headers: immutable },
+    ];
+  },
   env: {
     SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
     SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,

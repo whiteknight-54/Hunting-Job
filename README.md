@@ -7,7 +7,7 @@ Next.js app for **ATS-tailored resume PDFs**, apply prompts, and optional Google
 | **Manual** | `/manual/{slug}` | No — copy ATS prompt into ChatGPT, paste JSON back |
 | **Auto** | `/auto/{slug}` | Yes — OpenAI, Anthropic, or Groq |
 
-Profiles live in `profiles/*.json`. There is no database; business logic runs in Next.js API routes and `lib/`.
+Candidate data and prompts live under **`public/data/`** (read on the server from disk). There is no database; business logic runs in Next.js API routes and `lib/`. Direct browser access to `/data/*` is blocked in middleware — use the authenticated APIs instead.
 
 **Home:** [http://localhost:3000](http://localhost:3000) — **Tailor Resume App in BOC-E** — Slack sign-in, then enter a profile slug.  
 **Shortcut:** `/{slug}` redirects to `/manual/{slug}`.
@@ -23,7 +23,7 @@ Profiles live in `profiles/*.json`. There is no database; business logic runs in
 - **PDF contact toggles** — show/hide phone and LinkedIn on the generated PDF (LinkedIn renders as a clickable link labeled `linkedin`).
 - **Google Drive upload** — OAuth refresh token; button becomes **Upload Resume** when configured.
 - **Slack activity reports** — optional bot message on each successful PDF (user display name, AI model, prompt, Drive status, JD excerpt).
-- **Second prompts** — screening, FAQ, technical experience, recruiter simulation (`.txt` in `lib/prompts/second-prompts/`).
+- **Second prompts** — screening, FAQ, technical experience, recruiter simulation (`.txt` in `public/data/prompts/second/`).
 - **Quick-copy panel** — one-click copy of profile contact fields on Manual/Auto headers.
 - **In-app help** — `?` modal driven by `lib/help-guide.js`.
 
@@ -47,6 +47,7 @@ Open [http://localhost:3000](http://localhost:3000), sign in with Slack (if conf
 | `npm start` | Run production build |
 | `npm test` | Unit tests (`lib/**/*.test.js`) |
 | `npm run validate:prompts` | Check `{{placeholders}}` in prompt `.txt` files |
+| `npm run icons:webp` | Convert `public/icons/*.{png,ico}` → `.webp` (see script mapping) |
 
 **Node 20+** (`package.json` `engines`).
 
@@ -65,7 +66,7 @@ Public without a session:
 
 - `/` (login landing)
 - `/api/auth/*` (OAuth start, callback, session, logout)
-- Static assets (`/_next/*`, `/favicon.webp`, `/logo.webp`)
+- Static brand/UI assets (`/brand/*`, `/icons/*`, `/_next/*`)
 
 Users sign in on the home page; after login, `returnTo` deep-links (e.g. `/manual/jf`) work automatically.
 
@@ -189,8 +190,8 @@ Optional:
 Pipeline:
 
 ```
-profiles/*.json + JD
-  → ATS prompt (lib/prompts/ATS Resume Prompts/*.txt)
+public/data/profiles/*.json + JD
+  → ATS prompt (public/data/prompts/ats/*.txt)
   → OpenAI / Anthropic / Groq (lib/core/ai.js)
   → tailored JSON (lib/core/resume.js)
   → mergeForPdf (profile jobs + tailored title/summary/skills/bullets)
@@ -202,17 +203,17 @@ profiles/*.json + JD
 
 ## Data model
 
-### Profile (`profiles/*.json`)
+### Profile (`public/data/profiles/*.json`)
 
 Contact fields, `experience[]` (company, title, dates, location), education, optional `screening` block.
 
-- Template: `profiles/_template.json`
+- Template: `public/data/profiles/_template.json`
 - Slug mapping: `lib/profile-template-mapping.js`
-- Loaded via `lib/core/profile.js`
+- Loaded via `lib/core/profile.js` (paths in `lib/core/paths.js`)
 
 ### Tailored resume (AI / ChatGPT output)
 
-Example: `profiles/_tailored-resume-template.json`
+Example: `public/data/profiles/_tailored-resume-template.json`
 
 ```json
 {
@@ -237,18 +238,18 @@ Validation (`lib/core/resume.js`):
 
 ## Adding a profile
 
-1. Copy `profiles/_template.json` → `profiles/Your_Name.json`.
+1. Copy `public/data/profiles/_template.json` → `public/data/profiles/Your_Name.json`.
 2. Add a slug in `lib/profile-template-mapping.js`:
 
 ```js
 jf: {
   profileFile: "Joao_Franco",
   template: "Resume-Classic-Charcoal",
-  prompt: "prompt-1", // basename of lib/prompts/ATS Resume Prompts/prompt-1.txt (no .txt suffix)
+  prompt: "prompt-1", // basename of public/data/prompts/ats/prompt-1.txt (no .txt suffix)
 },
 ```
 
-Use `profileFile` (preferred). Legacy entries may still use `resume`; both resolve to `profiles/{basename}.json`.
+Use `profileFile` (preferred). Legacy entries may still use `resume`; both resolve to `public/data/profiles/{basename}.json`.
 
 3. Open `/manual/jf` or `/auto/jf`.
 
@@ -257,7 +258,14 @@ Use `profileFile` (preferred). Legacy entries may still use `resume`; both resol
 ## Project structure
 
 ```
-profiles/                          # candidate JSON
+public/
+  brand/                           # logo.webp, favicon.webp, favicon.ico → /brand/*
+  icons/                           # quick-copy tile icons → /icons/*
+  data/
+    profiles/                      # candidate JSON (not public HTTP — use API)
+    prompts/ats/                   # ATS .txt templates
+    prompts/second/                # second-prompt .txt templates
+    migration-prompt.txt
 lib/
   core/                            # pure logic
     profile.js, prompts.js, resume.js, ai.js, ai-config.js
@@ -334,8 +342,8 @@ Main maintenance surface: edit `.txt` files, then `npm run validate:prompts`.
 
 | Type | Location | Per-slug override |
 |------|----------|-------------------|
-| ATS | `lib/prompts/ATS Resume Prompts/*.txt` | `prompt` in mapping; UI dropdown on Manual |
-| Second | `lib/prompts/second-prompts/*.txt` | UI dropdown |
+| ATS | `public/data/prompts/ats/*.txt` | `prompt` in mapping; UI dropdown on Manual |
+| Second | `public/data/prompts/second/*.txt` | UI dropdown |
 
 **ATS placeholders:** `{{name}}`, `{{experience}}`, `{{jobDescription}}`, `{{questions}}`, `{{roleName}}`, `{{companyName}}`
 
@@ -356,6 +364,12 @@ Preview all layouts at `/preview`.
 ---
 
 ## Performance notes (Vercel)
+
+**Public folder**
+
+- **`public/brand/`** — site logo and favicons (`/brand/*`, long-cache headers).
+- **`public/icons/`** — quick-copy tiles (`/icons/*`). Use **`.svg`** (single-color, theme-tinted) or **`.webp`** (full color). Point each field at `src: "/icons/name.svg"` in `lib/shared/quick-copy-icons.js`. For `.png` / `.ico` sources run `npm run icons:webp`.
+- **`public/data/`** — profiles + prompts on disk for Vercel deploy; **not** exposed at `/data/*` (middleware returns 404).
 
 **Client**
 
