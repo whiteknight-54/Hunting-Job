@@ -4,7 +4,7 @@ import Head from "next/head";
 import { getThemeColors } from "../lib/theme-tokens";
 import { APP_FONT_FAMILY } from "../lib/shared/fonts";
 import { messageForAuthError } from "../lib/shared/auth-error-messages";
-import { SITE_TITLE } from "../lib/site-meta";
+import { SITE_ICON_PATH, SITE_TITLE } from "../lib/site-meta";
 import { useSlackSession } from "../lib/shared/useSlackSession";
 import SlackLoginButton from "../lib/components/shared/SlackLoginButton";
 import SlackAccountMenu from "../lib/components/shared/SlackAccountMenu";
@@ -117,18 +117,41 @@ export default function Home() {
               padding: "clamp(28px, 6vw, 40px)",
             }}
           >
-            <h1
+            <div
               style={{
-                fontSize: "clamp(22px, 5vw, 28px)",
-                fontWeight: 700,
-                margin: "0 0 8px",
-                letterSpacing: "-0.02em",
-                lineHeight: 1.2,
-                textAlign: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "clamp(10px, 3vw, 14px)",
+                marginBottom: 8,
               }}
             >
-              Tailor Resume App in BOC-E
-            </h1>
+              <img
+                src={SITE_ICON_PATH}
+                alt=""
+                width={48}
+                height={48}
+                style={{
+                  width: "clamp(40px, 10vw, 48px)",
+                  height: "clamp(40px, 10vw, 48px)",
+                  borderRadius: 10,
+                  objectFit: "cover",
+                  flexShrink: 0,
+                  border: `1px solid ${colors.cardBorder}`,
+                }}
+              />
+              <h1
+                style={{
+                  fontSize: "clamp(22px, 5vw, 28px)",
+                  fontWeight: 700,
+                  margin: 0,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.2,
+                }}
+              >
+                {SITE_TITLE}
+              </h1>
+            </div>
             <p
               style={{
                 margin: "0 0 28px",
