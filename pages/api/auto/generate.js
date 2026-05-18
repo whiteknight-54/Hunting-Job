@@ -3,6 +3,7 @@ import { getAiConfig, normalizeAiSelection } from "../../../lib/core/ai-config.j
 import { respondProfileLoadError } from "../../../lib/core/profile.js";
 import { runAutoGenerate } from "../../../lib/services/auto-generate-service.js";
 import { sendSlackPdfSuccessReport } from "../../../lib/services/slack-report.js";
+import { logPdfToTailorAppSheet } from "../../../lib/services/tailor-app-sheet-report.js";
 import { applyDriveUploadHeaders, uploadGeneratedPdfToDrive } from "../../../lib/services/pdf-drive-upload.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
 import { parsePdfGenerateBody } from "../../../lib/shared/pdf-generate-body.js";
@@ -55,13 +56,15 @@ export default async function handler(req, res) {
     const driveUpload = await uploadGeneratedPdfToDrive({ buffer: pdfBuffer, fileName });
     applyDriveUploadHeaders(res, driveUpload);
 
+    const bidderName = session.authDisabled ? null : session.name;
+    void logPdfToTailorAppSheet({ fileName, driveUpload, userName: bidderName });
     void sendSlackPdfSuccessReport({
       fileName,
       aiAgent: modelLabel,
       promptId: atsPromptUsed,
       jd,
       driveUpload,
-      userName: session.authDisabled ? null : session.name,
+      userName: bidderName,
     });
 
     res.setHeader("Content-Type", "application/pdf");
