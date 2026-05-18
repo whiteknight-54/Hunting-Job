@@ -1,7 +1,7 @@
 {
   "name": "Jason Revilla",
   "title": "Sr. Software Engineer",
-  "email": "jason.713@outlook.com",
+  "email": "jason.dev04@outlook.com",
   "workEmail": "",
   "phone": "+63 992 856 8694",
   "location": "Metro Manila, Philippine",
@@ -13,16 +13,16 @@
   "github": "",
   "experience": [
     {
-      "company": "Capgemini",
+      "company": "Cargo Express Freight Corp",
       "title": "Sr. Software Engineer",
-      "location": "Arlington, US",
+      "location": "California, US",
       "start_date": "Jul 2022",
       "end_date": "Mar 2026"
     },
     {
-      "company": "PuzzleHR",
+      "company": "BrightOps",
       "title": "DevOps Engineer",
-      "location": "Singapore",
+      "location": "United States",
       "start_date": "Feb 2019",
       "end_date": "Jun 2022"
     },
@@ -51,7 +51,7 @@
   ],
   "screening": {
     "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Philippines. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
-    "birth": "1992/07/13",
+    "birth": "1992/04/29",
     "languages": [
       "English (fluent) | B2/C1 level"
     ],
@@ -63,7 +63,7 @@
     "race": "white",
     "salaryExpectation": "$35,000 USD annually, $3,000 USD monthly, $20 USD hourly | ₱ 1,800,000 PHP annually, ₱ 150,000 PHP monthly | negotiable",
     "availability": "Immediately | ASAP",
-    "relocation": "open / remote only",
+    "relocation": "open / fully remote only",
     "customAnswers": {}
   }
 }

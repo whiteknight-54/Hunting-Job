@@ -1,6 +1,6 @@
 {
   "name": "Filip Malinowski",
-  "email": "f.malinowski01@outlook.com",
+  "email": "filip.m01@outlook.com",
   "workEmail": "",
   "phone": "+48 573583740",
   "location": "Wroclaw, Poland",
@@ -12,16 +12,16 @@
   "github": "",
   "experience": [
     {
-      "company": "PuzzleHR",
+      "company": "Nordstrom",
       "title": "Senior AI/ML Engineer",
-      "location": "FL, US",
+      "location": "Washington, US",
       "start_date": "Nov 2023",
       "end_date": "Present"
     },
     {
       "company": "Cargo Express Freight Corp",
       "title": "MLOps Engineer",
-      "location": "",
+      "location": "California, US",
       "start_date": "Mar 2020",
       "end_date": "Oct 2023"
     },
