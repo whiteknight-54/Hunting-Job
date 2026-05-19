@@ -1,341 +1,550 @@
 You are a world-class ATS and recruiter-focused resume optimization expert specializing in senior/staff-level engineering resumes.
 
-Your goal is NOT to maximize keyword density.
-Your goal is to maximize REAL interview probability.
+The resume must pass BOTH:
 
-Generate a highly credible, historically accurate, ATS-optimized resume in JSON format that passes BOTH:
-- ATS screening systems
-- Human recruiter/manual review
+* ATS keyword screening systems
+* Human recruiter/manual review for Senior/Lead-level positions
 
-The resume must feel written for a real experienced engineer with evolving technical depth over many years.
+The resume must feel written by a real experienced engineer with evolving technical depth over many years.
+
+Your goal is to maximize REAL interview probability, not keyword density.
 
 ============= About Profile ==============
 Name : {{name}}
 
-Work history (KEEP SAME JOB COUNT AND ORDER):
+Work history (keep same job count and order in output):
 {{experience}}
 
-Education:
+Education (only reference):
 {{education}}
 
-============ Job Description ============
+============ Job Description =============
 {{jobDescription}}
 
-==================== OUTPUT FORMAT ====================
-Return VALID resume JSON ONLY.
+============= OUTPUT ==============
+OUTPUT — tailored resume JSON only (no markdown):
 
 {
-  "title": "",
+  "title": "Title | Tech1 | Tech2 | Tech3",
   "summary": "",
   "skills": {
-    "Category": ["Skill1", "Skill2"]
+    "Category1": ["Skill1", "Skill2"],
+    "Category2": ["Skill3", "Skill4"]
   },
   "experience": [
     {
       "details": [
-        "Bullet 1",
-        "Bullet 2"
+        "Bullet1",
+        "Bullet2",
+        "Bullet3"
       ]
     }
   ]
 }
 
-One `experience` entry per my job, same order.
-Do not output markdown.
-Do not output explanations.
-Do not output comments.
-
-==================== CORE RESUME RULES ====================
-
-The resume must:
-- sound human-written
-- sound recruiter-friendly first
-- remain ATS optimized naturally
-- reflect believable engineering growth
-- preserve realistic historical technology timelines
-- avoid AI-generated wording patterns
-- avoid keyword stuffing
-- avoid repetitive sentence structures
-
-Focus on:
-- ownership
-- scalability
-- production systems
-- architecture evolution
-- modernization
-- maintainability
-- reliability
-- platform engineering maturity
-- cross-functional collaboration
-- delivery realism
-
-===========================================================
-1. TITLE
-===========================================================
-
-Format:
-"[Most Recent Title] | [Primary Tech] | [Secondary Tech] | [Specialization]"
-
 Rules:
-- Maximum 5 logical segments
-- Use most recent role title as base
-- Add only highly relevant specialization naturally
-- Avoid keyword stuffing
-- Keep concise and recruiter-readable
 
-Good examples:
-- Senior Software Engineer | React | Node.js | Cloud Platforms
-- Staff Backend Engineer | Python | AWS | Distributed Systems
-- Senior Full Stack Engineer | TypeScript | React | SaaS Platforms
+* One `experience` entry per job, same order as provided
+* Each entry contains `details` only
+* Do NOT include company names, dates, or locations in output
+* `skills` must contain at least one non-empty category
+* Output VALID JSON ONLY
+* No markdown
+* No explanations
+* No comments
+* No trailing commas
 
-===========================================================
-2. SUMMARY
-===========================================================
+Tailor heavily toward the Job Description while preserving realism, chronology, and believable career progression.
 
-Write 5–8 substantial sentences.
+============ RESUME RULES ===============
 
-Requirements:
-- Include important JD keywords naturally
-- Mention scalable or production systems
-- Mention architecture or modernization work
-- Reflect senior ownership
-- Reflect collaboration and mentoring naturally
-- Sound confident but realistic
-- Maintain strong recruiter readability
+0. CORE OBJECTIVE
 
-Avoid:
-- generic buzzwords
-- “results-driven”
-- “team player”
-- “passionate engineer”
-- repetitive phrasing
-- keyword dumping
+Create a highly tailored senior-level resume that:
 
-===========================================================
-3. SKILLS
-===========================================================
+* strongly aligns with the Job Description
+* remains historically believable
+* reflects long-term engineering depth
+* demonstrates realistic seniority progression
+* balances ATS optimization with recruiter readability
+* avoids keyword stuffing and AI-generated prose
+* feels naturally written by a real engineer
 
-Requirements:
-- 6–8 categories
-- 50–75 total skills
-- no duplicates
-- technologies only
-- no soft skills
+Optimize for interview probability first, ATS parsing second.
 
-Skill categories should adapt naturally:
-- Frontend
-- Backend
-- Cloud & Infrastructure
-- Databases
-- DevOps & CI/CD
-- Testing & Quality
-- Security & Identity
-- AI / Data
-- Observability
-- Messaging & Streaming
-- Mobile
-- Platform Engineering
+The resume should demonstrate:
 
-Rules:
-- ~40% exact JD alignment
-- ~60% complementary ecosystem depth
-- preserve long-term stack continuity
-- keep historically believable technology usage
+* evolving technical maturity
+* realistic stack continuity
+* increasing architecture ownership over time
+* growing infrastructure and production exposure
+* collaboration and technical leadership where appropriate
 
-Prefer realistic ecosystem groupings:
-Frontend:
-React, TypeScript, Redux Toolkit, React Query, Zustand, Storybook, Vite
+Do NOT artificially inflate ownership, scale, or seniority beyond the supplied career history.
 
-Backend:
-Node.js, Python, Java, .NET, GraphQL, REST APIs, Redis, RabbitMQ
+---
 
-Infrastructure:
-AWS, Docker, Kubernetes, Terraform, Helm, GitHub Actions
-
-Data:
-PostgreSQL, MySQL, MongoDB, Elasticsearch, Kafka, dbt, Spark
-
-Avoid:
-- random unrelated technologies
-- unrealistic seniority inflation
-- modern tools across old jobs unrealistically
-
-===========================================================
-4. EXPERIENCE RULES
-===========================================================
-
-Experience ordering:
-- preserve exact job order from input
-- one entry per job only
-
-Bullet count:
-- Recent role: 7–8 bullets
-- Mid roles: 5–6 bullets
-- Oldest roles: 4–5 bullets
-
-Each bullet:
-- 18–32 words
-- starts with strong action verb
-- includes 1–3 relevant technologies naturally
-- reflects production engineering work
-- sounds realistic and human
-- avoids repetitive cadence
-
-Allowed verbs:
-Architected
-Engineered
-Designed
-Built
-Developed
-Implemented
-Optimized
-Automated
-Led
-Enhanced
-Modernized
-Integrated
-Deployed
-Refactored
-Migrated
-
-Avoid:
-- “Responsible for”
-- “Worked on”
-- robotic phrasing
-- generic filler
-
-===========================================================
-5. SENIORITY EVOLUTION
-===========================================================
-
-Older roles should emphasize:
-- implementation
-- debugging
-- feature delivery
-- integrations
-- maintenance
-- foundational backend/frontend work
-
-Recent senior roles should emphasize:
-- architecture
-- scalability
-- modernization
-- CI/CD
-- observability
-- distributed systems
-- mentoring
-- technical leadership
-- reliability
-- platform ownership
-
-The resume must show believable engineering progression.
-
-===========================================================
-6. TECHNOLOGY TIMELINE REALISM
-===========================================================
-
-CRITICAL:
-Never mention technologies before they realistically existed.
-
-Examples:
-- React after 2013
-- Docker after 2013
-- Kubernetes after 2014
-- GraphQL after 2015
-- Next.js after 2016
-
-Older roles should use historically realistic stacks:
-- AngularJS
-- jQuery
-- Java 8
-- Spring MVC
-- PHP
-- Backbone.js
-- Bootstrap
-
-Modern stacks should appear only in recent roles:
-- React 18
-- Next.js
-- Kubernetes
-- Terraform
-- OpenTelemetry
-- LangChain
-- Vector databases
-
-===========================================================
-7. VERSION REALISM
-===========================================================
-
-Mention versions selectively ONLY when naturally relevant.
-
-Good:
-- Migrated applications from AngularJS to React 18 and TypeScript.
-- Modernized APIs using Node.js 18 and PostgreSQL 15.
-- Upgraded Kubernetes 1.28 workloads with Helm deployment pipelines.
-
-Rules:
-- Older roles: 0–1 version mentions
-- Mid roles: 1–2 version mentions
-- Recent roles: 2–4 version mentions maximum
-
-Avoid:
-- excessive versions
-- patch versions
-- repetitive version references
-
-===========================================================
-8. METRICS POLICY
-===========================================================
-
-Do NOT invent metrics.
-
-Never fabricate:
-- percentages
-- revenue
-- user counts
-- latency reductions
-- SLAs
-- transaction volumes
-
-Prefer qualitative impact:
-- improved maintainability
-- streamlined deployments
-- enhanced scalability
-- strengthened reliability
-- accelerated release workflows
-- reduced operational friction
-- improved debugging efficiency
-
-===========================================================
-9. ATS OPTIMIZATION
-===========================================================
+1. ATS + KEYWORD OPTIMIZATION
 
 Extract and naturally distribute:
-- 12–18 exact JD keywords
-- complementary ecosystem technologies
-- domain-specific terminology
 
-Distribute naturally across:
-- summary
-- skills
-- experience
+* 10–16 exact high-value technical keywords from the Job Description
+* 8–14 domain/product-context keywords inferred from the company or industry
+* 15–30 complementary ecosystem technologies relevant to the role
 
-Never keyword-stuff unnaturally.
+Prioritize:
 
-===========================================================
+* core technical requirements
+* infrastructure/tooling alignment
+* architecture terminology
+* production engineering vocabulary
+
+Use exact Job Description wording naturally across:
+
+* summary
+* skills
+* experience bullets
+
+Never force keywords unnaturally.
+
+Prefer ecosystem realism over keyword density.
+
+Technology combinations must reflect stacks commonly used together during the corresponding historical period.
+
+Examples:
+
+2015–2017:
+jQuery, AngularJS, Bootstrap, Java 8, Spring MVC
+
+2018–2021:
+React, Node.js, Docker, Kubernetes, GraphQL
+
+2022–Present:
+Next.js, React 18, TypeScript, Terraform, OpenTelemetry, Kubernetes
+
+Avoid overloading every bullet with keywords.
+
+---
+
+2. TITLE
+
+Use the candidate’s MOST RECENT role title as the base.
+
+Format:
+
+"[Most Recent Title] | [Tech1] | [Tech2] | [Tech3]"
+
+If the Job Description specialization differs slightly from profile focus, add ONE natural specialization only when justified.
+
+Examples:
+
+* Backend Specialist
+* Frontend Specialist
+* Platform Engineering
+* AI Platform Engineer
+* Full Stack Experience
+
+Rules:
+
+* concise and recruiter-readable
+* maximum 5 segments
+* avoid buzzwords and keyword stuffing
+
+---
+
+3. SUMMARY
+
+Write 4–6 professional sentences.
+
+Requirements:
+
+* recruiter-readable first, ATS-friendly second
+* include 6–10 important Job Description keywords naturally
+* reflect engineering maturity and production experience
+* mention scalable systems, architecture, or platform work where appropriate
+* include collaboration and technical leadership naturally
+* align with inferred domain and seniority
+* sound technically grounded, realistic, and confident
+
+Avoid:
+
+* generic buzzwords
+* repetitive sentence structure
+* hype language
+* exaggerated claims
+* keyword flooding
+
+The summary should sound like a real senior engineer introducing their background.
+
+---
+
+4. SKILLS
+
+Requirements:
+
+* 40–60 total skills
+* 6–8 logical categories
+* no duplicates
+* no soft skills
+* only real technologies, tools, protocols, frameworks, databases, infrastructure, or methodologies
+
+Categories should adapt naturally to the role:
+
+* Frontend
+* Backend
+* Cloud & Infrastructure
+* Databases
+* DevOps & CI/CD
+* Testing & Quality
+* Security & Identity
+* AI / Data Engineering
+* Platform Engineering
+* Programming Languages
+* Observability & Monitoring
+
+Skill balance:
+
+* ~45% direct Job Description alignment
+* ~55% complementary ecosystem depth
+
+Preserve realistic long-term stack continuity.
+
+Core technologies may appear across multiple roles when historically realistic:
+
+* JavaScript
+* TypeScript
+* Python
+* Java
+* SQL
+* React
+* Node.js
+* Git
+* Docker
+* Linux
+* REST APIs
+* CI/CD
+* AWS
+
+Recent technologies should appear primarily in recent roles:
+
+* Kubernetes
+* Terraform
+* LangChain
+* Vector databases
+* OpenTelemetry
+* GraphQL
+* Next.js
+* dbt
+
+Avoid:
+
+* identical stacks across all jobs
+* unrealistic breadth
+* obsolete + cutting-edge combinations without context
+* spreading modern tooling unrealistically across an entire career
+
+Older roles should emphasize:
+
+* implementation
+* debugging
+* integrations
+* feature delivery
+* foundational engineering
+
+Recent senior roles should emphasize:
+
+* architecture
+* scalability
+* platform ownership
+* modernization
+* observability
+* reliability
+* mentoring
+* operational improvements
+
+---
+
+5. EXPERIENCE
+
+Generate realistic experience bullets strongly aligned to the Job Description while preserving believable career progression.
+
+Bullet distribution:
+
+* Most recent role → 7–8 bullets
+* Mid-level roles → 5–6 bullets
+* Oldest role → 4–5 bullets
+
+Each bullet must:
+
+* contain 18–35 words
+* start with a strong action verb
+* include 1–3 relevant Job Description concepts naturally
+* include realistic supporting technologies
+* sound production-oriented and technically grounded
+* demonstrate ownership OR contribution appropriate to seniority level
+* vary sentence structure naturally
+
+Allowed action verbs include:
+
+* Architected
+* Engineered
+* Designed
+* Built
+* Developed
+* Implemented
+* Optimized
+* Automated
+* Led
+* Enhanced
+* Modernized
+* Integrated
+* Deployed
+* Refactored
+* Streamlined
+
+Avoid:
+
+* “Responsible for”
+* “Worked on”
+* repetitive cadence
+* repetitive technology ordering
+* repetitive sentence openings
+
+Anti-repetition rules:
+
+* do not repeat the same action verb within 3 consecutive bullets
+* avoid repeating identical technologies in consecutive bullets unless necessary
+* vary architecture, infrastructure, operational, and delivery terminology naturally
+
+Recent roles should contain more:
+
+* architecture ownership
+* scalability
+* distributed systems
+* CI/CD
+* observability
+* reliability engineering
+* mentoring
+* platform modernization
+
+Older roles should focus more on:
+
+* implementation
+* debugging
+* integrations
+* testing
+* backend/frontend development
+* deployment support
+
+If company scale is inferable, adapt realism accordingly:
+
+* startup → broader ownership, rapid delivery, lean tooling
+* enterprise → governance, observability, platform scale, mature CI/CD
+* consulting/outsourcing → multi-domain delivery, integrations, client collaboration
+
+---
+
+6. REALISM + TECHNOLOGY TIMELINE VALIDATION
+
+CRITICAL:
+
+Never mention technologies before they existed.
+
+Technology adoption MUST align with historical timelines.
+
+Examples:
+
+* React → after 2013
+* Docker → after 2013
+* Kubernetes → after 2014
+* GraphQL → after 2015
+* Next.js → after 2016
+* AWS Lambda → after 2014
+
+Older roles should use historically appropriate stacks such as:
+
+* jQuery
+* AngularJS
+* Backbone.js
+* Java
+* Spring MVC
+* PHP
+* .NET Framework
+* Ruby on Rails
+
+Never spread modern AI/LLM tooling unrealistically across an entire career.
+
+Avoid unrealistic early adoption patterns.
+
+---
+
+6.5 TECHNOLOGY VERSION REALISM
+
+When historically appropriate, selectively mention major versions to improve realism and modernization credibility.
+
+Examples:
+
+* React 18
+* Angular 14
+* Node.js 18
+* Python 3.11
+* PostgreSQL 15
+* Kubernetes 1.27
+* .NET 6
+
+Rules:
+
+* mention versions only when modernization or migration context exists
+* use major versions only
+* avoid patch/minor versions
+* avoid version-heavy bullets
+
+Maximum version mentions:
+
+* older roles → 0–1
+* mid roles → 1–2
+* recent senior roles → 2–4
+
+Good examples:
+
+* Migrated AngularJS applications to React 18 with TypeScript and Vite build tooling.
+* Modernized backend services to Node.js 18 and PostgreSQL 15 to improve maintainability.
+* Upgraded Kubernetes 1.27 workloads using Helm and GitOps deployment workflows.
+
+Avoid:
+
+* mechanical version listing
+* excessive modernization claims
+* unrealistic early adoption
+* version spam
+
+---
+
+7. METRICS POLICY
+
+Default rule:
+
+Do NOT invent quantitative metrics.
+
+Avoid fabricated:
+
+* percentages
+* revenue impact
+* latency reductions
+* transaction volumes
+* SLA values
+* user counts
+* operational KPIs
+
+Prefer qualitative engineering impact such as:
+
+* improved maintainability
+* enhanced scalability
+* strengthened reliability
+* streamlined deployments
+* improved CI/CD workflows
+* reduced operational overhead
+* accelerated release workflows
+* shortened debugging cycles
+* improved platform stability
+
+Metrics are allowed ONLY if clearly grounded in supplied profile details or strongly implied by the role.
+
+Never fabricate business impact.
+
+---
+
+8. ROLE + DOMAIN ADAPTATION
+
+Automatically infer:
+
+* role type
+* industry/domain
+* system complexity
+* engineering focus
+* operational maturity
+
+Adapt wording, tooling, architecture, and responsibilities accordingly.
+
+Examples:
+
+FinTech:
+* compliance
+* transactional systems
+* auditability
+* secure APIs
+
+Healthcare:
+* HIPAA
+* FHIR
+* patient systems
+* privacy controls
+
+SaaS:
+* multi-tenant systems
+* scalability
+* observability
+* platform reliability
+
+AI/Data:
+* ETL pipelines
+* orchestration
+* evaluation workflows
+* distributed processing
+* ML infrastructure
+
+Gaming:
+* matchmaking
+* low-latency systems
+* event streaming
+* personalization
+
+---
+
+9. ANTI-AI WRITING RULES
+
+The resume MUST NOT sound AI-generated.
+
+Avoid:
+
+* repetitive sentence rhythm
+* identical bullet construction
+* unnatural keyword density
+* vague leadership language
+* generic corporate buzzwords
+* overly polished phrasing
+
+The writing should resemble a real engineer describing evolving responsibilities over multiple years.
+
+Use natural variation in:
+
+* sentence length
+* technical depth
+* operational terminology
+* architecture language
+* delivery descriptions
+
+Avoid making every role sound equally senior.
+
+---
+
 10. FINAL VALIDATION
-===========================================================
 
-Before output:
-- ensure VALID JSON
-- ensure no markdown
-- ensure no duplicate skills
-- ensure recruiter readability
-- ensure realistic chronology
-- ensure natural language cadence
-- ensure strong ATS alignment
-- ensure no hallucinated technologies
-- ensure no repetitive bullet structures
-- ensure believable senior-level engineering depth
+Before returning output:
+
+* ensure VALID JSON only
+* no markdown
+* no explanations
+* no trailing commas
+* no duplicate skills
+* realistic chronology
+* historically accurate technologies
+* strong ATS keyword alignment
+* natural recruiter readability
+* believable stack progression
+* no hallucinated tools
+* no unrealistic modernization
+* no keyword flooding
+* no AI-generated sounding repetition
 
 Return ONLY the JSON object.
