@@ -5,7 +5,8 @@ import {
 } from "../../../lib/core/prompts.js";
 import { formatTailoredResumeContext } from "../../../lib/profile-format.js";
 import { tryParseTailoredJson } from "../../../lib/core/resume.js";
-import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
+import { respondProfileLoadError } from "../../../lib/core/profile.js";
+import { resolveProfileForRequest } from "../../../lib/core/resolve-profile-for-request.js";
 import { jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
 
@@ -20,13 +21,14 @@ export default async function handler(req, res) {
       jd,
       questions = "",
       resumeOutputJson = "",
+      profileOverride = null,
     } = req.body || {};
 
     if (!profileSlug) return jsonError(res, 400, "Profile slug required");
     if (!secondPromptId) return jsonError(res, 400, "secondPromptId required");
     if (!jd || !String(jd).trim()) return jsonError(res, 400, "Job description required");
 
-    const { data: profileData } = await loadProfileBySlug(profileSlug);
+    const { data: profileData } = await resolveProfileForRequest(profileSlug, profileOverride);
     const template = await readSecondPrompt(String(secondPromptId));
 
     const resumeRaw = String(resumeOutputJson || "").trim();

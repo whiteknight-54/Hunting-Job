@@ -39,6 +39,7 @@ export default async function handler(req, res) {
       companyName: pdfBody.companyName || null,
       atsPrompt,
       questions,
+      profileOverride: raw.profileOverride ?? null,
       showPhone: pdfBody.showPhone,
       showLinkedin: pdfBody.showLinkedin,
     });

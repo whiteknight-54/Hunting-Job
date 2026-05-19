@@ -6,7 +6,8 @@ import {
 } from "../../../lib/core/resume.js";
 import { getPreviewMockDataForProfile } from "../../../lib/preview-mock-data.js";
 import { renderPdfToBuffer, resolvePdfTemplate } from "../../../lib/core/pdf.js";
-import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
+import { respondProfileLoadError } from "../../../lib/core/profile.js";
+import { resolveProfileForRequest } from "../../../lib/core/resolve-profile-for-request.js";
 import { badRequest, jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
 import { parsePdfPreviewBody } from "../../../lib/shared/pdf-generate-body.js";
@@ -17,10 +18,11 @@ export default async function handler(req, res) {
 
   try {
     const body = parsePdfPreviewBody(req.body);
+    const profileOverride = req.body?.profileOverride ?? null;
 
     if (!body.profileSlug) return jsonError(res, 400, "Profile slug required");
 
-    const { data: profileData } = await loadProfileBySlug(body.profileSlug);
+    const { data: profileData } = await resolveProfileForRequest(body.profileSlug, profileOverride);
 
     const { templateName, TemplateComponent } = await resolvePdfTemplate(body.profileSlug, body.template);
     if (!TemplateComponent) {

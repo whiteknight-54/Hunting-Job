@@ -1,5 +1,6 @@
 import { buildAtsPromptForProfile } from "../../../lib/services/ats-prompt.js";
-import { loadProfileBySlug, respondProfileLoadError } from "../../../lib/core/profile.js";
+import { respondProfileLoadError } from "../../../lib/core/profile.js";
+import { resolveProfileForRequest } from "../../../lib/core/resolve-profile-for-request.js";
 import { jsonError, methodNotAllowed, serverError } from "../../../lib/core/api-response.js";
 import { guardApi } from "../../../lib/core/guard-api.js";
 
@@ -13,12 +14,13 @@ export default async function handler(req, res) {
       jd,
       atsPrompt: atsPromptOverride,
       questions = "",
+      profileOverride = null,
     } = req.body || {};
 
     if (!profileSlug) return jsonError(res, 400, "Profile slug required");
     if (!jd) return jsonError(res, 400, "Job description required");
 
-    const { data: profileData } = await loadProfileBySlug(profileSlug);
+    const { data: profileData } = await resolveProfileForRequest(profileSlug, profileOverride);
 
     const { prompt, atsPromptUsed } = await buildAtsPromptForProfile({
       profileSlug,

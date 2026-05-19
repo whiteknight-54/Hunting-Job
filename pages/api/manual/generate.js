@@ -14,8 +14,9 @@ export default async function handler(req, res) {
   if (!session) return;
 
   try {
-    const { jd, atsPrompt } = req.body || {};
-    const body = parsePdfGenerateBody(req.body);
+    const raw = req.body || {};
+    const { jd, atsPrompt } = raw;
+    const body = parsePdfGenerateBody(raw);
 
     if (!body.profileSlug) return jsonError(res, 400, "Profile slug required");
     if (!body.roleName) return jsonError(res, 400, "Role name is required");
@@ -29,6 +30,7 @@ export default async function handler(req, res) {
       roleName: body.roleName,
       companyName: body.companyName,
       content: body.content,
+      profileOverride: raw.profileOverride ?? null,
       showPhone: body.showPhone,
       showLinkedin: body.showLinkedin,
     });
