@@ -88,6 +88,21 @@ Use exact JD wording naturally across:
 
 Never stuff keywords unnaturally.
 
+Prefer ecosystem realism over keyword density.
+
+Technology combinations should reflect stacks commonly used together during that historical period.
+
+Examples:
+
+2016–2018:
+jQuery, AngularJS, Bootstrap, Java 8, Spring MVC
+
+2019–2021:
+React, Node.js, Docker, Kubernetes, GraphQL
+
+2022–Present:
+Next.js, React 18, TypeScript, Terraform, OpenTelemetry, Kubernetes
+
 ---
 
 2. TITLE
@@ -140,7 +155,7 @@ Avoid:
 
 Requirements:
 
-* 55–80 total skills
+* 50–75 total skills
 * 6–8 categories
 * no duplicates
 * no soft skills
@@ -180,36 +195,36 @@ Examples of technologies that should realistically persist across multiple roles
 * Testing frameworks
 
 Avoid unrealistic historical overuse of niche technologies.
----
+
 The resume must reflect believable long-term experience depth across technologies.
 
 Do NOT treat all skills equally.
 
 Infer realistic years-of-experience weighting automatically from:
 
-job chronology
-historical stack adoption
-role progression
-technology release timeline
-repeated usage across roles
+* job chronology
+* historical stack adoption
+* role progression
+* technology release timeline
+* repeated usage across roles
 
 Core technologies should appear consistently across multiple roles when historically plausible.
 
 Examples of technologies that commonly persist across long-term engineering careers:
 
-JavaScript
-TypeScript
-Python
-Java
-SQL
-React
-Node.js
-Git
-Docker
-Linux
-REST APIs
-CI/CD
-AWS
+* JavaScript
+* TypeScript
+* Python
+* Java
+* SQL
+* React
+* Node.js
+* Git
+* Docker
+* Linux
+* REST APIs
+* CI/CD
+* AWS
 
 A senior engineer should demonstrate stack continuity and ecosystem familiarity over time.
 
@@ -217,48 +232,47 @@ Recent or niche technologies should appear only in recent roles when historicall
 
 Examples:
 
-LLM orchestration
-LangChain
-Vector databases
-Kubernetes
-GraphQL
-Next.js
-Terraform
+* LLM orchestration
+* LangChain
+* Vector databases
+* Kubernetes
+* GraphQL
+* Next.js
+* Terraform
 
 Do NOT unrealistically spread modern technologies across all historical positions.
 
 The resume should show:
 
-evolving technical maturity
-gradual architecture ownership
-expanding infrastructure exposure
-increasing system complexity
-realistic tool adoption over time
+* evolving technical maturity
+* gradual architecture ownership
+* expanding infrastructure exposure
+* increasing system complexity
+* realistic tool adoption over time
 
 Older roles should emphasize:
 
-implementation
-feature delivery
-foundational engineering
+* implementation
+* feature delivery
+* foundational engineering
 
 Recent senior roles should emphasize:
 
-architecture
-scalability
-platform ownership
-mentoring
-reliability
-cross-functional leadership
+* architecture
+* scalability
+* platform ownership
+* mentoring
+* reliability
+* cross-functional leadership
 
 Avoid:
 
-identical tech stacks in every role
-unrealistic seniority from early positions
-modern tooling in legacy-era jobs
-artificial keyword flooding
+* identical tech stacks in every role
+* unrealistic seniority from early positions
+* modern tooling in legacy-era jobs
+* artificial keyword flooding
 
 The final resume must feel like a believable engineering career progression over many years.
-
 
 ---
 
@@ -269,12 +283,12 @@ Generate realistic senior-level bullets strongly aligned to the Job Description 
 Rules:
 
 * Most recent role → 7–8 bullets
-* Mid roles → 5–7 bullets
+* Mid roles → 5–6 bullets
 * Oldest roles → 4–5 bullets
 
 Each bullet:
 
-* 22–35 words
+* 18–32 words
 * starts with strong action verb
 * includes 1–3 relevant JD keywords naturally
 * includes complementary ecosystem tooling
@@ -303,6 +317,12 @@ Avoid:
 
 * “Responsible for”
 * “Worked on”
+
+Prefer naturally varied sentence openings and writing cadence.
+
+Recent senior roles should contain more architecture, platform ownership, scalability, modernization, reliability, and mentoring language.
+
+Older roles should focus more on implementation, delivery, debugging, integration, and feature development.
 
 ---
 
@@ -336,60 +356,101 @@ Never place modern AI/LLM tooling across entire historical careers unrealistical
 
 ---
 
-7. METRICS POLICY (CRITICAL)
+6.5 TECHNOLOGY VERSION REALISM
 
-METRICS POLICY (CRITICAL)
+When historically appropriate, selectively reference major technology versions within experience bullets to improve realism and technical credibility.
+
+Rules:
+
+* Mention versions ONLY for technologies where version progression materially reflects engineering modernization, migration work, platform evolution, or production maintenance.
+* Prefer major versions only:
+  * React 18
+  * Angular 14
+  * Node.js 18
+  * Python 3.11
+  * .NET 6
+  * PostgreSQL 15
+  * Kubernetes 1.27
+* Avoid patch/minor versions.
+* Do NOT overuse versions in every bullet.
+* Maximum:
+  * 0–1 version mentions in older roles
+  * 1–2 version mentions in mid roles
+  * 2–4 version mentions in recent senior roles
+* Versions must align with historical release timelines and employment dates.
+* Use versions naturally inside modernization, migration, upgrade, platform, or scalability contexts.
+
+Good examples:
+
+* Migrated frontend applications from AngularJS to React 18 with TypeScript and Vite-based build pipelines.
+* Modernized backend services to Node.js 18 and PostgreSQL 15 to improve maintainability and deployment consistency.
+* Upgraded Kubernetes 1.27 workloads using Helm and GitOps deployment workflows.
+
+Avoid:
+
+* listing versions mechanically
+* adding versions to every technology
+* unrealistic early adoption
+* dense version-heavy bullets
+* repeating same version references excessively
+
+The final resume should feel naturally written by a real senior engineer familiar with evolving production ecosystems.
+
+---
+
+7. METRICS POLICY (CRITICAL)
 
 Default rule:
 Do NOT invent quantitative metrics.
 
 Avoid:
 
-percentages
-revenue numbers
-user counts
-latency numbers
-transaction volumes
-SLA values
-fabricated performance gains
-fabricated business KPIs
-invented operational statistics
+* percentages
+* revenue numbers
+* user counts
+* latency numbers
+* transaction volumes
+* SLA values
+* fabricated performance gains
+* fabricated business KPIs
+* invented operational statistics
 
 Allowed:
 
-realistic qualitative impact statements
-engineering efficiency improvements
-delivery workflow improvements
-development lifecycle efficiency gains
-deployment speed improvements
-build/release optimization
-debugging and incident-response efficiency improvements
-production stability improvements
-time-efficiency statements related to development or operational workflows when written naturally and credibly
+* realistic qualitative impact statements
+* engineering efficiency improvements
+* delivery workflow improvements
+* development lifecycle efficiency gains
+* deployment speed improvements
+* build/release optimization
+* debugging and incident-response efficiency improvements
+* production stability improvements
+* time-efficiency statements related to development or operational workflows when written naturally and credibly
 
 Examples of ALLOWED phrasing:
 
-reduced deployment time
-shortened debugging cycles
-accelerated release workflows
-improved CI/CD efficiency
-streamlined production support processes
-faster feature delivery cadence
-improved build performance
-reduced manual operational overhead
+* reduced deployment time
+* shortened debugging cycles
+* accelerated release workflows
+* improved CI/CD efficiency
+* streamlined production support processes
+* faster feature delivery cadence
+* improved build performance
+* reduced manual operational overhead
 
 Use qualitative impact instead:
 
-improved maintainability
-enhanced scalability
-increased reliability
-streamlined deployment workflows
-reduced operational friction
-improved delivery consistency
-strengthened system stability
+* improved maintainability
+* enhanced scalability
+* increased reliability
+* streamlined deployment workflows
+* reduced operational friction
+* improved delivery consistency
+* strengthened system stability
 
 EXCEPTION:
 QA / ML / AI roles may include metrics ONLY if grounded in supplied profile details or clearly implied.
+
 Never fabricate numbers.
 
 ---
@@ -428,6 +489,19 @@ Avoid:
 
 Every role should feel distinct and progressively senior.
 
+Avoid repeating identical technologies excessively across consecutive bullets unless historically necessary.
+
+Vary:
+
+* architecture terminology
+* infrastructure terminology
+* engineering focus
+* operational language
+* integration patterns
+* deployment descriptions
+
+The writing should resemble a real experienced engineer describing evolving responsibilities across multiple companies and years.
+
 ---
 
 10. FINAL VALIDATION
@@ -445,5 +519,8 @@ Before returning output:
 * strong ATS keyword distribution
 * proper experience ordering
 * no hallucinated tools outside timeline
+* no excessive version mentions
+* no unrealistic stack combinations
+* no AI-generated sounding repetition
 
 Return ONLY the JSON object.
