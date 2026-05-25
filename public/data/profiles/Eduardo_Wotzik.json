@@ -1,0 +1,74 @@
+{  
+  "name": "Eduardo Wotzik",  
+  "email": "rogersjackrsb888@outlook.com",
+  "phone": "",
+  "location": "Rio de Janeiro, Rio de Janeiro, Brazil",
+  "address": "Rua Ivo do Prado, 334",
+  "postalCode": "23080-200",
+  "linkedin": "https://www.linkedin.comlínleduardo—wotzik—915547158/",
+
+  "experience": [
+    {
+      "company": "D'Vinvi Group",
+      "title": "Senior Software Engineer",
+      "location": "Uninted Kingdom",
+      "start_date": "July 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "Humana",
+      "title": "Senior Software Engineer",
+      "location": "Uninted States",
+      "start_date": "Mar 2022",
+      "end_date": "May 2024"
+    },
+    {
+      "company": "Humana",
+      "title": "Software Engineer",
+      "location": "Uninted States",
+      "start_date": "Jun 2020",
+      "end_date": "Feb 2022"
+    },
+    {
+      "company": "Nordstrom",
+      "title": "Software Engineer",
+      "location": "Uninted States",
+      "start_date": "Sep 2018",
+      "end_date": "May 2020"
+    },
+    {
+      "company": "Metadados",
+      "title": "Software Engineer",
+      "location": "Brazil",
+      "start_date": "Feb 2017",
+      "end_date": "Aug 2018"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science",
+      "school": "Federal University of Rio de Janeiro",
+      "start_year": "2012",
+      "end_year": "2016"
+    }
+  ],
+
+  "screening": {
+    "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Brazil or Latin America. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
+    "birth": "1994-08-13",
+    "languages": [
+      "English (fluent) | B2/C1 level", "Portuguese (Native)"
+    ],
+    "certifications": [],
+    "workAuthorization": "Brazilian citizen / No requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "$66,000 USD annually, $5,500 USD monthly, $35 USD hourly, $280 USD daily | R$330,000 BRL annually, R$27,500 BRL monthly, R$160 BRL hourly, R$1,300 BRL daily | negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": " remote only",
+    "customAnswers": {}
+  }
+}
