@@ -1,8 +1,6 @@
 {
   "name": "Maciej Chmiel",
-  "title": "Senior QA Engineer",
   "email": "maciej.chmiel01@outlook.com",
-  "workEmail": "",
   "phone": "",
   "location": "Lodz, Lódzkie, Poland",
   "address": "",
@@ -17,12 +15,12 @@
       "title": "Senior QA Automation Engineer",
       "location": "United States",
       "start_date": "Oct 2023",
-      "end_date": "Feb 2026"
+      "end_date": "Present"
     },
     {
       "company": "Cargo Express Freight",
       "title": "QA Automation Engineer",
-      "location": "",
+      "location": "United States",
       "start_date": "Aug 2020",
       "end_date": "Sep 2023"
     },
