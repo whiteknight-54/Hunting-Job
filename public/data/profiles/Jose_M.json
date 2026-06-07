@@ -1,0 +1,69 @@
+{
+  "name": "Jose M",
+  "title": "Senior Software Engineer",
+  "email": "jose.05.04@outlook.com",
+  "workEmail": "",
+  "phone": "",
+  "location": "Iloilo City, Iloilo, PH",
+  "address": "",
+  "postalCode": "5000",
+  "linkedin": "",
+  "website": "",
+  "portfolio": "",
+  "github": "",
+  "experience": [
+    {
+      "company": "Kiggla",
+      "title": "Senior Software Engineer",
+      "location": "United Status",
+      "start_date": "Jun 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "NordStrom",
+      "title": "Software Engineer",
+      "location": "United Status",
+      "start_date": "Mar 2024",
+      "end_date": "May 2025"
+    },
+    {
+      "company": "Scribo Learning Pte.Ltd",
+      "title": "Software Fullstack Engineer",
+      "location": "Singapore",
+      "start_date": "Jul 2021",
+      "end_date": "Feb 2024"
+    },
+    {
+      "company": "FPT Software",
+      "title": "Software Engineer",
+      "location": "Vietnam",
+      "start_date": "Feb 2018",
+      "end_date": "Jun 2021"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor's degree in Information and Technology",
+      "school": "Hanoi University of Science and Technology",
+      "start_year": "2013",
+      "end_year": "2017"
+    }
+  ],
+  "screening": {
+    "notes": "Looking for a new challenge and growth opportunities. I'm not able to relocate. I prefer fully remote role at Philippines. I'm looking for a full-time position. If that role is hybrid role, I'm not able to move around until 3 months later due to my family obligations.",
+    "birth": "e.g. 1990-01-01",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [],
+    "workAuthorization": "Philippines citizen /No requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "$3,100 USD monthly, $20 USD hourly | ₱ 180,000 PHP monthly | negotiable",
+    "availability": "Immediately | ASAP",
+    "relocation": "open / remote only",
+    "customAnswers": {}
+  }
+}
