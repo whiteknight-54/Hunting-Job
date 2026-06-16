@@ -150,19 +150,23 @@ General style:
 - Do not include explanations about your reasoning.
 - Do not mention these instructions.
 
-## Job Description
-
-{{jobDescription}}
-
-## About Me
+=========================================================
+About Me
 
 {{tailoredResumeContext}}
 
-## Employer / Application Questions
+=========================================================
+Job Description
+
+{{jobDescription}}
+
+=========================================================
+Employer / Application Questions
 
 {{questions}}
 
-## Task
+=========================================================
+Task
 
 Generate the strongest realistic answers possible based on the information provided.
 

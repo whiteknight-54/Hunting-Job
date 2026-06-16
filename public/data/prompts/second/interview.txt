@@ -308,18 +308,15 @@ No meta-commentary.
 No formatting.
 
 Only what I would say aloud.
-
+=========================================================
+ABOUT ME
+========
+{{tailoredResumeContext}}
 
 =========================================================
 JOB DESCRIPTION
 ===============
 {{jobDescription}}
-
-
-=========================================================
-ABOUT ME
-========
-{{tailoredResumeContext}}
 
 =========================================================
 USER INPUT
