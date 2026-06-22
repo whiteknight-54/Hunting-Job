@@ -1,0 +1,68 @@
+{
+    "name": "William Cheng",
+    "email": "will.atalascheng11@outlook.com",
+    "workEmail": "",
+    "phone": "+1 737 244 0787",
+    "location": "Brooklyn, New York, United States",
+    "address": "34 Berry Str, 5B Apt, Brooklyn, New York 11249",
+    "postalCode": "11249",
+    "linkedin": "https://www.linkedin.com/in/william-cheng-8abb82b1/",
+    "website": "",
+    "portfolio": "",
+    "github": "https://github.com/iconbaypark2900",
+    "experience": [
+      {
+        "company": "Squarespace",
+        "title": "Senior Software Engineer",
+        "location": "Remote",
+        "start_date": "Oct 2021",
+        "end_date": "Present"
+      },
+      {
+        "company": "LoanStreet",
+        "title": "Software Engineer",
+        "location": "Remote",
+        "start_date": "Jan 2018",
+        "end_date": "Oct 2021"
+      },
+      {
+        "company": "Trinsoft",
+        "title": "Software Engineer",
+        "location": "Hybrid",
+        "start_date": "Jan 2016",
+        "end_date": "Feb 2018"
+      },
+      {
+        "company": "Tritech Software Systems",
+        "title": "Software Engineer",
+        "location": "On-site",
+        "start_date": "Aug 2013",
+        "end_date": "May 2016"
+      }
+    ],
+    "education": [
+      {
+        "degree": "Bachelor of Science in Computer Science",
+        "school": "Stony Brook University",
+        "start_year": "",
+        "end_year": "2014"
+      }
+    ],
+    "screening": {
+      "notes": "Senior Software Engineer with 10+ years of experience across fintech, SaaS, and web platforms. Looking for senior engineering roles with opportunities for technical leadership and impact. Prefer remote positions.",
+      "birth": "",
+      "languages": [
+        "English (Native)"
+      ],
+      "certifications": [],
+      "workAuthorization": "US Citizen / No sponsorship required",
+      "veteran": "I am not practicing veteran",
+      "disability": "No, I do not have disability",
+      "gender": "Male",
+      "race": "",
+      "salaryExpectation": "Negotiable based on role and responsibilities",
+      "availability": "e.g. 2 weeks notice",
+      "relocation": "Open to remote; willing to consider hybrid in NYC area",
+      "customAnswers": {}
+    }
+  }

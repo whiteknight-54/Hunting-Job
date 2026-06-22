@@ -1,0 +1,68 @@
+{
+    "name": "Jeremy Rufino",
+    "email": "jeremy.rufino37@outlook.com",
+    "workEmail": "",
+    "phone": "+1 979 353 2937",
+    "location": "Las Vegas, Nevada, United States",
+    "address": "7487 S River Dove Ct, Las Vegas, Nevada, United States 89139",
+    "postalCode": "89139",
+    "linkedin": "https://www.linkedin.com/in/jeremyrufino/",
+    "website": "",
+    "portfolio": "",
+    "github": "",
+    "experience": [
+      {
+        "company": "GOAT Group",
+        "title": "Senior QA Engineer",
+        "location": "Los Angeles, CA (Remote)",
+        "start_date": "May 2022",
+        "end_date": "Mar 2026"
+      },
+      {
+        "company": "CBS Interactive",
+        "title": "Lead Quality Assurance Analyst",
+        "location": "Burbank, CA (Remote)",
+        "start_date": "Jul 2019",
+        "end_date": "May 2022"
+      },
+      {
+        "company": "ANRE Technologies Inc.",
+        "title": "Technical Recruiter",
+        "location": "Pasadena, CA (On-site)",
+        "start_date": "Apr 2019",
+        "end_date": "Jun 2019"
+      },
+      {
+        "company": "Pebblekick Inc.",
+        "title": "Quality Assurance Analyst / Game Localizer",
+        "location": "Pasadena, CA (On-site)",
+        "start_date": "Sep 2018",
+        "end_date": "Jun 2019"
+      }
+    ],
+    "education": [
+      {
+        "degree": "Bachelor of Science in Computer Information Systems",
+        "school": "California State Polytechnic University-Pomona",
+        "start_year": "2012",
+        "end_year": "2018"
+      }
+    ],
+    "screening": {
+      "notes": "Experienced QA leader with strong background in streaming and e-commerce platforms. Skilled in end-to-end QA strategy, cross-functional team management, and release coordination. Looking for senior QA or lead roles in streaming, entertainment, or tech industries.",
+      "birth": "",
+      "languages": [
+        "English (Native)"
+      ],
+      "certifications": [],
+      "workAuthorization": "US Citizen / No sponsorship required",
+      "veteran": "I am not a veteran",
+      "disability": "I do not have disability",
+      "gender": "male",
+      "race": "white",
+      "salaryExpectation": "100000 - 140000 USD annually",
+      "availability": "e.g. 2 weeks notice",
+      "relocation": "Open to remote or hybrid roles in Las Vegas area",
+      "customAnswers": {}
+    }
+  }

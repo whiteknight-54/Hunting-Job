@@ -1,0 +1,61 @@
+{
+    "name": "Cody Martin",
+    "email": "cody66s@outlook.com",
+    "workEmail": "",
+    "phone": "+1 315 352 8061",
+    "location": "Houston, Texas, United States",
+    "address": "1500 Shepherd Dr, Houston, Texas, 77007",
+    "postalCode": "77007",
+    "linkedin": "https://www.linkedin.com/in/cody-martin-76481138b/",
+    "website": "",
+    "portfolio": "",
+    "github": "https://github.com/aimaster-dev",
+    "experience": [
+      {
+        "company": "Infosys",
+        "title": "Senior AI Engineer",
+        "location": "San Francisco Bay Area (Remote)",
+        "start_date": "Nov 2022",
+        "end_date": "Present"
+      },
+      {
+        "company": "Electronic Arts (EA)",
+        "title": "AI / ML Engineer",
+        "location": "Orlando, Florida (Remote)",
+        "start_date": "Mar 2017",
+        "end_date": "Nov 2022"
+      },
+      {
+        "company": "CareCloud",
+        "title": "Machine Learning Engineer",
+        "location": "Somerset, New Jersey (Hybrid)",
+        "start_date": "Mar 2012",
+        "end_date": "Apr 2017"
+      }
+    ],
+    "education": [
+      {
+        "degree": "Bachelor's degree in Computer Science",
+        "school": "Kettering University",
+        "start_year": "",
+        "end_year": "2011"
+      }
+    ],
+    "screening": {
+      "notes": "Senior AI Engineer with extensive experience in AI/ML across gaming, healthcare, and enterprise sectors. Looking for challenging AI/ML roles with opportunities to work on cutting-edge models and applications. Prefer remote positions.",
+      "birth": "",
+      "languages": [
+        "English (Native)"
+      ],
+      "certifications": [],
+      "workAuthorization": "US Citizen / No sponsorship required",
+      "veteran": "No",
+      "disability": "No",
+      "gender": "Male",
+      "race": "white",
+      "salaryExpectation": "140000 - 200000 USD per year",
+      "availability": "e.g. 2 weeks notice",
+      "relocation": "Open to remote; willing to consider hybrid in Houston area",
+      "customAnswers": {}
+    }
+  }

@@ -1,0 +1,61 @@
+{
+    "name": "William O'Donnell",
+    "email": "will.don3312@outlook.com",
+    "workEmail": "",
+    "phone": "+1 281 941 8650",
+    "location": "Wilton, Connecticut, United States",
+    "address": "167 Drum Hill Rd #B, Wilton, CT 06897",
+    "postalCode": "06897",
+    "linkedin": "https://www.linkedin.com/in/william-e-odonnell/",
+    "website": "",
+    "portfolio": "",
+    "github": "https://github.com/waveecho08",
+    "experience": [
+      {
+        "company": "Rockstar Games",
+        "title": "Senior Software Engineer",
+        "location": "New York, NY",
+        "start_date": "May 2022",
+        "end_date": "Present"
+      },
+      {
+        "company": "Affordit",
+        "title": "Software Engineer",
+        "location": "Tampa, Florida",
+        "start_date": "Jul 2020",
+        "end_date": "Apr 2022"
+      },
+      {
+        "company": "Jabil",
+        "title": "Software Engineer",
+        "location": "St Petersburg, Florida",
+        "start_date": "Jun 2017",
+        "end_date": "Jul 2020"
+      }
+    ],
+    "education": [
+      {
+        "degree": "Bachelor's degree of Science in Computer Science",
+        "school": "University of South Florida",
+        "start_year": "2014",
+        "end_year": "2016"
+      }
+    ],
+    "screening": {
+      "notes": "Senior Software Engineer with experience in gaming and fintech. Currently at Rockstar Games. Looking for challenging software engineering roles, preferably in gaming, entertainment, or tech sectors.",
+      "birth": "",
+      "languages": [
+        "English (Native)"
+      ],
+      "certifications": [],
+      "workAuthorization": "US Citizen / No sponsorship required",
+      "veteran": "I am not practicing veteran",
+      "disability": "No, I do not have disability",
+      "gender": "male",
+      "race": "",
+      "salaryExpectation": "Negotiable based on role and responsibilities",
+      "availability": "e.g. 2 weeks notice",
+      "relocation": "Open to remote or hybrid; willing to consider NYC/CT area",
+      "customAnswers": {}
+    }
+  }
