@@ -1,0 +1,87 @@
+{
+  "name": "Jakub Nowak",
+  "title": "Senior Software Engineer",
+  "email": "",
+  "workEmail": "jakub_nowak012@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Mazowieckie, Poland",
+  "address": "",
+  "postalCode": "",
+  "linkedin": "https://www.linkedin.com/in/jakub-nowak-179842407/",
+  "website": "",
+  "portfolio": "",
+  "github": "",
+  "experience": [
+    {
+      "company": "Capgemini",
+      "title": "Senior Software Engineer",
+      "location": "France",
+      "start_date": "Jun 2025",
+      "end_date": "Present"
+    },
+    {
+      "company": "ASOS",
+      "title": "Senior Software Engineer",
+      "location": "",
+      "start_date": "Mar 2022",
+      "end_date": "May 2025"
+    },
+    {
+      "company": "Comarch",
+      "title": "Software Engineer",
+      "location": "",
+      "start_date": "Apr 2019",
+      "end_date": "Feb 2022"
+    },
+    {
+      "company": "Allego",
+      "title": "Software Engineer",
+      "location": "",
+      "start_date": "Apr 2017",
+      "end_date": "Mar 2019"
+    },
+    {
+      "company": "Mircosoft",
+      "title": "Software Engineer Intern",
+      "location": "",
+      "start_date": "Dec 2016",
+      "end_date": "Mar 2017"
+    }
+  ],
+   "education": [
+    {
+      "degree": "Master's Degree in Computer Science",
+      "school": "University of Warsaw",
+      "start_year": "2014",
+      "end_year": "2016"
+    },
+    {
+      "degree": "Bachelor's Degree in Computer Science",
+      "school": "University of Warsaw",
+      "start_year": "2010",
+      "end_year": "2014"
+    }
+  ],
+  "screening": {
+    "notes": "Private notes for prompts — preferences, constraints, talking points.",
+    "birth": "e.g. 1993-03-26",
+    "languages": [
+      "English (fluent) | B2/C1 level"
+    ],
+    "certifications": [
+      "e.g. AWS Certified Developer"
+    ],
+    "workAuthorization": "e.g. US citizen / requires sponsorship",
+    "veteran": "I am not a protected veteran",
+    "disability": "Don't have any disability",
+    "gender": "male",
+    "race": "white",
+    "salaryExpectation": "negotiable",
+    "availability": "e.g. 2 days notice",
+    "relocation": "open / remote only",
+    "customAnswers": {
+      "question1": "answer1",
+      "question2": "answer2"
+    }
+  }
+}
